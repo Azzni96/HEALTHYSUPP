@@ -316,6 +316,9 @@ header .cart-items-container .btn {
 }
 
 /* Contact-sektion tyylit */
+#User{
+  display: none;
+}
 .contact .row {
   display: flex;
   background: var(--black);
@@ -701,7 +704,7 @@ form.sign-in-form {
     padding: 0.5rem 0;
   }
 
-  .btn.transparent {
+  .btn-sign.transparent {
     width: 110px;
     height: 35px;
     font-size: 0.7rem;
