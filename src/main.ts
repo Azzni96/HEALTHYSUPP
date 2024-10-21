@@ -11,7 +11,8 @@ let menu = document.querySelector(".menu") as HTMLElement;
 let home = document.querySelector(".home") as HTMLElement;
 let userbtn = document.querySelector("#user-btn") as HTMLElement;
 let UserSign = document.querySelector("#User") as HTMLElement;
-let section = document.querySelector("section") as HTMLElement;
+let header = document.querySelector(".header") as HTMLElement;
+
 // Menu painikkeen toiminta
 (document.querySelector('#menu-btn') as HTMLElement).onclick = () => {
     navbar?.classList.toggle('active');
@@ -34,12 +35,12 @@ let section = document.querySelector("section") as HTMLElement;
 };
 
 (document.querySelector("#user-btn") as HTMLElement).onclick = () => {
-    contact?.classList.remove('contact')
-    about?.classList.remove('about')
-    menu?.classList.remove('menu')
-    home?.classList.remove('home')
-    userbtn?.classList.remove('user-btn')
-    UserSign?.classList.toggle('User')
+    contact?.classList.add('hidden')
+    about?.classList.add('hidden')
+    menu?.classList.add('hidden')
+    home?.classList.add('hidden')
+    header?.classList.remove('hidden')
+    UserSign?.classList.remove('hidden')
 }
 
 // Kun vieritetään sivua, kaikki valikot sulkeutuvat

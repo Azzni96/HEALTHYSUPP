@@ -316,9 +316,10 @@ header .cart-items-container .btn {
 }
 
 /* Contact-sektion tyylit */
-#User{
+.hidden {
   display: none;
 }
+
 .contact .row {
   display: flex;
   background: var(--black);
