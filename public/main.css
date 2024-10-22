@@ -82,7 +82,7 @@ html::-webkit-scrollbar-thumb {
   justify-content: space-between;
   padding: 1.5rem 7%;
   border-bottom: var(--border);
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
@@ -214,12 +214,12 @@ header .cart-items-container .btn {
 
 /* Home-sektion tyylit */
 .home {
-  min-height: 100vh;
+  min-height: 50vh;
   display: flex;
   align-items: center;
   background: url(/public/creatine.webp) no-repeat;
   background-size: contain;
-  background-position: center;
+  background-position: right;
 }
 
 .home .content {
@@ -396,9 +396,6 @@ header .cart-items-container .btn {
 }
 
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   width: 100%;
   background-color: #fff;
@@ -667,8 +664,12 @@ dialog {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  position: relative;
+  left: 25%;
+  top: 10%;
+  position: fixed;
+  background-color: white;
 }
+
 /* Responsive styles */
 @media (max-width: 870px) {
   .container {
