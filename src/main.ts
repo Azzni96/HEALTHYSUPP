@@ -8,6 +8,8 @@ const sign_in_btn = document.querySelector("#sign-in-btn") as HTMLElement;
 const sign_up_btn = document.querySelector("#sign-up-btn") as HTMLElement;
 const container = document.querySelector(".container") as HTMLElement;
 let userbtn = document.querySelector("#user-btn") as HTMLElement;
+let loginbtn = document.querySelector(".login-btn") as HTMLElement;
+
 // Menu-painikkeen toiminta
 (document.querySelector('#menu-btn') as HTMLElement).onclick = () => {
     navbar?.classList.toggle('active');
@@ -37,6 +39,9 @@ userbtn.onclick = () => {
 closeModalBtn.onclick = () => {
     userModal?.close(); // Close the dialog
 };
+loginbtn.onclick = () => {
+    userModal?.showModal();
+}
 // Kun vieritetään sivua, kaikki valikot sulkeutuvat
 window.onscroll = () => {
     navbar?.classList.remove('active');
