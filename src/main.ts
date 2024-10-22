@@ -1,19 +1,14 @@
-// Valitaan elementit ja määritellään toiminnot TypeScriptissä
+// Valitaan elementit
 let navbar: HTMLElement | null = document.querySelector('.navbar');
 let searchForm: HTMLElement | null = document.querySelector('.search-form');
 let cartItem: HTMLElement | null = document.querySelector('.cart-items-container');
+let userModal = document.querySelector("#user-modal") as HTMLDialogElement;
+let closeModalBtn = document.querySelector("#close-modal") as HTMLElement;
 const sign_in_btn = document.querySelector("#sign-in-btn") as HTMLElement;
 const sign_up_btn = document.querySelector("#sign-up-btn") as HTMLElement;
 const container = document.querySelector(".container") as HTMLElement;
-let contact = document.querySelector(".contact") as HTMLElement;
-let about = document.querySelector(".about") as HTMLElement;
-let menu = document.querySelector(".menu") as HTMLElement;
-let home = document.querySelector(".home") as HTMLElement;
 let userbtn = document.querySelector("#user-btn") as HTMLElement;
-let UserSign = document.querySelector("#User") as HTMLElement;
-let header = document.querySelector(".header") as HTMLElement;
-
-// Menu painikkeen toiminta
+// Menu-painikkeen toiminta
 (document.querySelector('#menu-btn') as HTMLElement).onclick = () => {
     navbar?.classList.toggle('active');
     cartItem?.classList.remove('active');
@@ -33,16 +28,15 @@ let header = document.querySelector(".header") as HTMLElement;
     navbar?.classList.remove('active');
     searchForm?.classList.remove('active');
 };
+// User button click to show the modal
+userbtn.onclick = () => {
+    userModal?.showModal(); // Open the dialog
+};
 
-(document.querySelector("#user-btn") as HTMLElement).onclick = () => {
-    contact?.classList.add('hidden')
-    about?.classList.add('hidden')
-    menu?.classList.add('hidden')
-    home?.classList.add('hidden')
-    header?.classList.remove('hidden')
-    UserSign?.classList.remove('hidden')
-}
-
+// Close modal button action
+closeModalBtn.onclick = () => {
+    userModal?.close(); // Close the dialog
+};
 // Kun vieritetään sivua, kaikki valikot sulkeutuvat
 window.onscroll = () => {
     navbar?.classList.remove('active');
@@ -52,9 +46,9 @@ window.onscroll = () => {
 
 // Kirjautuminen ja rekisteröityminen -moodin vaihto
 sign_up_btn?.addEventListener("click", () => {
-  container?.classList.add("sign-up-mode");
+    container?.classList.add("sign-up-mode");
 });
 
 sign_in_btn?.addEventListener("click", () => {
-  container?.classList.remove("sign-up-mode");
+    container?.classList.remove("sign-up-mode");
 });

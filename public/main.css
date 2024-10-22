@@ -26,7 +26,7 @@ body {
 section {
   padding: 2rem 7%;
 }
-
+/*kaikki h1 vaikuttaa tänne*/
 .heading {
   text-align: center;
   color: #fff;
@@ -39,7 +39,7 @@ section {
   color: var(--main-color);
   text-transform: uppercase;
 }
-
+/*kaikki a class btn vaikuttaa sitä*/
 .btn {
   margin-top: 1rem;
   display: inline-block;
@@ -53,7 +53,7 @@ section {
 .btn:hover {
   letter-spacing: .2rem;
 }
-
+/*se vaikuttaa sivulle*/
 html {
   font-size: 62.5%;
   overflow-x: hidden;
@@ -218,7 +218,7 @@ header .cart-items-container .btn {
   display: flex;
   align-items: center;
   background: url(/public/creatine.webp) no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
@@ -235,7 +235,7 @@ header .cart-items-container .btn {
 .home .content p {
   font-size: 2rem;
   font-weight: lighter;
-  line-height: 1.8;
+  line-height: 1.5;
   padding: 1rem 0;
   color: #fff;
 }
@@ -243,8 +243,8 @@ header .cart-items-container .btn {
 /* Menu-sektion tyylit */
 .menu .box-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+  gap: 1rem;
 }
 
 .menu .box-container .box {
@@ -265,12 +265,12 @@ header .cart-items-container .btn {
 
 .menu .box-container .box .price {
   color: #fff;
-  font-size: 2.5rem;
+  font-size: 2rem;
   padding: .5rem 0;
 }
 
 .menu .box-container .box .price span {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-decoration: line-through;
 }
 
@@ -316,9 +316,7 @@ header .cart-items-container .btn {
 }
 
 /* Contact-sektion tyylit */
-.hidden {
-  display: none;
-}
+
 
 .contact .row {
   display: flex;
@@ -387,15 +385,20 @@ header .cart-items-container .btn {
   position: relative;
 }
 
-.close-btn {
+.close-modal {
   position: absolute;
   top: 10px;
   right: 15px;
-  font-size: 24px;
+  font-size: 25px;
   cursor: pointer;
+  color: var(--black);
+  z-index: 1000;
 }
 
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: 100%;
   background-color: #fff;
@@ -653,6 +656,18 @@ form.sign-in-form {
 
 .container.sign-up-mode .right-panel {
   pointer-events: all;
+}
+.hidden {
+  display: none;
+}
+dialog {
+  width: 90%;
+  max-width: 600px;
+  border: none;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 /* Responsive styles */
 @media (max-width: 870px) {
