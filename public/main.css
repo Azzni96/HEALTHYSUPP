@@ -270,6 +270,38 @@ header .icons span{
 .listCard .count{
   margin: 0 10px;
 }
+.listcart .product-detail{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 200px;
+}
+.listcart .product-detail img{
+  width: 50%;
+}
+.listcart .product-detail .product{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 10rem;
+}
+.listcart .product-detail .product h1{
+  color: #fff;
+}
+.listcart .product-detail .product p{
+  color: #fff;
+  font-size: 20px;
+}
+.listcart .product-detail .product button{
+  width: 100%;
+  padding: 5px;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+.listcart .product-detail .product button:hover{
+  background-color: #000;
+  color: #fff;
+}
 /* Home-sektion tyylit */
 .home {
   min-height: 50vh;
