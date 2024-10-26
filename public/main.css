@@ -475,8 +475,12 @@ header .icons span{
 
 .contact .row form .inputBox a img {
   width: 50%;
+  margin-top: 10px;
 }
+.contact .row form .inputBox a img:hover {
+  transform: scale(1.1);
 
+}
 /* Modal-tyylit */
 
 
