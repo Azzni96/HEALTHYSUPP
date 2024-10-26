@@ -46,7 +46,8 @@ section {
   padding: .9rem 3rem;
   font-size: 1.7rem;
   color: #fff;
-  background: var(--main-color);
+  background: #454343;
+  border-radius: 5rem;
   cursor: pointer;
 }
 
@@ -220,6 +221,16 @@ header .icons span{
   row-gap: 20px;
   margin-top: 50px;
 }
+.list .item{
+  background-color: #202020;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .list .item img{
   width: 100%;
   height: 100px;
@@ -244,6 +255,7 @@ header .icons span{
   color: #fff;
   width: 100%;
   padding: 10px;
+  border-radius: 20px;
 }
 .list .item button:hover{
   background-color: #fff;
@@ -270,38 +282,46 @@ header .icons span{
 .listCard .count{
   margin: 0 10px;
 }
+
+.listcart .product-detail img{
+  width: 30%;
+}
 .listcart .product-detail{
   display: flex;
-  flex-wrap: wrap;
-  gap: 200px;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+  background-color: #1f1e1e;
+  background-size: cover;
+  border: 10px solid #000;
 }
-.listcart .product-detail img{
-  width: 50%;
-}
-.listcart .product-detail .product{
+.listcart .product-detail .info{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  line-height: 10rem;
+  gap: 10px;
 }
-.listcart .product-detail .product h1{
-  color: #fff;
-}
-.listcart .product-detail .product p{
+.listcart .product-detail h1{
   color: #fff;
   font-size: 20px;
 }
-.listcart .product-detail .product button{
+.listcart .product-detail p{
+  color: #fff;
+  font-size: 15px;
+}
+.listcart .product-detail button{
   width: 100%;
   padding: 5px;
   border-radius: 20px;
-  margin-top: 10px;
-}
-.listcart .product-detail .product button:hover{
   background-color: #000;
   color: #fff;
 }
+.listcart .product-detail  button:hover{
+  background-color: #fff;
+  color: #000;
+}
+
 /* Home-sektion tyylit */
 .home {
   min-height: 50vh;
@@ -310,6 +330,7 @@ header .icons span{
   background: url(/public/creatine.webp) no-repeat;
   background-size: contain;
   background-position: right;
+  background-color: #1a1a1b;
 }
 
 .home .content {
@@ -333,14 +354,15 @@ header .icons span{
 /* Menu-sektion tyylit */
 .menu .box-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 10rem;
 }
 
 .menu .box-container .box {
   padding: 5rem;
   text-align: center;
-  border: var(--border);
+  background-color: #1d1d1e;
+  border-radius: 2rem;
 }
 
 .menu .box-container .box img {
@@ -433,30 +455,26 @@ header .icons span{
 .contact .row form .inputBox {
   display: flex;
   align-items: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  background: var(--black);
-  border: var(--border);
-  width: 100%;
-  background-color: white;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  width: 50%;
 }
 
 .contact .row form .inputBox p {
-  text-transform: uppercase;
   font-size: 1.7rem;
-  color: var(--black);
+  color: #fff;
   width: 100%;
+  font-size: 15px;
 }
 
 .contact .row form .inputBox a {
-  width: 100%;
   font-size: 1.7rem;
   color: #fff;
   text-transform: none;
 }
 
 .contact .row form .inputBox a img {
-  width: 30%;
+  width: 50%;
 }
 
 /* Modal-tyylit */
@@ -754,7 +772,18 @@ dialog {
   position: fixed;
   background-color: white;
 }
-
+dialog .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-left: 10px;
+}
 /* Responsive styles */
 @media (max-width: 870px) {
   .home {

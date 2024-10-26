@@ -1,157 +1,191 @@
-// Ensure code runs after the DOM content is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Select necessary elements
-    let navbar: HTMLElement | null = document.querySelector('.navbar');
-    let searchForm: HTMLElement | null = document.querySelector('.search-form');
-    let cartItem: HTMLElement | null = document.querySelector('.cart-items-container');
-    let closeShopping: HTMLElement | null = document.querySelector('.closeShopping');
-    let userModal = document.querySelector("#user-modal") as HTMLDialogElement;
-    let closeModalBtn = document.querySelector("#close-modal") as HTMLElement;
-    const sign_in_btn = document.querySelector("#sign-in-btn") as HTMLElement;
-    const sign_up_btn = document.querySelector("#sign-up-btn") as HTMLElement;
-    const container = document.querySelector(".container") as HTMLElement;
-    let userbtn = document.querySelector("#user-btn") as HTMLElement;
-    let loginbtn = document.querySelector(".login-btn") as HTMLElement;
+  // Select necessary elements
+  const navbar = document.querySelector('.navbar') as HTMLElement | null;
+  const searchForm = document.querySelector('.search-form') as HTMLElement | null;
+  const cartItem = document.querySelector('.cart-items-container') as HTMLElement | null;
+  const closeShopping = document.querySelector('.closeShopping') as HTMLElement | null;
+  const userModal = document.querySelector("#user-modal") as HTMLDialogElement;
+  const closeModalBtn = document.querySelector("#close-modal") as HTMLElement;
+  const sign_in_btn = document.querySelector("#sign-in-btn") as HTMLElement;
+  const sign_up_btn = document.querySelector("#sign-up-btn") as HTMLElement;
+  const container = document.querySelector(".container") as HTMLElement;
+  const userbtn = document.querySelector("#user-btn") as HTMLElement;
+  const loginbtn = document.querySelector(".login-btn") as HTMLElement;
+  const searchinput = document.getElementById('search-box') as HTMLInputElement | null;
+  const searchbutton = document.getElementById('search-btn') as HTMLElement | null;
 
-    // Verify that the element exists before setting event listeners
-    if (navbar && document.querySelector('#menu-btn')) {
-      (document.querySelector('#menu-btn') as HTMLElement).onclick = () => {
-        navbar.classList.toggle('active');
-        cartItem?.classList.remove('active');
-        searchForm?.classList.remove('active');
-      };
-    }
-
-    if (closeShopping) {
-      closeShopping.onclick = () => {
-        cartItem?.classList.remove('active');
-      };
-    }
-
-    if (document.querySelector('#search-btn')) {
-      (document.querySelector('#search-btn') as HTMLElement).onclick = () => {
-        searchForm?.classList.toggle('active');
-        navbar?.classList.remove('active');
-        cartItem?.classList.remove('active');
-      };
-    }
-
-    if (document.querySelector('#cart-btn')) {
-      (document.querySelector('#cart-btn') as HTMLElement).onclick = () => {
-        cartItem?.classList.toggle('active');
-        navbar?.classList.remove('active');
-        searchForm?.classList.remove('active');
-      };
-    }
-
-    if (userbtn) {
-      userbtn.onclick = () => {
-        userModal?.showModal();
-      };
-    }
-
-    if (closeModalBtn) {
-      closeModalBtn.onclick = () => {
-        userModal?.close();
-      };
-    }
-
-    if (loginbtn) {
-      loginbtn.onclick = () => {
-        userModal?.showModal();
-      };
-    }
-
-    window.onscroll = () => {
-      navbar?.classList.remove('active');
+  // Verify that the element exists before setting event listeners
+  if (navbar && document.querySelector('#menu-btn')) {
+    (document.querySelector('#menu-btn') as HTMLElement).onclick = () => {
+      navbar.classList.toggle('active');
       cartItem?.classList.remove('active');
       searchForm?.classList.remove('active');
     };
+  }
 
-    if (sign_up_btn) {
-      sign_up_btn.addEventListener("click", () => {
-        container?.classList.add("sign-up-mode");
-      });
-    }
+  if (closeShopping) {
+    closeShopping.onclick = () => {
+      cartItem?.classList.remove('active');
+    };
+  }
 
-    if (sign_in_btn) {
-      sign_in_btn.addEventListener("click", () => {
-        container?.classList.remove("sign-up-mode");
-      });
-    }
-  });
+  if (searchbutton) {
+    searchbutton.onclick = () => {
+      searchForm?.classList.toggle('active');
+      navbar?.classList.remove('active');
+      cartItem?.classList.remove('active');
+    };
+  }
 
+  if (document.querySelector('#cart-btn')) {
+    (document.querySelector('#cart-btn') as HTMLElement).onclick = () => {
+      cartItem?.classList.toggle('active');
+      navbar?.classList.remove('active');
+      searchForm?.classList.remove('active');
+    };
+  }
 
-// Interface definitions
-interface Product {
+  if (userbtn) {
+    userbtn.onclick = () => {
+      userModal?.showModal();
+    };
+  }
+
+  if (closeModalBtn) {
+    closeModalBtn.onclick = () => {
+      userModal?.close();
+    };
+  }
+
+  if (loginbtn) {
+    loginbtn.onclick = () => {
+      userModal?.showModal();
+    };
+  }
+
+  window.onscroll = () => {
+    navbar?.classList.remove('active');
+    cartItem?.classList.remove('active');
+    searchForm?.classList.remove('active');
+  };
+
+  if (sign_up_btn) {
+    sign_up_btn.addEventListener("click", () => {
+      container?.classList.add("sign-up-mode");
+    });
+  }
+
+  if (sign_in_btn) {
+    sign_in_btn.addEventListener("click", () => {
+      container?.classList.remove("sign-up-mode");
+    });
+  }
+
+  // Search functionality
+  if (searchinput && searchbutton) {
+    searchinput.addEventListener('input', () => {
+      const searchTerm = searchinput.value.trim().toLowerCase();
+      filterProducts(searchTerm);
+    });
+
+    searchbutton.addEventListener('click', () => {
+      searchinput.classList.toggle('visible');
+      searchinput.focus();
+    });
+
+    searchinput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        const searchTerm = searchinput.value.trim().toLowerCase();
+        if (searchTerm) {
+          window.location.href = `Menu.html?search=${encodeURIComponent(searchTerm)}`;
+        }
+      }
+    });
+  }
+
+  // Function to filter and display products based on search input
+  function filterProducts(searchTerm: string) {
+    const listContainer = document.querySelector('.list') as HTMLDivElement;
+    listContainer.innerHTML = ''; // Clear previous results
+
+    const filteredProducts = products.filter(product =>
+      product.name.toLowerCase().includes(searchTerm)
+    );
+
+    filteredProducts.forEach(product => {
+      const productDiv = document.createElement('div');
+      productDiv.classList.add('item');
+      const hasDiscount = product.discountedPrice !== undefined;
+      const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
+      const originalPrice = hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : '';
+
+      productDiv.innerHTML = `
+        <a href="Menu.html?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}&explain=${encodeURIComponent(product.explain)}">
+          <img src="${product.image}" alt="${product.name}">
+        </a>
+        <div class="title">${product.name}</div>
+        <div class="price">$${displayPrice} ${originalPrice}</div>
+        <button onclick="addToCard(${product.id})">Add To Cart</button>
+      `;
+      listContainer.appendChild(productDiv);
+    });
+  }
+
+  // Interface definitions
+  interface Product {
     id: number;
     name: string;
     image: string;
     price: number;
     explain: string;
-}
+    discountedPrice?: number; // Optional property for discounted price
+  }
 
-interface ProductCard extends Product {
+  interface ProductCard extends Product {
     quantity: number;
-}
+  }
 
-// Products list
-let products: Product[] = [
-    { id: 1, name: 'PRODUCT NAME 1', image: 'creatine.webp', price: 20, explain: 'This is creatine' },
-    { id: 2, name: 'PRODUCT NAME 2', image: 'creatine2.webp', price: 20, explain: 'This is creatine' },
+  // Products list
+  const products: Product[] = [
+    { id: 1, name: 'PRODUCT NAME 1', image: 'creatine.webp', price: 20, explain: 'This is creatine', discountedPrice: 15 },
+    { id: 2, name: 'PRODUCT NAME 2', image: 'creatine2.webp', price: 20, explain: 'This is creatine', discountedPrice: 18 },
     { id: 3, name: 'PRODUCT NAME 3', image: 'creatine3.webp', price: 20, explain: 'This is creatine' },
-    { id: 4, name: 'PRODUCT NAME 4', image: 'creatine4.webp', price: 20, explain: 'This is creatine' },
-];
+    { id: 4, name: 'PRODUCT NAME 4', image: 'creatine4.webp', price: 20, explain: 'This is creatine', discountedPrice: 17 },
+  ];
 
-let listCards: (ProductCard | null)[] = [];
+  let listCards: (ProductCard | null)[] = [];
 
-// Initialize product list for the index page
-function initApp(): void {
-    const list = document.querySelector('.list') as HTMLDivElement;
-    products.forEach((value, key) => {
-        const newDiv = document.createElement('div');
-        newDiv.classList.add('item');
-        newDiv.innerHTML = `
-            <a href="Menu.html?id=${value.id}&name=${encodeURIComponent(value.name)}&price=${value.price}&image=${encodeURIComponent(value.image)}">
-                <img src="${value.image}" alt="${value.name}">
-            </a>
-            <div class="title">
-                <a href="Menu.html?id=${value.id}&name=${encodeURIComponent(value.name)}&price=${value.price}&image=${encodeURIComponent(value.image)}">${value.name}</a>
-            </div>
-            <div class="price">${value.price.toLocaleString()}$</div>
-            <button onclick="addToCard(${key})">Add To Cart</button>`;
-        list.appendChild(newDiv);
-    });
-}
-
-// Add product to cart
-function addToCard(key: number): void {
-    if (!listCards[key]) {
-        const productCopy: ProductCard = { ...products[key], quantity: 1 };
-        listCards[key] = productCopy;
-    } else {
-        listCards[key]!.quantity += 1; // Increase quantity if already in the cart
+  // Load cart from localStorage
+  function loadCart(): void {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      listCards = JSON.parse(storedCart);
     }
-    reloadCard();
-}
-(window as any).addToCard = addToCard; // Make function globally accessible
+  }
 
-// Change product quantity
-function changeQuantity(key: number, quantity: number): void {
-    if (quantity === 0) {
-        listCards[key] = null;
-    } else {
-        const currentProduct = listCards[key];
-        if (currentProduct) {
-            currentProduct.quantity = quantity;
-        }
+  // Save cart to localStorage
+  function saveCart(): void {
+    localStorage.setItem('cart', JSON.stringify(listCards));
+  }
+
+  // Add product to cart function
+  function addToCard(key: number): void {
+    const productIndex = products.findIndex((product) => product.id === key);
+    if (productIndex >= 0) {
+      if (!listCards[productIndex]) {
+        const productCopy: ProductCard = { ...products[productIndex], quantity: 1 };
+        listCards[productIndex] = productCopy;
+      } else {
+        listCards[productIndex]!.quantity += 1; // Increase quantity if already in the cart
+      }
+      saveCart();
+      reloadCard();
     }
-    reloadCard();
-}
-(window as any).changeQuantity = changeQuantity; // Make function globally accessible
+  }
+  (window as any).addToCard = addToCard; // Make function globally accessible
 
-// Reload cart items on index page
-function reloadCard(): void {
+  // Reload cart items on index page
+  function reloadCard(): void {
     const listCard = document.querySelector('.listCard') as HTMLUListElement;
     const total = document.querySelector('.total') as HTMLDivElement;
     const quantity = document.querySelector('.quantity') as HTMLSpanElement;
@@ -161,30 +195,46 @@ function reloadCard(): void {
     let totalPrice = 0;
 
     listCards.forEach((value, key) => {
-        if (value) {
-            totalPrice += value.price * value.quantity;
-            count += value.quantity;
-            const newDiv = document.createElement('li');
-            newDiv.innerHTML = `
-                <div><img src="${value.image}" alt="${value.name}"></div>
-                <div>${value.name}</div>
-                <div>${value.price.toLocaleString()}$</div>
-                <div>
-                    <button onclick="changeQuantity(${key}, ${value.quantity - 1})">-</button>
-                    <div class="count">${value.quantity}</div>
-                    <button onclick="changeQuantity(${key}, ${value.quantity + 1})">+</button>
-                </div>`;
-            listCard.appendChild(newDiv);
-        }
+      if (value) {
+        const hasDiscount = value.discountedPrice !== undefined;
+        const displayPrice = hasDiscount ? value.discountedPrice! : value.price;
+        totalPrice += displayPrice * value.quantity;
+        count += value.quantity;
+        const newDiv = document.createElement('li');
+        newDiv.innerHTML = `
+          <div><img src="${value.image}" alt="${value.name}"></div>
+          <div>${value.name}</div>
+          <div>${displayPrice.toLocaleString()}$</div>
+          <div>
+            <button onclick="changeQuantity(${value.id}, ${value.quantity - 1})">-</button>
+            <div class="count">${value.quantity}</div>
+            <button onclick="changeQuantity(${value.id}, ${value.quantity + 1})">+</button>
+          </div>`;
+        listCard.appendChild(newDiv);
+      }
     });
 
     total.innerText = totalPrice.toLocaleString() + "$";
     quantity.innerText = count.toString();
-}
+  }
 
+  // Function to change quantity of a product in the cart
+  function changeQuantity(id: number, newQuantity: number): void {
+    const productIndex = listCards.findIndex((product) => product?.id === id);
+    if (productIndex >= 0 && listCards[productIndex]) {
+      if (newQuantity <= 0) {
+        listCards[productIndex] = null; // Remove the product if quantity is zero or less
+      } else {
+        listCards[productIndex]!.quantity = newQuantity; // Update the quantity
+      }
+      saveCart();
+      reloadCard(); // Reload the cart to reflect changes
+    }
+  }
+  (window as any).changeQuantity = changeQuantity; // Make function globally accessible
 
-// Utility function to read URL parameters
-function getProductDetailsFromURL(): Product | null {
+  // Function to get URL parameters
+  function getProductDetailsFromURL(): Product | null {
     const urlParams = new URLSearchParams(window.location.search);
     const id = parseInt(urlParams.get('id') || '');
     const name = decodeURIComponent(urlParams.get('name') || '');
@@ -192,75 +242,136 @@ function getProductDetailsFromURL(): Product | null {
     const image = decodeURIComponent(urlParams.get('image') || '');
     const explain = decodeURIComponent(urlParams.get('explain') || '');
 
-    // Return null if mandatory details are missing
-    if (!id || !name || !price || !image && !explain ) return null;
+    if (!id || !name || !price || !image || !explain) return null;
 
     return { id, name, price, image, explain } as Product;
-}
+  }
 
-// Function to initialize the product details page
-function setupMenuPage(): void {
+  // Setup Menu Page
+  function setupMenuPage(): void {
     const product = getProductDetailsFromURL();
     if (!product) {
-        console.error("Invalid product details in URL");
-        return;
+      console.error("Invalid product details in URL");
+      return;
     }
 
-    // Set product details on the page
     const listContainer = document.querySelector('.listcart') as HTMLDivElement;
-    listContainer.innerHTML = `
+    if (listContainer) {
+      const hasDiscount = product.discountedPrice !== undefined;
+      const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
+      const priceHTML = hasDiscount
+        ? `<p class="price"><span class="discounted-price">$${displayPrice}</span> <span class="original-price">$${product.price.toFixed(2)}</span></p>`
+        : `<p class="price">$${displayPrice}</p>`;
+
+      listContainer.innerHTML = `
         <div class="product-detail">
-            <img src="${product.image}" alt="${product.name}">
+          <img src="${product.image}" alt="${product.name}">
+          <div class="info">
             <h1>${product.name}</h1>
-            <p class="price">$${product.price.toFixed(2)}</p>
+            <p class="explain">${product.explain}</p>
+            ${priceHTML}
             <button id="add-to-cart-btn">Add to Cart</button>
+          </div>
         </div>
-    `;
-    const listCart = document.querySelector('.listcart') as HTMLDivElement;
-    listCart.innerHTML = `
-        <div class="product-detail">
-            <img src="${product.image}" alt="${product.name}">
-         <div class="product">
-            <h1>${product.name}</h1>
-            <p class="explain">${product.explain}<p>
-            <p class="price">$${product.price.toFixed(2)}</p>
-            <button id="add-to-cart-btn">Add to Cart</button>
-        </div>
-        </div>
-    `;
+      `;
 
-    // Handle adding the product to the cart
-    const addToCartButton = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
-    addToCartButton.addEventListener('click', () => {
-        // Retrieve the cart from localStorage
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]') as ProductCard[];
+      const addToCartButton = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
+      if (addToCartButton) {
+        addToCartButton.addEventListener('click', () => {
+          addToCard(product.id);
+          alert('Product added to cart!');
+        });
+      }
+    }
 
-        // Check if the product is already in the cart
-        const existingProductIndex = cart.findIndex((item: ProductCard) => item.id === product.id);
+    // Display other products at the bottom
+    const otherProductsContainer = document.querySelector('.other-products') as HTMLDivElement;
+    if (otherProductsContainer) {
+      const otherProducts = products.filter(p => p.id !== product.id);
+      otherProductsContainer.innerHTML = otherProducts.map(generateProductHTML).join('');
+    }
+  }
 
-        if (existingProductIndex !== -1) {
-            // If the product is already in the cart, increase the quantity
-            cart[existingProductIndex].quantity += 1;
-        } else {
-            // Add new product to the cart
-            cart.push({ ...product, quantity: 1 });
-        }
+  // Initialize app on index page
+  function initApp(): void {
+    const list = document.querySelector('.list') as HTMLDivElement;
+    products.forEach((product) => {
+      const newDiv = document.createElement('div');
+      newDiv.classList.add('item');
+      const hasDiscount = product.discountedPrice !== undefined;
+      const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
+      const originalPrice = hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : '';
 
-        // Save the updated cart to localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        // Update the in-memory listCards array to reflect the new cart state
-        listCards = cart;
-
-        // Reload the cart to update the UI
-        reloadCard();
-
-        alert('Product added to cart!');
+      newDiv.innerHTML = `
+        <a href="Menu.html?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}&explain=${encodeURIComponent(product.explain)}">
+          <img src="${product.image}" alt="${product.name}">
+        </a>
+        <div class="title">${product.name}</div>
+        <div class="price">$${displayPrice} ${originalPrice}</div>
+        <button onclick="addToCard(${product.id})">Add To Cart</button>`;
+      list.appendChild(newDiv);
     });
 
-}
+    // Add search functionality to navigate to Menu.html with search term
+    if (searchinput) {
+      searchinput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter' ) {
+          const searchTerm = searchinput.value.trim().toLowerCase()
+          if (searchTerm) {
+            window.location.href = `Menu.html?search=${encodeURIComponent(searchTerm)}`;
+          }
+        }
+      });
+    }
+  }
 
-// Reload cart and set up the menu page when the script runs
-initApp(); // Initialize index page product list
-setupMenuPage(); // Setup product details on Menu.html
-reloadCard(); // Sync cart state
+  // Function to populate the menu with products
+  function populateMenu(products: Product[]): void {
+    const container = document.querySelector('.box-container');
+    if (container) {
+      const normalPriceProducts = products.filter(product => product.discountedPrice === undefined);
+      container.innerHTML = normalPriceProducts.map(generateProductHTML).join('');
+    }
+  }
+
+  // Function to populate the discounted menu with products
+  function populateDiscountedMenu(products: Product[]): void {
+    const container = document.querySelector('.box-container');
+    if (container) {
+      const discountedProducts = products.filter(product => product.discountedPrice !== undefined);
+      container.innerHTML = discountedProducts.map(generateProductHTML).join('');
+    }
+  }
+
+  // Call the appropriate function to populate the menu on page load
+  if (window.location.pathname.includes('Menu.html')) {
+    setupMenuPage();
+    populateDiscountedMenu(products);
+  } else {
+    initApp();
+    populateMenu(products);
+  }
+
+  // Always reload the cart on page load
+  loadCart();
+  reloadCard();
+  filterProducts(''); // Display all products initially
+
+  // Function to generate HTML for a product
+  function generateProductHTML(product: Product): string {
+    const hasDiscount = product.discountedPrice !== undefined;
+    const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
+    const originalPrice = hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : '';
+
+    return `
+      <div class="box">
+        <a href="Menu.html?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}&explain=${encodeURIComponent(product.explain)}">
+          <img src="${product.image}" alt="${product.name}">
+        </a>
+        <h3>${product.name}</h3>
+        <div class="price">$${displayPrice} ${originalPrice}</div>
+        <a href="#" class="btn" onclick="addToCard(${product.id})">add to cart</a>
+      </div>
+    `;
+  }
+});
