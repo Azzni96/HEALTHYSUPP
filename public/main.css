@@ -784,6 +784,55 @@ dialog .close {
   color: #888;
   margin-left: 10px;
 }
+.feedback-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.feedback-container h2 {
+  text-align: center;
+}
+.feedback-container form {
+  display: flex;
+  flex-direction: column;
+}
+.feedback-container form input,
+.feedback-container form textarea,
+.feedback-container form button {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+.feedback-list {
+  margin-top: 20px;
+}
+.feedback-item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.feedback-item button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.feedback-item strong {
+  margin-right: 10px;
+  color: #fff;
+}
+.feedback-item button:hover {
+  background-color: darkred;
+}
+.feedback-item p {
+  margin: 0;
+  color: #fff;
+}
 /* Responsive styles */
 @media (max-width: 870px) {
   .home {
