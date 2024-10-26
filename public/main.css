@@ -833,6 +833,53 @@ dialog .close {
   margin: 0;
   color: #fff;
 }
+/* Footer styles */
+footer {
+  background-color: #272626;
+  padding: 20px 0;
+  border-top: 1px solid #292828;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-logo img {
+  max-width: 150px;
+  margin-bottom: 20px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.footer-social a img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.3s ease;
+}
+
+.footer-social a img:hover {
+  transform: scale(1.1);
+}
+
+.footer-text {
+  text-align: center;
+  color: #555;
+}
+
+.footer-text p {
+  margin: 0;
+  font-size: 14px;
+}
 /* Responsive styles */
 @media (max-width: 870px) {
   .home {
