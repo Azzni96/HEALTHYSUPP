@@ -1,3 +1,5 @@
+import { loadStripe } from "@stripe/stripe-js";
+import axios from 'axios';
 document.addEventListener('DOMContentLoaded', () => {
   // Select necessary elements
   const navbar = document.querySelector('.navbar') as HTMLElement | null;
@@ -80,6 +82,57 @@ document.addEventListener('DOMContentLoaded', () => {
       container?.classList.remove("sign-up-mode");
     });
   }
+//sign
+const signUpForm = document.querySelector('.sign-up-form') as HTMLFormElement | null;
+if (signUpForm) {
+  signUpForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const usernameInput = signUpForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
+    const emailInput = signUpForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
+    const passwordInput = signUpForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+
+    try {
+      const response = await axios.post('/api/auth/signup', {
+        username: usernameInput.value,
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+
+      if (response.status === 201) {
+        alert('Sign-up successful!');
+        // Redirect or update UI based on response
+      }
+    } catch (error) {
+      console.error('Sign-up error:', error);
+      alert('Sign-up failed. Please try again.');
+    }
+  });
+}
+
+// Sign-in event handler
+const signInForm = document.querySelector('.sign-in-form') as HTMLFormElement | null;
+if (signInForm) {
+  signInForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const usernameInput = signInForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
+    const passwordInput = signInForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+
+    try {
+      const response = await axios.post('/api/auth/signin', {
+        username: usernameInput.value,
+        password: passwordInput.value,
+      });
+
+      if (response.status === 200) {
+        alert('Sign-in successful!');
+        // Store authentication token if provided, and redirect or update UI
+      }
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      alert('Sign-in failed. Please check your credentials.');
+    }
+  });
+}
 
   // Search functionality
   if (searchinput && searchbutton) {
@@ -195,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalPrice = 0;
 
     listCards.forEach((value, key) => {
+      console.log(key);
       if (value) {
         const hasDiscount = value.discountedPrice !== undefined;
         const displayPrice = hasDiscount ? value.discountedPrice! : value.price;
@@ -429,3 +483,55 @@ document.addEventListener('DOMContentLoaded', () => {
    loadFeedback();
  }
 });
+// Function to create a checkout session
+// Initialize Stripe.js with your publishable key
+const stripePromise = loadStripe('your-publishable-key-here');
+
+// Function to create a checkout session
+// Function to create a checkout session
+async function createCheckoutSession() {
+  try {
+    const response = await fetch('http://localhost:5173/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        // Add necessary data here
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const session = await response.json();
+    return session;
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    throw error;
+  }
+}
+
+// Event listener for the checkout button
+const checkoutButton = document.getElementById('checkout-button');
+if (checkoutButton) {
+  checkoutButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+    try {
+      const session = await createCheckoutSession();
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      if (stripe) {
+        const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
+        if (error) {
+          console.error('Error redirecting to checkout:', error);
+        }
+      }
+    } catch (error) {
+      console.error('Error during checkout:', error);
+    }
+  });
+} else {
+  console.error('Checkout button not found');
+}

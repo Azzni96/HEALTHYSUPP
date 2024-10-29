@@ -431,7 +431,19 @@ header .icons span{
 }
 
 /* Contact-sektion tyylit */
-
+#checkout-button{
+  background-color: #000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 20px;
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+}
+#checkout-button:hover{
+  background-color: #fff;
+  color: #000;
+}
 
 .contact .row {
   display: flex;
