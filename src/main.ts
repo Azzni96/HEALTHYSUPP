@@ -1,3 +1,4 @@
+import axios from 'axios';
 document.addEventListener('DOMContentLoaded', () => {
   // Select necessary elements
   const navbar = document.querySelector('.navbar') as HTMLElement | null;
@@ -80,6 +81,58 @@ document.addEventListener('DOMContentLoaded', () => {
       container?.classList.remove("sign-up-mode");
     });
   }
+  const signUpForm = document.querySelector('.sign-up-form') as HTMLFormElement | null;
+if (signUpForm) {
+  signUpForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const usernameInput = signUpForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
+    const emailInput = signUpForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
+    const passwordInput = signUpForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+    const phoneInput = signUpForm.querySelector('input[placeholder="Phone"]') as HTMLInputElement;
+
+    try {
+      const response = await axios.post('/api/auth/signup', {
+        username: usernameInput.value,
+        email: emailInput.value,
+        password: passwordInput.value,
+        phone: phoneInput.value,
+      });
+
+      if (response.status === 201) {
+        console.log('Sign-up successful!');
+        // Redirect or update UI based on response
+      }
+    } catch (error) {
+      console.error('Sign-up error:', error);
+      console.log('Sign-up failed. Please try again.');
+    }
+  });
+}
+
+// Sign-in event handler
+const signInForm = document.querySelector('.sign-in-form') as HTMLFormElement | null;
+if (signInForm) {
+  signInForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const usernameInput = signInForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
+    const passwordInput = signInForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+
+    try {
+      const response = await axios.post('/api/auth/signin', {
+        username: usernameInput.value,
+        password: passwordInput.value,
+      });
+
+      if (response.status === 200) {
+        alert('Sign-in successful!');
+        // Store authentication token if provided, and redirect or update UI
+      }
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      alert('Sign-in failed. Please check your credentials.');
+    }
+  });
+}
 
   // Search functionality
   if (searchinput && searchbutton) {
