@@ -114,22 +114,22 @@ const signInForm = document.querySelector('.sign-in-form') as HTMLFormElement | 
 if (signInForm) {
   signInForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const usernameInput = signInForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
+    const emailInput = signInForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
     const passwordInput = signInForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
 
     try {
       const response = await axios.post('/api/auth/signin', {
-        username: usernameInput.value,
+        email: emailInput.value,
         password: passwordInput.value,
       });
 
       if (response.status === 200) {
-        alert('Sign-in successful!');
+        console.log('Sign-in successful!');
         // Store authentication token if provided, and redirect or update UI
       }
     } catch (error) {
       console.error('Sign-in error:', error);
-      alert('Sign-in failed. Please check your credentials.');
+      console.log('Sign-in failed. Please check your credentials.');
     }
   });
 }
