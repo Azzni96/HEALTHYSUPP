@@ -1,25 +1,34 @@
 const express = require('express');
-const connectDB = require('./config/db');
-const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const path = require('path');
 const authRoutes = require('./routes/authRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
+const connectDB = require('./config/db'); // Ensure this file connects to MongoDB properly
 
 const app = express();
+
+// Connect to MongoDB
 connectDB();
 
-
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use('/api/auth', authRoutes);
-
+app.use(express.json());
 app.use(express.static('public'));
 
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/feedback', feedbackRoutes); // Mounted feedback route
+
+// Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

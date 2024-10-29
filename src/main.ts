@@ -428,57 +428,42 @@ if (signInForm) {
     `;
   }
 
-  // Feedback form functionality
- // Feedback form functionality
- const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement | null;
- const feedbackList = document.getElementById('feedback-list') as HTMLDivElement | null;
+  const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement | null;
 
- if (feedbackForm && feedbackList) {
-   // Load feedback from localStorage
-   function loadFeedback(): void {
-     const feedbacks: { name: string; feedback: string }[] = JSON.parse(localStorage.getItem('feedbacks') || '[]');
-     if (feedbackList) {
-       feedbackList.innerHTML = feedbacks.map((feedback, index) => `
-         <div class="feedback-item">
-           <strong>${feedback.name}</strong>
-           <p>${feedback.feedback}</p>
-           <button onclick="removeFeedback(${index})">Poista</button>
-         </div>
-       `).join('');
-     }
-   }
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const nameInput = document.getElementById('name') as HTMLInputElement;
+      const feedbackInput = document.getElementById('feedback') as HTMLTextAreaElement;
+      const emailInput = document.getElementById('email') as HTMLInputElement; // Add email input
 
-   // Save feedback to localStorage
-   function saveFeedback(name: string, feedback: string): void {
-     const feedbacks: { name: string; feedback: string }[] = JSON.parse(localStorage.getItem('feedbacks') || '[]');
-     feedbacks.push({ name, feedback });
-     localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-     loadFeedback();
-   }
+      if (nameInput && feedbackInput && emailInput) {
+        const feedbackData = {
+          name: nameInput.value,
+          email: emailInput.value,
+          message: feedbackInput.value,
+        };
 
-   // Remove feedback from localStorage
-   function removeFeedback(index: number): void {
-     const feedbacks: { name: string; feedback: string }[] = JSON.parse(localStorage.getItem('feedbacks') || '[]');
-     feedbacks.splice(index, 1);
-     localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-     loadFeedback();
-   }
-   (window as any).removeFeedback = removeFeedback; // Make function globally accessible
+        try {
+          const response = await fetch('http://localhost:3000/api/feedback', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(feedbackData),
+          });
 
-   // Handle form submission
-   feedbackForm.addEventListener('submit', (event: Event) => {
-     event.preventDefault();
-     const nameInput = document.getElementById('name') as HTMLInputElement;
-     const feedbackInput = document.getElementById('feedback') as HTMLTextAreaElement;
-     if (nameInput && feedbackInput) {
-       const name = nameInput.value;
-       const feedback = feedbackInput.value;
-       saveFeedback(name, feedback);
-       feedbackForm.reset();
-     }
-   });
-
-   // Initial load
-   loadFeedback();
- }
+          if (response.ok) {
+            alert('Feedback submitted successfully!');
+            feedbackForm.reset();
+          } else {
+            alert('Failed to submit feedback');
+          }
+        } catch (error) {
+          console.error('Error submitting feedback:', error);
+          alert('An error occurred while submitting feedback');
+        }
+      }
+    });
+  }
 });
