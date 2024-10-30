@@ -9,8 +9,17 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "typescript": "^5.6.2",
     "vite": "^4.5.5",
     "vite-plugin-pwa": "^0.20.5"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.7.3"
   }
 }
