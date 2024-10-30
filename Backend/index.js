@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const productRoutes = require('./routes/productRoutes');
 const connectDB = require('./config/db'); // Ensure this file connects to MongoDB properly
 
 const app = express();
@@ -22,10 +23,10 @@ app.use(express.static('public'));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes); // Mounted feedback route
-
+app.use('/api/', productRoutes);
 // Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public'));
 });
 
 // Start server

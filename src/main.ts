@@ -466,4 +466,58 @@ if (signInForm) {
       }
     });
   }
+  interface product {
+  _id: string; // Assuming MongoDB ObjectId will be returned as a string
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+}
+
+window.addEventListener('load', async () => {
+  try {
+    console.log("Attempting to fetch products...");
+
+    // Fetch products from the API
+    const response = await fetch('http://localhost:3000/api/products');
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // Parse the response as JSON
+    const products: product[] = await response.json();
+    console.log('Fetched products:', products); // Log to verify data
+
+    // Get the container to display products
+    const productContainer = document.getElementById('product-list') as HTMLElement | null;
+    console.log('Product container:', productContainer); // Log to verify container
+
+    if (productContainer) {
+      productContainer.innerHTML = ''; // Clear anys previous content
+
+      products.forEach((product: product) => {
+        console.log('Appending product:', product); // Add debug log
+
+        // Create a div element for each product
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product-item');
+        productDiv.innerHTML = `
+          <h2>${product.name}</h2>
+          <p>${product.description}</p>
+          <p>Price: $${product.price}</p>
+          <img src="${product.image}" alt="${product.name}" width="200">
+          <button id="add-to-cart-btn">Add to Cart</button>
+        `;
+
+        // Append the new product div to the container
+        productContainer.appendChild(productDiv);
+      });
+    } else {
+      console.error('Product container not found');
+    }
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+});
 });
