@@ -328,7 +328,7 @@ async function checkout(): Promise<void> {
       const response = await axios.post('/create-checkout-session', { amount: totalAmount * 100 });
 
       if (response.data.id) {
-         const stripe = await loadStripe('pk_test_51QGlItRvF2XeuAxviPQAtYF18cKUpN9WCn4AhgDO9Y1zCOq4INPgiFw55WDc3xZfj19D2cNFo4mxRh2voYtBvqRz00C0yR9HS7'); // Korvaa omalla Stripe-julkisella avaimellasi
+         const stripe = await loadStripe('your strip'); // Korvaa omalla Stripe-julkisella avaimellasi
          if (stripe) {
             await stripe.redirectToCheckout({ sessionId: response.data.id });
          } else {
