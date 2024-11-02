@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { loadStripe } from '@stripe/stripe-js';
 document.addEventListener('DOMContentLoaded', () => {
   // Select necessary elements
   const navbar = document.querySelector('.navbar') as HTMLElement | null;
@@ -14,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginbtn = document.querySelector(".login-btn") as HTMLElement;
   const searchinput = document.getElementById('search-box') as HTMLInputElement | null;
   const searchbutton = document.getElementById('search-btn') as HTMLElement | null;
+  const clearCartButton = document.getElementById('clear-cart') as HTMLButtonElement;
+  const checkoutButton = document.getElementById('checkout') as HTMLButtonElement;
 
   // Verify that the element exists before setting event listeners
   if (navbar && document.querySelector('#menu-btn')) {
@@ -81,60 +84,72 @@ document.addEventListener('DOMContentLoaded', () => {
       container?.classList.remove("sign-up-mode");
     });
   }
+
   const signUpForm = document.querySelector('.sign-up-form') as HTMLFormElement | null;
-if (signUpForm) {
-  signUpForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const usernameInput = signUpForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
-    const emailInput = signUpForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
-    const passwordInput = signUpForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
-    const phoneInput = signUpForm.querySelector('input[placeholder="Phone"]') as HTMLInputElement;
+  if (signUpForm) {
+    signUpForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const usernameInput = signUpForm.querySelector('input[placeholder="Username"]') as HTMLInputElement;
+      const emailInput = signUpForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
+      const passwordInput = signUpForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+      const phoneInput = signUpForm.querySelector('input[placeholder="Phone"]') as HTMLInputElement;
 
-    try {
-      const response = await axios.post('/api/auth/signup', {
-        username: usernameInput.value,
-        email: emailInput.value,
-        password: passwordInput.value,
-        phone: phoneInput.value,
-      });
+      try {
+        const response = await axios.post('/api/auth/signup', {
+          username: usernameInput.value,
+          email: emailInput.value,
+          password: passwordInput.value,
+          phone: phoneInput.value,
+        });
 
-      if (response.status === 201) {
-        console.log('Sign-up successful!');
-        // Redirect or update UI based on response
+        if (response.status === 201) {
+          console.log('Sign-up successful!');
+        }
+      } catch (error) {
+        console.error('Sign-up error:', error);
+        console.log('Sign-up failed. Please try again.');
       }
-    } catch (error) {
-      console.error('Sign-up error:', error);
-      console.log('Sign-up failed. Please try again.');
-    }
-  });
-}
+    });
+  }
 
-// Sign-in event handler
-const signInForm = document.querySelector('.sign-in-form') as HTMLFormElement | null;
-if (signInForm) {
-  signInForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const emailInput = signInForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
-    const passwordInput = signInForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+  const signInForm = document.querySelector('.sign-in-form') as HTMLFormElement | null;
+  if (signInForm) {
+    signInForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const emailInput = signInForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
+      const passwordInput = signInForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
 
-    try {
-      const response = await axios.post('/api/auth/signin', {
-        email: emailInput.value,
-        password: passwordInput.value,
-      });
+      try {
+        const response = await axios.post('/api/auth/signin', {
+          email: emailInput.value,
+          password: passwordInput.value,
+        });
 
-      if (response.status === 200) {
-        console.log('Sign-in successful!');
-        // Store authentication token if provided, and redirect or update UI
+        if (response.status === 200) {
+          console.log('Sign-in successful!');
+        }
+      } catch (error) {
+        console.error('Sign-in error:', error);
+        console.log('Sign-in failed. Please check your credentials.');
       }
-    } catch (error) {
-      console.error('Sign-in error:', error);
-      console.log('Sign-in failed. Please check your credentials.');
-    }
-  });
-}
+    });
+  }
 
-  // Search functionality
+  function filterProducts(searchTerm: string): void {
+    const productContainer = document.getElementById('product-list') as HTMLElement | null;
+    if (productContainer) {
+      const products = productContainer.querySelectorAll('.product-item');
+      products.forEach(product => {
+        const productName = product.querySelector('h2')?.textContent?.toLowerCase() || '';
+        if (productName.includes(searchTerm)) {
+          (product as HTMLElement).style.display = 'block';
+        } else {
+          (product as HTMLElement).style.display = 'none';
+        }
+      });
+    }
+  }
+
   if (searchinput && searchbutton) {
     searchinput.addEventListener('input', () => {
       const searchTerm = searchinput.value.trim().toLowerCase();
@@ -156,88 +171,86 @@ if (signInForm) {
     });
   }
 
-  // Function to filter and display products based on search input
-  function filterProducts(searchTerm: string) {
-    const listContainer = document.querySelector('.list') as HTMLDivElement;
-    listContainer.innerHTML = ''; // Clear previous results
-
-    const filteredProducts = products.filter(product =>
-      product.name.toLowerCase().includes(searchTerm)
-    );
-
-    filteredProducts.forEach(product => {
-      const productDiv = document.createElement('div');
-      productDiv.classList.add('item');
-      const hasDiscount = product.discountedPrice !== undefined;
-      const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
-      const originalPrice = hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : '';
-
-      productDiv.innerHTML = `
-        <a href="Menu.html?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}&explain=${encodeURIComponent(product.explain)}">
-          <img src="${product.image}" alt="${product.name}">
-        </a>
-        <div class="title">${product.name}</div>
-        <div class="price">$${displayPrice} ${originalPrice}</div>
-        <button onclick="addToCard(${product.id})">Add To Cart</button>
-      `;
-      listContainer.appendChild(productDiv);
-    });
-  }
-
-  // Interface definitions
   interface Product {
-    id: number;
+    _id: string;
     name: string;
-    image: string;
     price: number;
-    explain: string;
-    discountedPrice?: number; // Optional property for discounted price
+    discount: number;
+    discountedPrice: number;
+    description: string;
+    image: string;
   }
 
-  interface ProductCard extends Product {
-    quantity: number;
-  }
+  let products: Product[] = [];
 
-  // Products list
-  const products: Product[] = [
-    { id: 1, name: 'PRODUCT NAME 1', image: 'creatine.webp', price: 20, explain: 'This is creatine', discountedPrice: 15 },
-    { id: 2, name: 'PRODUCT NAME 2', image: 'creatine2.webp', price: 20, explain: 'This is creatine', discountedPrice: 18 },
-    { id: 3, name: 'PRODUCT NAME 3', image: 'creatine3.webp', price: 20, explain: 'This is creatine' },
-    { id: 4, name: 'PRODUCT NAME 4', image: 'creatine4.webp', price: 20, explain: 'This is creatine', discountedPrice: 17 },
-  ];
+  window.addEventListener('load', async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/products');
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-  let listCards: (ProductCard | null)[] = [];
+      products = await response.json();
 
-  // Load cart from localStorage
+      products = products.map(product => ({
+        ...product,
+        discountedPrice: product.discount > 0
+          ? product.price - (product.price * (product.discount / 100))
+          : product.price,
+      }));
+
+      const productContainer = document.getElementById('product-list') as HTMLElement | null;
+      if (productContainer) {
+        productContainer.innerHTML = '';
+        products.forEach(product => {
+          const productDiv = document.createElement('div');
+          productDiv.classList.add('product-item');
+
+          const priceText = product.discount > 0
+            ? `<p><del>$${product.price}</del> $${product.discountedPrice.toFixed(2)}</p>`
+            : `<p>Price: $${product.price.toFixed(2)}</p>`;
+
+          productDiv.innerHTML = `
+            <a href="Menu.html?id=${product._id}&name=${encodeURIComponent(product.name)}&price=${product.discountedPrice}&description=${encodeURIComponent(product.description)}&image=${encodeURIComponent(product.image)}">
+              <h2>${product.name}</h2>
+              <p>${product.description}</p>
+              ${priceText}
+              <img src="${product.image}" alt="${product.name}" width="200">
+              <a href="#" class="btn" onclick="addToCard('${product._id}')">Add to cart</a>
+            </a>
+          `;
+          productContainer.appendChild(productDiv);
+        });
+      } else {
+        console.error('Product container not found');
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  });
+
+  let listCards: { [key: string]: Product & { quantity: number } | null } = {};
+
   function loadCart(): void {
     const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      listCards = JSON.parse(storedCart);
-    }
+    if (storedCart) listCards = JSON.parse(storedCart);
   }
 
-  // Save cart to localStorage
   function saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(listCards));
   }
 
-  // Add product to cart function
-  function addToCard(key: number): void {
-    const productIndex = products.findIndex((product) => product.id === key);
-    if (productIndex >= 0) {
-      if (!listCards[productIndex]) {
-        const productCopy: ProductCard = { ...products[productIndex], quantity: 1 };
-        listCards[productIndex] = productCopy;
-      } else {
-        listCards[productIndex]!.quantity += 1; // Increase quantity if already in the cart
+  function addToCard(id: string): void {
+    if (!listCards[id]) {
+      const product = products.find(product => product._id === id);
+      if (product) {
+        listCards[id] = { ...product, quantity: 1 };
       }
-      saveCart();
-      reloadCard();
+    } else {
+      listCards[id]!.quantity += 1;
     }
+    saveCart();
+    reloadCard();
   }
-  (window as any).addToCard = addToCard; // Make function globally accessible
 
-  // Reload cart items on index page
   function reloadCard(): void {
     const listCard = document.querySelector('.listCard') as HTMLUListElement;
     const total = document.querySelector('.total') as HTMLDivElement;
@@ -247,185 +260,95 @@ if (signInForm) {
     let count = 0;
     let totalPrice = 0;
 
-    listCards.forEach((value, key) => {
+    for (const key in listCards) {
+      const value = listCards[key];
       if (value) {
-        const hasDiscount = value.discountedPrice !== undefined;
-        const displayPrice = hasDiscount ? value.discountedPrice! : value.price;
-        totalPrice += displayPrice * value.quantity;
+        totalPrice += value.price * value.quantity;
         count += value.quantity;
-        const newDiv = document.createElement('li');
-        newDiv.innerHTML = `
-          <div><img src="${value.image}" alt="${value.name}"></div>
-          <div>${value.name}</div>
-          <div>${displayPrice.toLocaleString()}$</div>
-          <div>
-            <button onclick="changeQuantity(${value.id}, ${value.quantity - 1})">-</button>
-            <div class="count">${value.quantity}</div>
-            <button onclick="changeQuantity(${value.id}, ${value.quantity + 1})">+</button>
-          </div>`;
-        listCard.appendChild(newDiv);
+        listCard.innerHTML += `
+          <li>
+            <div><img src="${value.image}" alt="${value.name}"></div>
+            <div>${value.name}</div>
+            <div>$${value.price.toFixed(2)}</div>
+            <div>
+              <button onclick="changeQuantity('${value._id}', ${value.quantity - 1})">-</button>
+              <div class="count">${value.quantity}</div>
+              <button onclick="changeQuantity('${value._id}', ${value.quantity + 1})">+</button>
+            </div>
+          </li>`;
       }
-    });
-
-    total.innerText = totalPrice.toLocaleString() + "$";
+    }
+    total.innerText = `$${totalPrice.toFixed(2)}`;
     quantity.innerText = count.toString();
   }
 
-  // Function to change quantity of a product in the cart
-  function changeQuantity(id: number, newQuantity: number): void {
-    const productIndex = listCards.findIndex((product) => product?.id === id);
-    if (productIndex >= 0 && listCards[productIndex]) {
+  function changeQuantity(id: string, newQuantity: number): void {
+    if (listCards[id]) {
       if (newQuantity <= 0) {
-        listCards[productIndex] = null; // Remove the product if quantity is zero or less
+        listCards[id] = null;
       } else {
-        listCards[productIndex]!.quantity = newQuantity; // Update the quantity
+        listCards[id]!.quantity = newQuantity;
       }
       saveCart();
-      reloadCard(); // Reload the cart to reflect changes
+      reloadCard();
     }
   }
-  (window as any).changeQuantity = changeQuantity; // Make function globally accessible
 
-  // Function to get URL parameters
-  function getProductDetailsFromURL(): Product | null {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = parseInt(urlParams.get('id') || '');
-    const name = decodeURIComponent(urlParams.get('name') || '');
-    const price = parseFloat(urlParams.get('price') || '0');
-    const image = decodeURIComponent(urlParams.get('image') || '');
-    const explain = decodeURIComponent(urlParams.get('explain') || '');
+  (window as any).addToCard = addToCard;
+  (window as any).changeQuantity = changeQuantity;
 
-    if (!id || !name || !price || !image || !explain) return null;
+  window.addEventListener('load', () => {
+    loadCart();
+    reloadCard();
+  });
 
-    return { id, name, price, image, explain } as Product;
+  function clearCart(): void {
+    listCards = {};
+    saveCart();
+    reloadCard();
+    alert('Ostoskorisi on tyhjennetty.');
   }
 
-  // Setup Menu Page
-  function setupMenuPage(): void {
-    const product = getProductDetailsFromURL();
-    if (!product) {
-      console.error("Invalid product details in URL");
+async function checkout(): Promise<void> {
+   if (Object.keys(listCards).length === 0) {
+      alert('Ostoskorisi on tyhjä.');
       return;
-    }
+   }
 
-    const listContainer = document.querySelector('.listcart') as HTMLDivElement;
-    if (listContainer) {
-      const hasDiscount = product.discountedPrice !== undefined;
-      const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
-      const priceHTML = hasDiscount
-        ? `<p class="price"><span class="discounted-price">$${displayPrice}</span> <span class="original-price">$${product.price.toFixed(2)}</span></p>`
-        : `<p class="price">$${displayPrice}</p>`;
-
-      listContainer.innerHTML = `
-        <div class="product-detail">
-          <img src="${product.image}" alt="${product.name}">
-          <div class="info">
-            <h1>${product.name}</h1>
-            <p class="explain">${product.explain}</p>
-            ${priceHTML}
-            <button id="add-to-cart-btn">Add to Cart</button>
-          </div>
-        </div>
-      `;
-
-      const addToCartButton = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
-      if (addToCartButton) {
-        addToCartButton.addEventListener('click', () => {
-          addToCard(product.id);
-          alert('Product added to cart!');
-        });
+   // Laske kokonaissumma
+   let totalAmount = 0;
+   for (const key in listCards) {
+      const product = listCards[key];
+      if (product) {
+         totalAmount += product.price * product.quantity;
       }
-    }
+   }
 
-    // Display other products at the bottom
-    const otherProductsContainer = document.querySelector('.other-products') as HTMLDivElement;
-    if (otherProductsContainer) {
-      const otherProducts = products.filter(p => p.id !== product.id);
-      otherProductsContainer.innerHTML = otherProducts.map(generateProductHTML).join('');
-    }
+   try {
+      const response = await axios.post('/create-checkout-session', { amount: totalAmount * 100 });
+
+      if (response.data.id) {
+         const stripe = await loadStripe('pk_test_51QGlItRvF2XeuAxviPQAtYF18cKUpN9WCn4AhgDO9Y1zCOq4INPgiFw55WDc3xZfj19D2cNFo4mxRh2voYtBvqRz00C0yR9HS7'); // Korvaa omalla Stripe-julkisella avaimellasi
+         if (stripe) {
+            await stripe.redirectToCheckout({ sessionId: response.data.id });
+         } else {
+            console.error('Stripe ladattu virheellisesti');
+         }
+      } else {
+         console.error('Checkout session ID puuttuu');
+      }
+   } catch (error) {
+      console.error('Maksun käsittelyssä tapahtui virhe:', error);
+      alert('Maksun käsittelyssä tapahtui virhe.');
+   }
+}
+
+  if (clearCartButton) {
+    clearCartButton.addEventListener('click', clearCart);
   }
 
-  // Initialize app on index page
-  function initApp(): void {
-    const list = document.querySelector('.list') as HTMLDivElement;
-    products.forEach((product) => {
-      const newDiv = document.createElement('div');
-      newDiv.classList.add('item');
-      const hasDiscount = product.discountedPrice !== undefined;
-      const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
-      const originalPrice = hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : '';
-
-      newDiv.innerHTML = `
-        <a href="Menu.html?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}&explain=${encodeURIComponent(product.explain)}">
-          <img src="${product.image}" alt="${product.name}">
-        </a>
-        <div class="title">${product.name}</div>
-        <div class="price">$${displayPrice} ${originalPrice}</div>
-        <button onclick="addToCard(${product.id})">Add To Cart</button>`;
-      list.appendChild(newDiv);
-    });
-
-    // Add search functionality to navigate to Menu.html with search term
-    if (searchinput) {
-      searchinput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter' ) {
-          const searchTerm = searchinput.value.trim().toLowerCase()
-          if (searchTerm) {
-            window.location.href = `Menu.html?search=${encodeURIComponent(searchTerm)}`;
-          }
-        }
-      });
-    }
-  }
-
-  // Function to populate the menu with products
-  function populateMenu(products: Product[]): void {
-    const container = document.querySelector('.box-container');
-    if (container) {
-      const normalPriceProducts = products.filter(product => product.discountedPrice === undefined);
-      container.innerHTML = normalPriceProducts.map(generateProductHTML).join('');
-    }
-  }
-
-  // Function to populate the discounted menu with products
-  function populateDiscountedMenu(products: Product[]): void {
-    const container = document.querySelector('.box-container');
-    if (container) {
-      const discountedProducts = products.filter(product => product.discountedPrice !== undefined);
-      container.innerHTML = discountedProducts.map(generateProductHTML).join('');
-    }
-  }
-
-  // Call the appropriate function to populate the menu on page load
-  if (window.location.pathname.includes('Menu.html')) {
-    setupMenuPage();
-    populateDiscountedMenu(products);
-  } else {
-    initApp();
-    populateMenu(products);
-  }
-
-  // Always reload the cart on page load
-  loadCart();
-  reloadCard();
-  filterProducts(''); // Display all products initially
-
-  // Function to generate HTML for a product
-  function generateProductHTML(product: Product): string {
-    const hasDiscount = product.discountedPrice !== undefined;
-    const displayPrice = hasDiscount ? product.discountedPrice!.toFixed(2) : product.price.toFixed(2);
-    const originalPrice = hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : '';
-
-    return `
-      <div class="box">
-        <a href="Menu.html?id=${product.id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}&explain=${encodeURIComponent(product.explain)}">
-          <img src="${product.image}" alt="${product.name}">
-        </a>
-        <h3>${product.name}</h3>
-        <div class="price">$${displayPrice} ${originalPrice}</div>
-        <a href="#" class="btn" onclick="addToCard(${product.id})">add to cart</a>
-      </div>
-    `;
+  if (checkoutButton) {
+    checkoutButton.addEventListener('click', checkout);
   }
 
   const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement | null;
@@ -435,7 +358,7 @@ if (signInForm) {
       event.preventDefault();
       const nameInput = document.getElementById('name') as HTMLInputElement;
       const feedbackInput = document.getElementById('feedback') as HTMLTextAreaElement;
-      const emailInput = document.getElementById('email') as HTMLInputElement; // Add email input
+      const emailInput = document.getElementById('email') as HTMLInputElement;
 
       if (nameInput && feedbackInput && emailInput) {
         const feedbackData = {
@@ -466,58 +389,4 @@ if (signInForm) {
       }
     });
   }
-  interface product {
-  _id: string; // Assuming MongoDB ObjectId will be returned as a string
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-}
-
-window.addEventListener('load', async () => {
-  try {
-    console.log("Attempting to fetch products...");
-
-    // Fetch products from the API
-    const response = await fetch('http://localhost:3000/api/products');
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    // Parse the response as JSON
-    const products: product[] = await response.json();
-    console.log('Fetched products:', products); // Log to verify data
-
-    // Get the container to display products
-    const productContainer = document.getElementById('product-list') as HTMLElement | null;
-    console.log('Product container:', productContainer); // Log to verify container
-
-    if (productContainer) {
-      productContainer.innerHTML = ''; // Clear anys previous content
-
-      products.forEach((product: product) => {
-        console.log('Appending product:', product); // Add debug log
-
-        // Create a div element for each product
-        const productDiv = document.createElement('div');
-        productDiv.classList.add('product-item');
-        productDiv.innerHTML = `
-          <h2>${product.name}</h2>
-          <p>${product.description}</p>
-          <p>Price: $${product.price}</p>
-          <img src="${product.image}" alt="${product.name}" width="200">
-          <button id="add-to-cart-btn">Add to Cart</button>
-        `;
-
-        // Append the new product div to the container
-        productContainer.appendChild(productDiv);
-      });
-    } else {
-      console.error('Product container not found');
-    }
-  } catch (error) {
-    console.error('Error fetching products:', error);
-  }
-});
 });

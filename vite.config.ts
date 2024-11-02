@@ -1,17 +1,25 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   base: './',
+
   server: {
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
       },
+      '/create-checkout-session': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
     },
   },
+
   plugins: [
+    vue(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
@@ -19,12 +27,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}'],
-        // Allow dynamic routing with specific patterns like /Menu.html?id=...
-        navigateFallback: '/index.html', // Fallback to index.html for SPA-like behavior
+        navigateFallback: '/index.html',
         navigateFallbackAllowlist: [
-          // Regular expression to allow /Menu.html and any query parameters
           /^\/Menu.html\?.*/,
-          /^\/index.html$/, // Allow the base index.html route
+          /^\/index.html$/,
         ],
       },
       includeAssets: ['app-icon.svg', 'main.css', 'Pacifico-Regular.ttf'],
