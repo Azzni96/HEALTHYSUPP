@@ -23,4 +23,15 @@ router.post('/products', async (req, res) => {
   }
 });
 
+router.get('/products', async (req, res) => {
+  try {
+    const products = await Product.find().lean();
+    products.forEach(product => {
+      product.discountedPrice = product.price - (product.price * (product.discount / 100))
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

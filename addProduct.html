@@ -7,7 +7,8 @@
   <h1>Add a New Product</h1>
   <form id="product-form">
     <input type="text" id="name" placeholder="Product Name" required>
-    <input type="number" id="price" placeholder="Price" required>
+    <input type="number" id="price" placeholder="Price" required min="0">
+    <input type="number" id="discount" placeholder="Discount %" min="0" max="100"> <!-- Alennuskenttä -->
     <textarea id="description" placeholder="Description"></textarea>
     <input type="text" id="image" placeholder="Image URL">
     <button type="submit">Add Product</button>
@@ -18,9 +19,16 @@
       event.preventDefault();
 
       const name = document.getElementById('name').value;
-      const price = document.getElementById('price').value;
+      const price = parseFloat(document.getElementById('price').value); // Muutetaan numeroksi
+      const discount = parseFloat(document.getElementById('discount').value) || 0; // Valinnainen, oletus 0
       const description = document.getElementById('description').value;
       const image = document.getElementById('image').value;
+
+      // Tarkistetaan, että hinta on positiivinen
+      if (price <= 0) {
+        alert('Price must be a positive number.');
+        return;
+      }
 
       try {
         const response = await fetch('http://localhost:3000/api/products', {
@@ -28,18 +36,19 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name, price, description, image }),
+          body: JSON.stringify({ name, price, discount, description, image }),
         });
 
         if (response.ok) {
           alert('Product added successfully!');
           document.getElementById('product-form').reset();
         } else {
-          alert('Failed to add product');
+          const errorData = await response.json();
+          alert('Failed to add product: ' + (errorData.message || 'Unknown error'));
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred');
+        alert('An error occurred: ' + error.message);
       }
     });
   </script>
