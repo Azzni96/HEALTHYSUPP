@@ -188,47 +188,51 @@ document.addEventListener('DOMContentLoaded', () => {
   // Array of products
   let products: Product[] = [];
   // Load products from the API
-  window.addEventListener('load', async () => {
-    try {
-      const response = await fetch('http://localhost:3000/api/products');
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      products = await response.json();
-      products = products.map((product: any) => ({
-        ...product,
-        discountedPrice: product.discount > 0
-          ? product.price - (product.price * (product.discount / 100))
-          : product.price,
-      }));
-      const productContainer = document.getElementById('product-list') as HTMLElement | null;
-      if (productContainer) {
-        productContainer.innerHTML = '';
-        products.forEach(product => {
-          const productDiv = document.createElement('div');
-          productDiv.classList.add('product-item');
-
-          const priceText = product.discount > 0
-            ? `<p><del>$${product.price}</del> $${product.discountPrice.toFixed(2)}</p>`
-            : `<p>Price:$${product.price.toFixed(2)}</p>`;
-
-          productDiv.innerHTML = `
-            <a href="Menu.html?id=${product._id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}">
-            <h2>${product.name}</h2>
-            <p>${product.description}</p>
-            ${priceText}
-            <img src="${product.image}" alt="${product.name}" width="200">
-            <a href="#" class="btn" onclick="addToCart('${product._id}')">add to cart</a>
-            </a>`;
-          productContainer.appendChild(productDiv);
-        });
-      } else {
-        console.error('Product container not found');
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
+  // Load products from the API
+window.addEventListener('load', async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/products');
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-  });
+
+    products = await response.json();
+    products = products.map((product: any) => ({
+      ...product,
+      discountPrice: product.discount > 0
+        ? (product.price || 0) - ((product.price || 0) * ((product.discount || 0) / 100))
+        : product.price || 0,
+    }));
+
+    const productContainer = document.getElementById('product-list') as HTMLElement | null;
+    if (productContainer) {
+      productContainer.innerHTML = '';
+      products.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product-item');
+
+        const priceText = product.discount > 0
+          ? `<p><del>$${product.price.toFixed(2)}</del> $${product.discountPrice.toFixed(2)}</p>`
+          : `<p>Price: $${product.price.toFixed(2)}</p>`;
+
+        productDiv.innerHTML = `
+          <a href="Menu.html?id=${product._id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}">
+          <h2>${product.name}</h2>
+          <p>${product.description}</p>
+          ${priceText}
+          <img src="${product.image}" alt="${product.name}" width="200">
+          <a href="#" class="btn" onclick="addToCart('${product._id}')">add to cart</a>
+          </a>`;
+        productContainer.appendChild(productDiv);
+      });
+    } else {
+      console.error('Product container not found');
+    }
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+});
+
 
   let listCards: { [key: string]: Product & { quantity: number } | null } = {};
   // Load cart from localStorage

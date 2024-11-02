@@ -8,9 +8,9 @@
   <form id="product-form">
     <input type="text" id="name" placeholder="Product Name" required>
     <input type="number" id="price" placeholder="Price" required min="0">
-    <input type="number" id="discount" placeholder="Discount %" min="0" max="100"> <!-- Alennuskenttä -->
+    <input type="number" id="discount" placeholder="Discount %" min="0" max="100">
     <textarea id="description" placeholder="Description"></textarea>
-    <input type="text" id="image" placeholder="Image URL">
+    <input type="text" id="images" placeholder="Image URLs (comma separated)">
     <button type="submit">Add Product</button>
   </form>
 
@@ -19,12 +19,11 @@
       event.preventDefault();
 
       const name = document.getElementById('name').value;
-      const price = parseFloat(document.getElementById('price').value); // Muutetaan numeroksi
-      const discount = parseFloat(document.getElementById('discount').value) || 0; // Valinnainen, oletus 0
+      const price = parseFloat(document.getElementById('price').value);
+      const discount = parseFloat(document.getElementById('discount').value) || 0;
       const description = document.getElementById('description').value;
-      const image = document.getElementById('image').value;
+      const imageUrls = document.getElementById('images').value.split(',').map(url => url.trim()); // Process multiple image URLs
 
-      // Tarkistetaan, että hinta on positiivinen
       if (price <= 0) {
         alert('Price must be a positive number.');
         return;
@@ -36,7 +35,7 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name, price, discount, description, image }),
+          body: JSON.stringify({ name, price, discount, description, images: imageUrls }),
         });
 
         if (response.ok) {
