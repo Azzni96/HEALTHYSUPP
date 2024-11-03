@@ -1042,7 +1042,31 @@ footer {
 .product-item .btn:hover {
   background-color: #2c2c2d;
 }
+#username-display {
+  display: none;
+  /* Add any additional styles you want for the username display */
+  font-size: 16px;
+  color: #333;
+}
 
+button {
+  /* Add styles for the logout button */
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #45a049; /* Darker green */
+}
 
 /* Responsive styles */
 @media (max-width: 870px) {

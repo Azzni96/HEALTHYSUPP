@@ -110,31 +110,53 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+  document.querySelector('.sign-in-form')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = (document.querySelector('input[placeholder="Email"]') as HTMLInputElement).value;
+    const password = (document.querySelector('input[placeholder="Password"]') as HTMLInputElement).value;
 
-  // Sign-in event handler
-  const signInForm = document.querySelector('.sign-in-form') as HTMLFormElement | null;
-  if (signInForm) {
-    signInForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const emailInput = signInForm.querySelector('input[placeholder="Email"]') as HTMLInputElement;
-      const passwordInput = signInForm.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/signin', { email, password });
+      if (response.status === 200) {
+        const { userId, username } = response.data;
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('username', username); // Store username for quick display
 
-      try {
-        const response = await axios.post('/api/auth/signin', {
-          email: emailInput.value,
-          password: passwordInput.value,
-        });
-
-        if (response.status === 200) {
-          console.log('Sign-in successful!');
-          // Store authentication token if provided, and redirect or update UI
-        }
-      } catch (error) {
-        console.error('Sign-in error:', error);
-        console.log('Sign-in failed. Please check your credentials.');
+        // Update the username display and navigate to Menu.html
+        document.getElementById('username-display')!.innerText = `Welcome, ${username}`;
+        document.getElementById('username-display')!.style.display = 'block';
+        window.location.href = 'index.html';
+      } else {
+        alert('Login failed');
       }
-    });
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      alert('Sign-in failed. Please check your credentials.');
+    }
+  });
+
+  window.addEventListener('load', () => {
+    // Try to load the username from localStorage
+    const username = localStorage.getItem('username');
+    if (username) {
+      document.getElementById('username-display')!.innerText = `Welcome, ${username}`;
+      document.getElementById('username-display')!.style.display = 'block';
+    } else {
+      console.log('Username not found in localStorage');
+    }
+  });
+
+
+
+  function logout() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    document.getElementById('username-display')!.style.display = 'none';
+    window.location.href = 'index.html'; // Redirect to login page or home
   }
+
+(window as any).logout = logout;
+
 
   // Search functionality
   if (searchinput && searchbutton) {

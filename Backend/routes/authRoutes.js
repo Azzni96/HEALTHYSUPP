@@ -20,6 +20,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // Login route
+// Login route
 router.post('/signin', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -29,10 +30,12 @@ router.post('/signin', async (req, res) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
 
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ userId: user._id, username: user.username }); // Send userId and username
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 
 module.exports = router;
