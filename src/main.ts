@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { all } from 'axios';
 document.addEventListener('DOMContentLoaded', () => {
   // Select necessary elements
   const navbar = document.querySelector('.navbar') as HTMLElement | null;
@@ -216,15 +216,15 @@ window.addEventListener('load', async () => {
           : `<p>Price: $${product.price.toFixed(2)}</p>`;
 
         productDiv.innerHTML = `
-          <a href="Menu.html?id=${product._id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}">
           <h2>${product.name}</h2>
           <p>${product.description}</p>
           ${priceText}
           <img src="${product.image}" alt="${product.name}" width="200">
           <a href="#" class="btn" onclick="addToCart('${product._id}')">add to cart</a>
-          </a>`;
+          <a href="Menu.html?id=${product._id}&name=${encodeURIComponent(product.name)}&price=${product.price}&image=${encodeURIComponent(product.image)}" class="btn">View Product</a>`;
         productContainer.appendChild(productDiv);
       });
+
     } else {
       console.error('Product container not found');
     }
@@ -325,6 +325,73 @@ window.addEventListener('load', async () => {
       clearCart();
     });
   }
+  window.addEventListener('load', async () => {
+    const params = new URLSearchParams(window.location.search);
+    const searchProductId = params.get('id'); // Get the selected product ID from URL
+
+    try {
+      const response = await fetch('http://localhost:3000/api/products');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const products = await response.json();
+      console.log('Products:', products);
+
+      const selectedProductContainer = document.getElementById('Product-List') as HTMLElement | null;
+      const allProductsContainer = document.getElementById('All-Products-List') as HTMLElement | null;
+
+      // Find the selected product and display it in Product-List with discount handling
+      if (searchProductId && selectedProductContainer) {
+        const selectedProduct = products.find((product: any) => product._id === searchProductId);
+        if (selectedProduct) {
+          const discountPrice = selectedProduct.discount > 0
+            ? (selectedProduct.price * (1 - selectedProduct.discount / 100)).toFixed(2)
+            : selectedProduct.price.toFixed(2);
+
+          const selectedPriceText = selectedProduct.discount > 0
+            ? `<p><del>$${selectedProduct.price.toFixed(2)}</del> $${discountPrice}</p>`
+            : `<p>Price: $${selectedProduct.price.toFixed(2)}</p>`;
+
+          selectedProductContainer.innerHTML = `
+            <h2>${selectedProduct.name}</h2>
+            <p>${selectedProduct.description}</p>
+            ${selectedPriceText}
+            <img src="${selectedProduct.image}" alt="${selectedProduct.name}" width="200">
+            <a href="#" class="btn" onclick="addToCart('${selectedProduct._id}')">Add to Cart</a>
+          `;
+        } else {
+          selectedProductContainer.innerHTML = `<p>Product not found.</p>`;
+        }
+      }
+
+      // Display all other products in All-Products-List, excluding the selected product, with discount handling
+      if (allProductsContainer) {
+        allProductsContainer.innerHTML = products
+          .filter((product: any) => product._id !== searchProductId) // Exclude selected product
+          .map((product: any) => {
+            const discountPrice = product.discount > 0
+              ? (product.price * (1 - product.discount / 100)).toFixed(2)
+              : product.price.toFixed(2);
+
+            const priceText = product.discount > 0
+              ? `<p><del>$${product.price.toFixed(2)}</del> $${discountPrice}</p>`
+              : `<p>Price: $${product.price.toFixed(2)}</p>`;
+
+            return `
+              <div class="product-item">
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+                ${priceText}
+                <img src="${product.image}" alt="${product.name}" width="200">
+                <a href="?id=${product._id}" class="btn">View Product</a>
+              </div>
+            `;
+          }).join('');
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  });
 
   // Feedback form event listener
   const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement | null;
