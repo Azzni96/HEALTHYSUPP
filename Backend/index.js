@@ -1,17 +1,23 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+const sequelize = require('./config/db'); // Connect to MariaDB using Sequelize
 const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const productRoutes = require('./routes/productRoutes');
-const connectDB = require('./config/db'); // Ensure this file connects to MongoDB properly
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
+// Connect to MariaDB
+sequelize.authenticate()
+  .then(() => {
+    console.log('Connected to MariaDB');
+    return sequelize.sync(); // Sync all defined models with the database
+  })
+  .catch(error => {
+    console.error('Unable to connect to MariaDB:', error);
+  });
 
 // Middleware
 app.use(cors());
@@ -22,11 +28,18 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/feedback', feedbackRoutes); // Mounted feedback route
-app.use('/api/', productRoutes);
+app.use('/api/feedback', feedbackRoutes);
+app.use('/api', productRoutes);
+
 // Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: 'Server error', error: err.message });
 });
 
 // Start server

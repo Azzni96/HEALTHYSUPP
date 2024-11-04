@@ -1,13 +1,10 @@
-const mongoose = require('mongoose');
-const connectDB = async () => {
-  try {
-    await mongoose.connect('mongodb://localhost:27017/HEALTHYSUPP', {
-    });
-    console.log('MongoDB Connection Success.');
-  }
-  catch (error) {
-    console.log(error);
-    process.exit(1);
-  }
-};
-module.exports = connectDB;
+const { Sequelize } = require('sequelize');
+
+// Set up the MariaDB connection
+const sequelize = new Sequelize('HEALTHYSUPP', 'root', 'Nihad1996', {
+  host: 'localhost',
+  dialect: 'mariadb',
+  logging: false,
+});
+
+module.exports = sequelize;

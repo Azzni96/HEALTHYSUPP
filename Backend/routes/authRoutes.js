@@ -6,36 +6,31 @@ const User = require('../models/User');
 router.post('/signup', async (req, res) => {
   try {
     const { username, email, phone, password } = req.body;
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ message: 'Email already exists' });
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) return res.status(400).json({ message: 'Email already exists' });
 
-    user = new User({ username, email, phone, password });
-    await user.save();
-    res.status(201);
-    res.json({ message: 'User registered successfully' });
+    const newUser = await User.create({ username, email, phone, password });
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    console.log("Error: ", error); // pitäs lisätä tämä
+    console.error("Error:", error);
     res.status(500).json({ message: 'Error registering user' });
   }
 });
 
 // Login route
-// Login route
 router.post('/signin', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) return res.status(400).json({ message: 'Invalid email or password' });
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
 
-    res.status(200).json({ userId: user._id, username: user.username }); // Send userId and username
+    res.status(200).json({ userId: user.id, username: user.username });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-
 
 module.exports = router;

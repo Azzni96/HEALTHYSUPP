@@ -9,15 +9,12 @@ router.post('/', async (req, res) => {
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'Please fill all fields' });
     }
-    const feedback = new Feedback({ name, email, message });
-    await feedback.save();
+    const feedback = await Feedback.create({ name, email, message });
     res.status(201).json({ message: 'Feedback sent successfully' });
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error:", error);
     res.status(500).json({ message: 'Error sending feedback' });
   }
 });
-
-
 
 module.exports = router;
