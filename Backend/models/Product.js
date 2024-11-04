@@ -7,12 +7,14 @@ const Product = sequelize.define('Product', {
   discount: { type: DataTypes.DECIMAL(5, 2), defaultValue: 0 },
   description: { type: DataTypes.TEXT },
   image_urls: { type: DataTypes.TEXT }, // Adjusted to match the column name in your database
-}, {
-  getterMethods: {
-    discountedPrice() {
+  discountedPrice: {
+    type: DataTypes.VIRTUAL,
+    get() {
       return this.discount > 0 ? this.price - (this.price * (this.discount / 100)) : this.price;
-    }
-  }
+    },
+  },
+}, {
+  timestamps: false, // Disable automatic createdAt and updatedAt fields
 });
 
 module.exports = Product;

@@ -15,13 +15,15 @@ router.get('/products', async (req, res) => {
 // Route to add a new product
 router.post('/products', async (req, res) => {
   try {
-    const newProduct = await Product.create(req.body);
+    const { name, price, discount, description, image_urls } = req.body;
+    const newProduct = await Product.create({ name, price, discount, description, image_urls });
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error('Error in creating product:', error)
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error adding product:", error); // Log detailed error
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
 
 // Route to get a single product by ID
 router.get('/products/:id', async (req, res) => {

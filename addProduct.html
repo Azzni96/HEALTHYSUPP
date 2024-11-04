@@ -22,7 +22,7 @@ document.getElementById('product-form').addEventListener('submit', async (event)
   const price = parseFloat(document.getElementById('price').value);
   const discount = parseFloat(document.getElementById('discount').value) || 0;
   const description = document.getElementById('description').value;
-  const image_urls = document.getElementById('images').value; // Updated to match database column
+  const image_urls = document.getElementById('images').value.split(',').map(url => url.trim()).join(','); // Convert array to comma-separated string
 
   try {
     const response = await fetch('http://localhost:3000/api/products', {
