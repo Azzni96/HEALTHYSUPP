@@ -14,7 +14,7 @@ const Product = sequelize.define('Product', {
     },
   },
 }, {
-  timestamps: false, // Disable automatic createdAt and updatedAt fields
+  timestamps: true, // Disable automatic createdAt and updatedAt fields
 });
 
 module.exports = Product;

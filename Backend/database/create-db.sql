@@ -12,16 +12,20 @@ CREATE TABLE products (
     price DECIMAL(10, 2) NOT NULL,
     discount DECIMAL(5, 2) DEFAULT 0.00, -- Default discount to 0.00 if not specified
     description TEXT,
-    image_urls TEXT -- Store multiple image URLs, either as JSON string or comma-separated
+    image_urls TEXT, -- Store multiple image URLs, either as JSON string or comma-separated
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Table for storing users
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL, -- Ensure email uniqueness
+    email VARCHAR(255) UNIQUE NOT NULL, -- Ensuring email is unique
     password VARCHAR(255) NOT NULL,
-    phone VARCHAR(20) -- Store phone numbers as text to accommodate various formats
+    phone VARCHAR(20),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Table for storing feedback entries
@@ -34,6 +38,3 @@ CREATE TABLE feedback (
 
 -- Optional: Verify that the tables are created successfully
 SHOW TABLES;
-ALTER TABLE products
-ADD COLUMN createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
