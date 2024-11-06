@@ -28,12 +28,13 @@ CREATE TABLE users (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Table for storing feedback entries
+-- Table for storing feedback
 CREATE TABLE feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL, -- Email is required but not unique
-    message TEXT NOT NULL -- Feedback message content
+    email VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Optional: Verify that the tables are created successfully

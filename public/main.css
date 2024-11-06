@@ -50,6 +50,27 @@ section {
   border-radius: 5rem;
   cursor: pointer;
 }
+.logbar{
+  right: 150px;
+  display: none;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  margin-top: 25px;
+  background-color: #fff;
+}
+.logbar.active {
+  display: flex;
+}
+#LoginBtn{
+  color: #000;
+  font-size: 15px;
+}
+
+#log{
+  color: #000;
+  font-size: 15px;
+}
 
 .btn:hover {
   letter-spacing: .2rem;
@@ -1049,7 +1070,7 @@ footer {
   color: #333;
 }
 
-button {
+#feedbackbtn {
   /* Add styles for the logout button */
   background-color: #4CAF50; /* Green */
   border: none;
@@ -1064,9 +1085,7 @@ button {
   border-radius: 4px;
 }
 
-button:hover {
-  background-color: #45a049; /* Darker green */
-}
+
 
 
 
