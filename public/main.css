@@ -51,7 +51,7 @@ section {
   cursor: pointer;
 }
 .logbar{
-  right: 150px;
+  right: 20px;
   display: none;
   align-items: center;
   flex-direction: column;
@@ -59,8 +59,16 @@ section {
   margin-top: 25px;
   background-color: #fff;
 }
+.logbar h2{
+  margin-left: 15px;
+}
 .logbar.active {
   display: flex;
+}
+.logbar button {
+  background: none;
+  border: none;
+  margin-left: 5px;
 }
 #LoginBtn{
   color: #000;
@@ -70,6 +78,9 @@ section {
 #log{
   color: #000;
   font-size: 15px;
+}
+#log:hover, #LoginBtn:hover{
+  color: #d3ad7f;
 }
 
 .btn:hover {
@@ -1084,13 +1095,22 @@ footer {
   cursor: pointer;
   border-radius: 4px;
 }
-
-
-
-
-
 /* Responsive styles */
 @media (max-width: 870px) {
+  .feedback-container form input, .feedback-container form textarea, .feedback-container form button {
+    width: 100%;
+    margin-top: 10px;
+  }
+  #feedbackbtn {
+    width: 100%;
+  }
+  .about .row .image img {
+    display: flex;
+    margin-left: 60px;
+  }
+  .about .row .content {
+    text-align: center;
+  }
   .home {
     background-position: center;
   }
@@ -1197,11 +1217,6 @@ footer {
   form {
     padding: 0 1.5rem;
   }
-
-  .image {
-    display: none;
-  }
-
   .panel .content {
     padding: 0.5rem 1rem;
   }
@@ -1269,16 +1284,44 @@ footer {
   }
 }
 
+
+@media (max-width: 320px) {
+  header .icons span{
+    left: 72%;
+  }
+
+}
+@media (max-width: 375px) {
+  header .icons span{
+    left: 76%;
+
+  }
+}
 @media (max-width: 450px) {
   html {
     font-size: 50%;
   }
-}
-@media (max-width: 485px) {
-  #logoutbtn.active{
+  #user-btn {
     display: none;
   }
-  .navbar.active{
-    display: none;
+  header .icons span{
+    left: 79%;
   }
+  .header .icons .logbar{
+    font-size: 2rem;
+    background: none;
+    position: absolute;
+    right: 10px;
+    top: 30px;
+
+  }
+  .header .icons .logbar button{
+    font-size: 2rem;
+
+    align-items: center;
+    background: none;
+    margin-top: 5px;
+
+  }
+
 }

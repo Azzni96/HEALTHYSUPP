@@ -20,7 +20,7 @@ export function setupNavListeners() {
         navbar?.classList.toggle('active');
         cartItem?.classList.remove('active');
         searchForm?.classList.remove('active');
-        logbar?.classList.remove('active');
+        logbar?.classList.toggle('active');
       };
     }
     if (logbar && userbtn){
