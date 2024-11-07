@@ -1095,6 +1095,48 @@ footer {
   cursor: pointer;
   border-radius: 4px;
 }
+#List {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.Menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.Menu-image {
+  width: 60px;
+  height: 60px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.Menu-name {
+  font-size: 24px; /* Suurempi fonttikoko */
+  color: #333; /* Lähtöväri */
+  transition: color 0.3s ease;
+}
+
+.Menu:hover .Menu-image {
+  opacity: 1;
+  transform: scale(1); /* Palauttaa normaalikokoon hoverin aikana */
+}
+
+.Menu:hover .Menu-name {
+  color: #ff5722; /* Tekstin väri muuttuu hoverin aikana oranssiksi */
+}
+
+
 /* Responsive styles */
 @media (max-width: 870px) {
   .feedback-container form input, .feedback-container form textarea, .feedback-container form button {
