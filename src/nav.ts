@@ -62,11 +62,14 @@ export function setupNavListeners() {
     if (LoginModel) {
       LoginModel.onclick = () => {
         userModal?.showModal();
+        document.body.classList.add('fixed-body');
+
       };
     }
     if (closeModalBtn) {
       closeModalBtn.onclick = () => {
         userModal?.close();
+        document.body.classList.remove('fixed-body');
       };
     }
 

@@ -48,6 +48,7 @@ function displayProducts(products: Product[]) {
     }
 
     products.forEach(product => {
+
       const productDiv = document.createElement('div');
       productDiv.classList.add('product-item');
 

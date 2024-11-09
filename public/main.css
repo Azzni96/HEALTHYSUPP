@@ -10,6 +10,11 @@ body,
 input {
   font-family: "Poppins", sans-serif;
 }
+.fixed-body {
+  position: fixed;
+  width: 100%;
+}
+
 
 :root {
   --main-color: #d3ad7f;
