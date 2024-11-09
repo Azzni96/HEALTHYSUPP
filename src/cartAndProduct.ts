@@ -11,37 +11,42 @@ interface Product {
   quantity?: number;
 }
 
-// Define the products and cart structures
 let products: Product[] = [];
 let listCards: { [key: string]: Product & { quantity: number } | null } = {};
 
-// Load products from the API and display them on the page
-export async function loadProducts() {
+// Load products from API and display on the page, optionally filtered by category
+export async function loadProducts(category: string | null = null) {
   try {
-    const response = await fetch('http://localhost:3000/api/products');
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    const url = category
+      ? `http://localhost:3000/api/products/category/${category}`
+      : `http://localhost:3000/api/products`;
 
-    products = await response.json();
-    products = products.map((product: any) => ({
+    console.log(`Fetching products from: ${url}`); // Debugging log for URL
+
+    const response = await axios.get(url);
+    products = response.data.map((product: any) => ({
       ...product,
       discountPrice: product.discount > 0
         ? (product.price || 0) - ((product.price || 0) * ((product.discount || 0) / 100))
         : product.price || 0,
     }));
 
-    displayProducts(products);
+    displayProducts(products); // Display the filtered products
   } catch (error) {
     console.error('Error fetching products:', error);
   }
 }
 
-// Display products on the page
+// Display products in the product list (home page or filtered category)
 function displayProducts(products: Product[]) {
   const productContainer = document.getElementById('product-list') as HTMLElement | null;
   if (productContainer) {
-    productContainer.innerHTML = '';
+    productContainer.innerHTML = ''; // Clear existing products
+    if (products.length === 0) {
+      productContainer.innerHTML = '<p>No products found for this category.</p>';
+      return;
+    }
+
     products.forEach(product => {
       const productDiv = document.createElement('div');
       productDiv.classList.add('product-item');
@@ -55,8 +60,12 @@ function displayProducts(products: Product[]) {
         <p>${product.description}</p>
         ${priceText}
         <img src="${product.image}" alt="${product.name}" width="200">
-        <a href="#" class="btn" onclick="addToCart('${product.id}')">Add to Cart</a>
-        <a href="Menu.html?id=${product.id}" class="btn">View Product</a>`;
+        <button class="btn add-to-cart">Add to Cart</button>
+        <a href="ProductDetail.html?id=${product.id}" class="btn">View Product</a>`;
+
+      const addToCartButton = productDiv.querySelector('.add-to-cart');
+      addToCartButton?.addEventListener('click', () => addToCart(product.id));
+
       productContainer.appendChild(productDiv);
     });
   } else {
@@ -70,7 +79,7 @@ export function loadCart(): void {
   if (storedCart) {
     listCards = JSON.parse(storedCart);
   }
-  reloadCart(); // Reload cart display on page load
+  reloadCart();
 }
 
 // Save cart to localStorage
@@ -80,13 +89,15 @@ function saveCart(): void {
 
 // Add product to cart
 export function addToCart(id: string): void {
-  if (!listCards[id]) {
-    const product = products.find((product) => product.id === id);
-    if (product) {
-      listCards[id] = { ...product, quantity: 1 };
+  const product = products.find((product) => product.id === id);
+  if (product) {
+    const discountPrice = product.discount > 0 ? product.discountPrice : product.price;
+
+    if (!listCards[id]) {
+      listCards[id] = { ...product, quantity: 1, price: discountPrice };
+    } else {
+      listCards[id]!.quantity!++;
     }
-  } else {
-    listCards[id]!.quantity!++;
   }
   saveCart();
   reloadCart();
@@ -106,13 +117,14 @@ export function reloadCart(): void {
     for (const key in listCards) {
       const value = listCards[key];
       if (value) {
-        totalPrice += value.price * value.quantity!;
+        const productPrice = value.price;
+        totalPrice += productPrice * value.quantity!;
         count += value.quantity!;
         listCard.innerHTML += `
           <li>
             <div><img src="${value.image}" alt="${value.name}" width="50"></div>
             <div>${value.name}</div>
-            <div>$${value.price.toFixed(2)}</div>
+            <div>$${productPrice.toFixed(2)}</div>
             <div>
               <button onclick="changeQuantity('${value.id}', ${value.quantity! - 1})">-</button>
               <div class="count">${value.quantity}</div>
@@ -132,7 +144,7 @@ export function reloadCart(): void {
 export function changeQuantity(id: string, newQuantity: number): void {
   if (listCards[id]) {
     if (newQuantity <= 0) {
-      listCards[id] = null;
+      delete listCards[id];
     } else {
       listCards[id]!.quantity = newQuantity;
     }
@@ -143,18 +155,80 @@ export function changeQuantity(id: string, newQuantity: number): void {
 
 // Clear all items from the cart
 export function clearCart(): void {
+  // Empty the listCards object
   listCards = {};
+
+  // Update localStorage to reflect the empty cart
   saveCart();
+
+  // Reload the cart UI to show the cart is empty
   reloadCart();
+
+  console.log('Cart has been cleared.');
 }
+
+// Attach `clearCart` to the window object so it can be called in HTML
+(window as any).clearCart = clearCart;
+
+// Event listener for the "Tyhjennä Ostoskori" button
+document.addEventListener('DOMContentLoaded', () => {
+  const clearCartButton = document.getElementById('clear-cart') as HTMLButtonElement;
+  if (clearCartButton) {
+    clearCartButton.addEventListener('click', () => {
+      clearCart(); // Call the `clearCart` function on button click
+    });
+  } else {
+    console.error('Clear Cart button not found');
+  }
+});
+
+
 
 // Attach cart functions to the window object for accessibility in HTML
 (window as any).addToCart = addToCart;
 (window as any).changeQuantity = changeQuantity;
 (window as any).clearCart = clearCart;
+(window as any).loadProductsByCategory = (category: string) => loadProducts(category);
 
-// Load cart data from localStorage on page load
-document.addEventListener('DOMContentLoaded', () => {
+// Load cart data and products on page load
+window.addEventListener('load', () => {
   loadCart();
-  loadProducts();
+
+  // Retrieve the category from the URL to load specific products
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('category');
+  console.log('Category:', category);
+  loadProducts(category);
+
+  // Display product details if `id` parameter is present
+  const productId = urlParams.get('id');
+  if (category) loadProducts(category);
+  if (productId) {
+    displayProductDetails(productId);
+  }
 });
+
+// Display product details on Menu.html page
+async function displayProductDetails(productId: string) {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/products/${productId}`);
+    const product = response.data;
+
+    const productContainer = document.getElementById('product-details') as HTMLElement | null;
+    if (productContainer) {
+      productContainer.innerHTML = `
+        <h2>${product.name}</h2>
+        <p>${product.description}</p>
+        <p>Price: $${product.price.toFixed(2)}</p>
+        ${product.discount > 0
+          ? `<p><del>$${product.price.toFixed(2)}</del> $${product.discountPrice.toFixed(2)}</p>`
+          : `<p>Price: $${product.price.toFixed(2)}</p>`
+        }
+        <img src="${product.image}" alt="${product.name}" width="200">
+        <button class="btn" onclick="addToCart('${product.id}')">Add to Cart</button>
+      `;
+    }
+  } catch (error) {
+    console.error('Error fetching product details:', error);
+  }
+}

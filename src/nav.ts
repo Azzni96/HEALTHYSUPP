@@ -13,8 +13,14 @@ export function setupNavListeners() {
     const sign_in_btn = document.querySelector("#sign-in-btn") as HTMLElement;
     const sign_up_btn = document.querySelector("#sign-up-btn") as HTMLElement;
     const container = document.querySelector(".container") as HTMLElement;
-
+    const closeshopping = document.querySelector(".closeShopping") as HTMLElement | null;
     // Toggle navbar visibility
+
+    if (closeshopping) {
+      closeshopping.onclick = () => {
+        cartItem?.classList.remove('active');
+      };
+    }
     if (navbar && document.querySelector('#menu-btn')) {
       (document.querySelector('#menu-btn') as HTMLElement).onclick = () => {
         navbar?.classList.toggle('active');
@@ -101,4 +107,5 @@ export function setupNavListeners() {
       });
     }
   }
+
 

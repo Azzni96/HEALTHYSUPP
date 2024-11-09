@@ -663,12 +663,12 @@ form.sign-in-form {
 }
 
 .btn-sign {
-  width: 150px;
+  width: 130px;
   background-color: #312f2e;
   border: none;
   outline: none;
-  height: 49px;
-  border-radius: 49px;
+  height: 40px;
+  border-radius: 20px;
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
@@ -735,13 +735,14 @@ form.sign-in-form {
 }
 
 .panel h3 {
+  margin-top: 50px;
   font-weight: 600;
   line-height: 1;
   font-size: 1.5rem;
 }
 
 .panel p {
-  font-size: 0.95rem;
+  font-size: 11.5px;
   padding: 0.7rem 0;
 }
 
@@ -810,9 +811,9 @@ dialog {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   left: 25%;
   top: 10%;
-  position: fixed;
   background-color: white;
 }
+
 dialog .close {
   position: absolute;
   top: 10px;
@@ -1102,46 +1103,87 @@ footer {
   padding: 10px;
 }
 
+/* Styling for Menu Container */
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+#List {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Individual Menu Item Styling */
 .Menu {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  gap: 20px;
-  position: relative;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.Menu-image {
-  width: 60px;
-  height: 60px;
-  transform: scale(0.8);
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.Menu-name {
-  font-size: 24px; /* Suurempi fonttikoko */
-  color: #333; /* Lähtöväri */
-  transition: color 0.3s ease;
+.Menu:hover .Menu-name {
+  color: #ff5722; /* Change text color on hover */
 }
 
 .Menu:hover .Menu-image {
   opacity: 1;
-  transform: scale(1); /* Palauttaa normaalikokoon hoverin aikana */
+  transform: scale(1); /* Grow image on hover */
 }
 
-.Menu:hover .Menu-name {
-  color: #ff5722; /* Tekstin väri muuttuu hoverin aikana oranssiksi */
+/* Menu Text Styling */
+.Menu-name {
+  font-size: 24px;
+  color: #333;
+  transition: color 0.3s ease;
+  color: #fff;
 }
 
+/* Menu Image Styling */
+.Menu-image {
+  width: 60px;
+  height: 60px;
+  transform: scale(0.8); /* Initial smaller size */
+  opacity: 0; /* Hidden initially */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none; /* Makes image non-clickable */
+}
 
-/* Responsive styles */
+/* Yleiset tyylit */
+.feedback-container form input,
+.feedback-container form textarea,
+.feedback-container form button {
+  margin-top: 10px;
+}
+
+#feedbackbtn {
+  width: 100%;
+}
+
+/* Media Queryt suuremmasta pienempään */
+
+@media (max-width: 991px) {
+  html {
+    font-size: 55%;
+  }
+  .header {
+    padding: 1.5rem 2rem;
+  }
+  section {
+    padding: 2rem;
+  }
+}
+
 @media (max-width: 870px) {
-  .feedback-container form input, .feedback-container form textarea, .feedback-container form button {
+  .feedback-container form input,
+  .feedback-container form textarea,
+  .feedback-container form button {
     width: 100%;
-    margin-top: 10px;
   }
   #feedbackbtn {
     width: 100%;
@@ -1156,7 +1198,7 @@ footer {
   .home {
     background-position: center;
   }
-  header .icons span{
+  header .icons span {
     top: 5px;
     left: 84.5%;
   }
@@ -1165,9 +1207,9 @@ footer {
     height: 100vh;
     width: 70%;
   }
-  .image{
+  .image {
     width: 70%;
-    margin-top:  100px;
+    margin-top: 100px;
     margin-left: 30px;
   }
   .signin-signup {
@@ -1176,20 +1218,17 @@ footer {
     transform: translate(-50%, -100%);
     transition: 1s 0.8s ease-in-out;
   }
-
-
   .container.sign-up-mode .signin-signup {
     left: 50%;
     top: 60%;
   }
-  .signin-signup{
+  .signin-signup {
     left: 50%;
   }
   .panels-container {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 2fr 1fr;
   }
-
   .panel {
     flex-direction: row;
     justify-content: space-around;
@@ -1197,30 +1236,24 @@ footer {
     padding: 2.5rem 8%;
     grid-column: 1 / 2;
   }
-
   .right-panel {
     grid-row: 3 / 4;
   }
-
   .left-panel {
     grid-row: 1 / 2;
   }
-
   .panel h3 {
     font-size: 1.2rem;
   }
-
   .panel p {
     font-size: 0.7rem;
     padding: 0.5rem 0;
   }
-
   .btn-sign.transparent {
     width: 110px;
     height: 35px;
     font-size: 0.7rem;
   }
-
   .container:before {
     width: 1500px;
     height: 1500px;
@@ -1231,20 +1264,19 @@ footer {
     top: initial;
     transition: 2s ease-in-out;
   }
-
   .container.sign-up-mode:before {
     transform: translate(-50%, 100%);
     bottom: 32%;
     right: initial;
   }
-  #product-list{
+  #product-list {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     column-gap: 20px;
     row-gap: 20px;
     margin-top: 50px;
   }
-  #product-list .product-item{
+  #product-list .product-item {
     background-color: #202020;
     padding: 20px;
     border-radius: 20px;
@@ -1252,37 +1284,6 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-}
-
-@media (max-width: 570px) {
-  form {
-    padding: 0 1.5rem;
-  }
-  .panel .content {
-    padding: 0.5rem 1rem;
-  }
-
-  .container:before {
-    bottom: 72%;
-    left: 50%;
-  }
-
-  .container.sign-up-mode:before {
-    bottom: 28%;
-    left: 50%;
-  }
-}
-
-@media (max-width: 991px) {
-  html {
-    font-size: 55%;
-  }
-  .header {
-    padding: 1.5rem 2rem;
-  }
-  section {
-    padding: 2rem;
   }
 }
 
@@ -1313,10 +1314,9 @@ footer {
     right: 2rem;
   }
   .home {
-    background-position: left;
+    background-position: center;
     justify-content: center;
     text-align: center;
-    background-position: center;
   }
   .home .content h3 {
     font-size: 4.5rem;
@@ -1326,19 +1326,23 @@ footer {
   }
 }
 
-
-@media (max-width: 320px) {
-  header .icons span{
-    left: 72%;
+@media (max-width: 570px) {
+  form {
+    padding: 0 1.5rem;
   }
-
-}
-@media (max-width: 375px) {
-  header .icons span{
-    left: 76%;
-
+  .panel .content {
+    padding: 0.5rem 1rem;
+  }
+  .container:before {
+    bottom: 72%;
+    left: 50%;
+  }
+  .container.sign-up-mode:before {
+    bottom: 28%;
+    left: 50%;
   }
 }
+
 @media (max-width: 450px) {
   html {
     font-size: 50%;
@@ -1346,24 +1350,41 @@ footer {
   #user-btn {
     display: none;
   }
-  header .icons span{
+  header .icons span {
     left: 79%;
   }
-  .header .icons .logbar{
+  .header .icons .logbar {
     font-size: 2rem;
     background: none;
     position: absolute;
     right: 10px;
     top: 30px;
-
   }
-  .header .icons .logbar button{
+  .header .icons .logbar button {
     font-size: 2rem;
-
     align-items: center;
     background: none;
     margin-top: 5px;
-
   }
+  #product-list {
+    margin-left: 165px;
+  }
+}
 
+@media (max-width: 375px) {
+  header .icons span {
+    left: 76%;
+  }
+  #product-list {
+    margin-left: 75px;
+  }
+}
+
+@media (max-width: 320px) {
+  header .icons span {
+    left: 72%;
+  }
+  #product-list {
+    margin-left: 50px;
+  }
 }

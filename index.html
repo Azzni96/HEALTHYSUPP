@@ -76,22 +76,27 @@
     <div class="list"></div>
   </section>
   <section class="menu" id="menu">
-    <h1 class="heading"><span>our menu</span></h1>
+    <h1 class="heading"><span>Our Menu</span></h1>
     <div id="List">
-      <div class="Menu" data-image="">
-        <p class="Menu-name">Tuote 1</p>
-        <img src="public/instagram.png" alt="" class="Menu-image">
+      <!-- Each Menu div acts as a category button with data-category attributes for each -->
+      <div class="Menu" data-category="creatine" onclick="location.href='Menu.html?category=creatine'">
+        <p class="Menu-name">CREATINE</p>
+        <img src="public/instagram.png" alt="Creatine" class="Menu-image">
       </div>
-      <div class="Menu" data-image="">
-        <p class="Menu-name">Tuote 2</p>
-        <img src="public/linkedin.png" alt="" class="Menu-image">
+      <div class="Menu" data-category="energy" onclick="location.href='Menu.html?category=energy'">
+        <p class="Menu-name">ENERGY</p>
+        <img src="public/linkedin.png" alt="Energy" class="Menu-image">
       </div>
-      <div class="Menu" data-image="">
-        <p class="Menu-name">Tuote 3</p>
-        <img src="public/facebook.png" alt="" class="Menu-image">
+      <div class="Menu" data-category="muscle" onclick="location.href='Menu.html?category=muscle'">
+        <p class="Menu-name">MUSCLE</p>
+        <img src="public/facebook.png" alt="Muscle" class="Menu-image">
       </div>
     </div>
   </section>
+
+
+
+
   <section class="about" id="about">
     <h1 class="heading"><span>about us</span></h1>
     <div class="row">
@@ -201,10 +206,9 @@
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
-            <h3>New here ?</h3>
+            <h3>New here</h3>
             <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-              ex ratione. Aliquid!
+              Join us and discover exclusive benefits! Sign up to get started on your journey with us.
             </p>
             <button class="btn-sign transparent" id="sign-up-btn">
               Sign up
@@ -213,10 +217,9 @@
         </div>
         <div class="panel right-panel">
           <div class="content">
-            <h3>One of us ?</h3>
+            <h3>Welcome Back!</h3>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-              laboriosam ad deleniti.
+              Already have an account? Sign in to stay connected with us and access your personalized dashboard.
             </p>
             <button class="btn-sign transparent" id="sign-in-btn">
               Sign in
