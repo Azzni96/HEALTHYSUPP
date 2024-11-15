@@ -5,44 +5,40 @@
 </head>
 <body>
   <h1>Add a New Product</h1>
-  <form id="product-form">
-    <input type="text" id="name" placeholder="Product Name" required>
-    <input type="number" id="price" placeholder="Price" required min="0">
-    <input type="number" id="discount" placeholder="Discount %" min="0" max="100">
-    <textarea id="description" placeholder="Description"></textarea>
-    <input type="text" id="images" placeholder="Image URLs (comma separated)">
+  <form id="product-form" enctype="multipart/form-data">
+    <input type="text" id="name" name="name" placeholder="Product Name" required>
+    <input type="number" id="price" name="price" placeholder="Price" required min="0">
+    <input type="number" id="discount" name="discount" placeholder="Discount %" min="0" max="100">
+    <textarea id="description" name="description" placeholder="Description"></textarea>
+    <input type="file" id="images" name="images" multiple accept="image/*">
+    <input type="text" id="category" name="category" placeholder="Category" required>
     <button type="submit">Add Product</button>
   </form>
 
   <script>
-document.getElementById('product-form').addEventListener('submit', async (event) => {
-  event.preventDefault();
+    document.getElementById('product-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
 
-  const name = document.getElementById('name').value;
-  const price = parseFloat(document.getElementById('price').value);
-  const discount = parseFloat(document.getElementById('discount').value) || 0;
-  const description = document.getElementById('description').value;
-  const image_urls = document.getElementById('images').value.split(',').map(url => url.trim()).join(','); // Convert array to comma-separated string
+      const formData = new FormData(document.getElementById('product-form'));
 
-  try {
-    const response = await fetch('http://localhost:3000/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, price, discount, description, image_urls }), // Matching keys
+      try {
+        const response = await fetch('http://localhost:3000/api/products', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          alert('Product added successfully!');
+          document.getElementById('product-form').reset();
+        } else {
+          const errorData = await response.json();
+          alert('Failed to add product: ' + (errorData.message || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+      }
     });
-
-    if (response.ok) {
-      alert('Product added successfully!');
-      document.getElementById('product-form').reset();
-    } else {
-      const errorData = await response.json();
-      alert('Failed to add product: ' + (errorData.message || 'Unknown error'));
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred: ' + error.message);
-  }
-});
   </script>
 </body>
 </html>

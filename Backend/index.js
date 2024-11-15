@@ -13,7 +13,7 @@ const app = express();
 sequelize.authenticate()
   .then(() => {
     console.log('Connected to MariaDB');
-    return sequelize.sync(); // Sync all defined models with the database
+    return sequelize.sync();
   })
   .catch(error => {
     console.error('Unable to connect to MariaDB:', error);
@@ -24,6 +24,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Routes
@@ -33,7 +34,7 @@ app.use('/api', productRoutes);
 
 // Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'addProduct.html'));
 });
 
 // Error handling

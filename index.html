@@ -34,14 +34,19 @@
       </nav>
       <div class="icons">
         <!-- Lisää tämä HTML-elementti, johon käyttäjän nimi näytetään -->
-        <div id="username-display" style="display: none;"></div>
-        <button onclick="logout()">Logout</button>
-
         <div class="fas fa-user" id="user-btn"></div>
         <div class="fas fa-shopping-cart" id="cart-btn"></div>
         <span class="quantity">0</span>
         <div class="fas fa-search" id="search-btn"></div>
         <div class="fas fa-bars" id="menu-btn"></div>
+        <div class="logbar">
+          <h2 id="username-display" style="display: none;"></h2>
+          <div>
+          <button><div class="fas fa-right-to-bracket" id="LoginBtn"> register</div></button>
+          <button id="logoutbtn" onclick="logout()" class="active">
+          <div class="fas fa-right-from-bracket" id="log">Logout</div>
+          </button></div>
+        </div>
       </div>
       <div class="search-form">
         <input type="search" id="search-box" placeholder="search here...">
@@ -62,7 +67,7 @@
   </header>
   <section class="home" id="home">
     <div class="content">
-      <h3>SUPPLEMENT HEALTHIER.</h3>
+      <h3>SUPPLEMENT HEALTHIER</h3>
       <p>Our mission is to provide you with the tools, guidance, and support you need to achieve quick and effortless success. Whether you're looking to make significant strides in your personal goals or elevate your professional skills, we're here to streamline the process, ensuring you gain maximum results with minimum hassle.</p>
       <a href="#" class="btn login-btn">LOG IN HERE</a>
     </div>
@@ -71,9 +76,27 @@
     <div class="list"></div>
   </section>
   <section class="menu" id="menu">
-    <h1 class="heading"><span>our menu</span></h1>
-    <div id="product-list"></div>
+    <h1 class="heading"><span>Our Menu</span></h1>
+    <div id="List">
+      <!-- Each Menu div acts as a category button with data-category attributes for each -->
+      <div class="Menu" data-category="creatine" onclick="location.href='Menu.html?category=creatine'">
+        <p class="Menu-name">CREATINE</p>
+        <img src="public/instagram.png" alt="Creatine" class="Menu-image">
+      </div>
+      <div class="Menu" data-category="energy" onclick="location.href='Menu.html?category=energy'">
+        <p class="Menu-name">ENERGY</p>
+        <img src="public/linkedin.png" alt="Energy" class="Menu-image">
+      </div>
+      <div class="Menu" data-category="muscle" onclick="location.href='Menu.html?category=muscle'">
+        <p class="Menu-name">MUSCLE</p>
+        <img src="public/facebook.png" alt="Muscle" class="Menu-image">
+      </div>
+    </div>
   </section>
+
+
+
+
   <section class="about" id="about">
     <h1 class="heading"><span>about us</span></h1>
     <div class="row">
@@ -183,10 +206,9 @@
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
-            <h3>New here ?</h3>
+            <h3>New here</h3>
             <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-              ex ratione. Aliquid!
+              Join us and discover exclusive benefits! Sign up to get started on your journey with us.
             </p>
             <button class="btn-sign transparent" id="sign-up-btn">
               Sign up
@@ -195,10 +217,9 @@
         </div>
         <div class="panel right-panel">
           <div class="content">
-            <h3>One of us ?</h3>
+            <h3>Welcome Back!</h3>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-              laboriosam ad deleniti.
+              Already have an account? Sign in to stay connected with us and access your personalized dashboard.
             </p>
             <button class="btn-sign transparent" id="sign-in-btn">
               Sign in
@@ -215,7 +236,7 @@
         <input type="text" id="name" placeholder="Your Name" required>
         <input type="email" id="email" placeholder="Your Email" required>
         <textarea id="feedback" placeholder="Your Feedback" rows="4" required></textarea>
-        <button type="submit">Submit Feedback</button>
+        <button type="submit" id="feedbackbtn">Submit Feedback</button>
       </form>
       <div class="feedback-list" id="feedback-list"></div>
     </div>

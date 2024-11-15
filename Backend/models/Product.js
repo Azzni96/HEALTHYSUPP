@@ -6,7 +6,9 @@ const Product = sequelize.define('Product', {
   price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   discount: { type: DataTypes.DECIMAL(5, 2), defaultValue: 0 },
   description: { type: DataTypes.TEXT },
-  image_urls: { type: DataTypes.TEXT }, // Adjusted to match the column name in your database
+  image: { type: DataTypes.STRING }, // A comma-separated string of image names or URLs
+  // Tässä tallennetaan pilkulla eroteltu lista kuvan URL:ista
+  category: { type: DataTypes.STRING }, // Kategoriasarake
   discountedPrice: {
     type: DataTypes.VIRTUAL,
     get() {
@@ -14,7 +16,7 @@ const Product = sequelize.define('Product', {
     },
   },
 }, {
-  timestamps: true, // Disable automatic createdAt and updatedAt fields
+  timestamps: true,
 });
 
 module.exports = Product;

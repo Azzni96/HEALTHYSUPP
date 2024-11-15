@@ -10,9 +10,10 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    discount DECIMAL(5, 2) DEFAULT 0.00, -- Default discount to 0.00 if not specified
-    description TEXT,
-    image_urls TEXT, -- Store multiple image URLs, either as JSON string or comma-separated
+    discount DECIMAL(5, 2) DEFAULT 0,  -- Lisätty alennus kenttä
+    description TEXT,   -- Yksi kuvauskenttä riittää
+    image TEXT,         -- Lisätty kuva kenttä
+    category VARCHAR(1000),  -- Lisätty kategoria kenttä
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -28,13 +29,7 @@ CREATE TABLE users (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Table for storing feedback entries
-CREATE TABLE feedback (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL, -- Email is required but not unique
-    message TEXT NOT NULL -- Feedback message content
-);
+
 
 -- Optional: Verify that the tables are created successfully
 SHOW TABLES;
