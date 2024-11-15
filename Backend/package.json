@@ -1,6 +1,12 @@
 {
+  "name": "healthy-supp-backend",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "start": "npx nodemon index.js"
+    "start": "npx nodemon index.js",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

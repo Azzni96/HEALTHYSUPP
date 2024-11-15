@@ -33,7 +33,8 @@ export async function loadProducts(category: string | null = null) {
 
     displayProducts(products); // Display the filtered products
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching products:', error instanceof AxiosError ? error.response?.data : error);
+    alert('Failed to fetch products. Please try again later.');
   }
 }
 

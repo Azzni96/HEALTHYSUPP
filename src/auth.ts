@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export function setupAuthListeners() {
   const signUpForm = document.querySelector('.sign-up-form') as HTMLFormElement | null;
@@ -33,11 +33,23 @@ export function setupAuthListeners() {
   if (loginForm) {
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const email = (document.querySelector('input[placeholder="Email"]') as HTMLInputElement).value;
-      const password = (document.querySelector('input[placeholder="Password"]') as HTMLInputElement).value;
+      const emailInput = loginForm.querySelector('input[name="email"]') as HTMLInputElement | null;
+      const passwordInput = loginForm.querySelector('input[name="password"]') as HTMLInputElement | null;
+
+      if (!emailInput || !passwordInput) {
+        console.error('Email or password input not found');
+        alert('Please ensure both email and password fields are filled out correctly.');
+        return;
+      }
+
+      const email = emailInput.value;
+      const password = passwordInput.value;
 
       try {
-        const response = await axios.post('http://localhost:3000/api/auth/signin', { email, password });
+        const response = await axios.post('http://localhost:3000/api/auth/signin', {
+          email,
+          password,
+        });
         if (response.status === 200) {
           const { userId, username } = response.data;
           localStorage.setItem('userId', userId);
@@ -51,9 +63,11 @@ export function setupAuthListeners() {
         }
       } catch (error) {
         console.error('Sign-in error:', error);
-        alert('Sign-in failed. Please check your credentials.');
+        alert('Sign-in error: ' + (error instanceof AxiosError ? error.response?.data.message : (error as Error).message));
       }
     });
+  } else {
+    console.error('Login form not found');
   }
 
   window.addEventListener('load', () => {
