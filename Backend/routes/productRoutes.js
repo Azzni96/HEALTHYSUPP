@@ -10,7 +10,11 @@ const upload = multer({ storage });
 router.post('/products', upload.array('images'), async (req, res) => {
   try {
     const { name, price, discount, description, category } = req.body;
-    const images = req.files.map(file => file.originalname).join(',');
+    const images = req.files ? req.files.map(file => file.originalname).join(',') : '';
+
+    if (!name || !price || !category) {
+      return res.status(400).json({ message: 'Name, price, and category are required' });
+    }
 
     const newProduct = await Product.create({
       name,
@@ -23,7 +27,8 @@ router.post('/products', upload.array('images'), async (req, res) => {
 
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.stack });
+    console.error('Error adding product:', error);  // Lisätään virheilmoitus palvelinpäähän
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
