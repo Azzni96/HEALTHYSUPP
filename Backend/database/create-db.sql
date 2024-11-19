@@ -12,8 +12,8 @@ CREATE TABLE products (
     price DECIMAL(10, 2) NOT NULL,
     discount DECIMAL(5, 2) DEFAULT 0,  -- Lisätty alennus kenttä
     description TEXT,   -- Yksi kuvauskenttä riittää
-    image TEXT,         -- Lisätty kuva kenttä
-    category VARCHAR(1000),  -- Lisätty kategoria kenttä
+    image VARCHAR(255),         -- Lisätty kuva kenttä
+    category VARCHAR(255) NOT NULL,  -- Lisätty kategoria kenttä
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
