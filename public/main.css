@@ -1103,25 +1103,12 @@ footer {
 }
 #List {
   display: flex;
-  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   gap: 20px;
   padding: 10px;
 }
 
-/* Styling for Menu Container */
-.menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
-}
-
-#List {
-  display: flex;
-  gap: 40px;
-  justify-content: center;
-  margin-top: 20px;
-}
 
 /* Individual Menu Item Styling */
 .Menu {
@@ -1130,6 +1117,11 @@ footer {
   align-items: center;
   cursor: pointer;
   transition: color 0.3s ease;
+  border: 1px solid #ddd;
+  width: 300px;
+  height: 15pc;
+  gap: 50px;
+  border-radius: 1pc;
 }
 
 .Menu:hover .Menu-name {
@@ -1143,6 +1135,7 @@ footer {
 
 /* Menu Text Styling */
 .Menu-name {
+  margin-top: 10px;
   font-size: 24px;
   color: #333;
   transition: color 0.3s ease;
@@ -1151,6 +1144,7 @@ footer {
 
 /* Menu Image Styling */
 .Menu-image {
+  margin-top: 40px;
   width: 60px;
   height: 60px;
   transform: scale(0.8); /* Initial smaller size */

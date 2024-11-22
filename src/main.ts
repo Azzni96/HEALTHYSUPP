@@ -3,6 +3,7 @@ import { loadCart, reloadCart, clearCart, loadProducts } from './cartAndProduct'
 import { setupFeedbackForm } from './feedback';
 import { setupNavListeners } from './nav';
 
+
 document.addEventListener('DOMContentLoaded', () => {
   setupAuthListeners();
   loadCart();
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
   setupFeedbackForm();
   setupNavListeners();
+
 
   (window as any).logout = logout;
   (window as any).clearCart = clearCart;
