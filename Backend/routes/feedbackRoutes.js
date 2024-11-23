@@ -17,4 +17,14 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const feedback = await Feedback.findAll();
+    res.status(200).json(feedback);
+  } catch (error) {
+    console.error('Error fetching feedback:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

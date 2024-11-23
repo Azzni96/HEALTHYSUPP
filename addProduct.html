@@ -4,7 +4,15 @@
   <title>Add Product</title>
 </head>
 <body>
-  <h1>Add a New Product</h1>
+  <header>
+    <h1>Customer Feedback</h1>
+  </header>
+  <main>
+    <section id="feedback-list"></section>
+    <h2>All Feedback</h2>
+    <ul id="feedback-container"></ul>
+  </main>
+  <h1>Add a New Product, feedback List</h1>
   <form id="product-form" enctype="multipart/form-data">
     <input type="text" id="name" name="name" placeholder="Product Name" required>
     <input type="number" id="price" name="price" placeholder="Price" required min="0">
@@ -40,5 +48,6 @@
       }
     });
   </script>
+  <script type="module" src="/src/feedback.ts"></script>
 </body>
 </html>
