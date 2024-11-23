@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Page</title>
-    <link rel="stylesheet" href="css/style.css">
     <script type="module" src="/src/payment.ts"></script>
     <style>
         body {
@@ -82,23 +81,56 @@
         .confirmation a:hover {
             text-decoration: underline;
         }
-        @media print {
-  body * {
-    visibility: hidden;
-  }
+        #receipt-container {
+          display: block;
+          background: white;
+          padding: 20px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          max-width: 400px;
+          margin: 20px auto;
+          text-align: left;
+        }
 
-  #receipt-container, #receipt-container * {
-    visibility: visible;
-  }
-
-  #receipt-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
+#receipt-container h2 {
+  margin-bottom: 10px;
 }
-    </style>
+
+#product-list li {
+  list-style: none;
+  margin: 5px 0;
+}
+
+#print-receipt-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#print-receipt-btn:hover {
+  background: #0056b3;
+}
+
+@media print {
+    body * {
+      visibility: hidden;
+    }
+
+    #receipt-container, #receipt-container * {
+      visibility: visible;
+    }
+
+    #receipt-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+</style>
 </head>
 <body>
     <div class="payment-container">
