@@ -60,7 +60,7 @@ function displayProducts(products: Product[]) {
         <h2>${product.name}</h2>
         <p>${product.description}</p>
         ${priceText}
-        <img src="${product.image}" alt="${product.name}" width="200">
+       <img src="http://localhost:3000/uploads/${product.image}" alt="${product.name}" width="200">
         <button class="btn add-to-cart">Add to Cart</button>
         <a href="ProductDetail.html?id=${product.id}" class="btn">View Product</a>`;
 
@@ -225,7 +225,7 @@ async function displayProductDetails(productId: string) {
           ? `<p><del>$${product.price.toFixed(2)}</del> $${product.discountPrice.toFixed(2)}</p>`
           : `<p>Price: $${product.price.toFixed(2)}</p>`
         }
-        <img src="${product.image}" alt="${product.name}" width="200">
+        <img src="http://localhost:3000/uploads/${product.image}" alt="${product.name}" width="200">
         <button class="btn" onclick="addToCart('${product.id}')">Add to Cart</button>
       `;
     }

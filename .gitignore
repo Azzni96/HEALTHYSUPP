@@ -23,3 +23,9 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+
+uploads/*
+# except one (empty) file to have the folder in version control
+!uploads/.gitkeep
+# environment variables
+.env

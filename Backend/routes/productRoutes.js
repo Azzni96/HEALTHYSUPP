@@ -1,16 +1,29 @@
 const express = require('express');
+const path = require('path');
 const multer = require('multer');
 const router = express.Router();
 const Product = require('../models/Product');
 
-// Määritä multer kuvatiedostojen tallennusta varten
-const storage = multer.memoryStorage();
+// Määritetään multer kuvatiedostojen tallennusta varten
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../uploads')); // Tallennuskansio
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname); // Uniikki tiedostonimi
+  },
+});
+
 const upload = multer({ storage });
 
-router.post('/products', upload.array('images'), async (req, res) => {
+// Reitti tuotteen lisäämiseen
+router.post('/products', upload.array('images', 10), async (req, res) => {
   try {
     const { name, price, discount, description, category } = req.body;
-    const images = req.files ? req.files.map(file => file.originalname).join(',') : '';
+
+    // Tallennetaan kuvien tiedostonimet pilkulla erotettuna
+    const images = req.files ? req.files.map(file => file.filename).join(',') : '';
 
     if (!name || !price || !category) {
       return res.status(400).json({ message: 'Name, price, and category are required' });
@@ -22,48 +35,47 @@ router.post('/products', upload.array('images'), async (req, res) => {
       discount: discount || 0,
       description,
       image: images,
-      category
+      category,
     });
 
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error('Error adding product:', error);  // Lisätään virheilmoitus palvelinpäähän
+    console.error('Error adding product:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-
-// Route to fetch all products
+// Reitti kaikkien tuotteiden hakemiseen
 router.get('/products', async (req, res) => {
   try {
     const products = await Product.findAll();
     res.json(products);
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Route to fetch products by category
+// Reitti tuotteiden hakemiseen kategorian mukaan
 router.get('/products/category/:category', async (req, res) => {
   try {
     const category = req.params.category;
     const products = await Product.findAll({ where: { category } });
     res.json(products);
   } catch (error) {
-    console.error("Error fetching products by category:", error);
+    console.error('Error fetching products by category:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-// Route to fetch a single product by ID
+// Reitti yksittäisen tuotteen hakemiseen ID:n perusteella
 router.get('/products/:id', async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json(product);
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error('Error fetching product:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

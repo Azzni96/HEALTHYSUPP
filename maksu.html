@@ -82,6 +82,22 @@
         .confirmation a:hover {
             text-decoration: underline;
         }
+        @media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #receipt-container, #receipt-container * {
+    visibility: visible;
+  }
+
+  #receipt-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
     </style>
 </head>
 <body>
@@ -110,5 +126,14 @@
             <p>By clicking "Pay Now," you agree to our <a href="#">Terms & Conditions</a>.</p>
         </div>
     </div>
+    <div id="receipt-container" style="display: none;">
+      <h2>Kuitin tiedot</h2>
+      <p id="customer-name"></p>
+      <p id="payment-date"></p>
+      <ul id="product-list"></ul>
+      <p id="total-amount"></p>
+      <button id="print-receipt-btn">Tulosta kuitti</button>
+    </div>
+
 </body>
 </html>
