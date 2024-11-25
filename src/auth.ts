@@ -14,10 +14,10 @@ export function setupAuthListeners() {
 
       try {
         const response = await axios.post('/api/auth/signup', {
-          username: usernameInput.value,
-          email: emailInput.value,
-          password: passwordInput.value,
-          phone: phoneInput.value,
+          username: usernameInput.value.trim(),
+          email: emailInput.value.trim(),
+          password: passwordInput.value.trim(),
+          phone: phoneInput.value.trim(),
         });
 
         if (response.status === 201) {
@@ -30,44 +30,70 @@ export function setupAuthListeners() {
     });
   }
 
-  if (loginForm) {
-    loginForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const email = (document.querySelector('input[placeholder="Email"]') as HTMLInputElement).value;
-      const password = (document.querySelector('input[placeholder="Password"]') as HTMLInputElement).value;
+if (loginForm) {
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = (document.querySelector('input[placeholder="Email"]') as HTMLInputElement).value;
+    const password = (document.querySelector('input[placeholder="Password"]') as HTMLInputElement).value;
 
-      try {
-        const response = await axios.post('http://localhost:3000/api/auth/signin', { email, password });
-        if (response.status === 200) {
-          const { userId, username } = response.data;
-          localStorage.setItem('userId', userId);
-          localStorage.setItem('username', username);
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/signin', { email, password });
 
-          document.getElementById('username-display')!.innerText = `Welcome, ${username}`;
-          document.getElementById('username-display')!.style.display = 'block';
-          window.location.href = 'index.html';
-        } else {
-          alert('Login failed');
+      if (response.status === 200) {
+        const { userId, username } = response.data.user;
+
+        if (!username) {
+          console.error('Username is missing in the API response', response.data);
+          alert('Login failed. Please try again.');
+          return;
         }
-      } catch (error) {
-        console.error('Sign-in error:', error);
-        alert('Sign-in failed. Please check your credentials.');
-      }
-    });
-  }
 
-  window.addEventListener('load', () => {
-    const username = localStorage.getItem('username');
-    if (username) {
-      document.getElementById('username-display')!.innerText = `Welcome, ${username}`;
-      document.getElementById('username-display')!.style.display = 'block';
+        // Store user data in localStorage
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('username', username);
+
+        // Display the username
+        document.getElementById('username-display')!.innerText = `Welcome, ${username}`;
+        document.getElementById('username-display')!.style.display = 'block';
+
+        // Redirect to the homepage
+        window.location.href = 'index.html';
+      } else {
+        alert('Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      alert('Sign-in failed. Please try again.');
     }
   });
 }
 
+
+window.addEventListener('load', () => {
+  const username = localStorage.getItem('username');
+  const usernameDisplay = document.getElementById('username-display');
+
+  if (username && usernameDisplay) {
+    usernameDisplay.innerText = `Welcome, ${username}`;
+    usernameDisplay.style.display = 'block';
+  } else if (usernameDisplay) {
+    usernameDisplay.style.display = 'none';
+  }
+});
+
+}
+
+// Logout Function
 export function logout() {
+  // Clear localStorage
   localStorage.removeItem('userId');
   localStorage.removeItem('username');
-  document.getElementById('username-display')!.style.display = 'none';
+
+  // Update UI and redirect
+  const usernameDisplay = document.getElementById('username-display');
+  if (usernameDisplay) {
+    usernameDisplay.style.display = 'none';
+  }
+  alert('You have been logged out.');
   window.location.href = 'index.html';
 }

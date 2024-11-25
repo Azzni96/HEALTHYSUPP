@@ -74,16 +74,30 @@ function displayProducts(products: Product[]) {
 }
 
 // Load cart from localStorage
+// Load cart from localStorage
 export function loadCart(): void {
   const storedCart = localStorage.getItem('cart');
+
   if (storedCart) {
-    const cartArray = JSON.parse(storedCart); // Parse JSON string into an array
-    listCards = {}; // Reset the `listCards` object
-    cartArray.forEach((item: Product & { quantity: number }) => {
-      listCards[item.id] = item; // Rebuild the `listCards` object
-    });
+    try {
+      const cartArray = JSON.parse(storedCart); // Parse JSON string into an array
+
+      if (Array.isArray(cartArray)) { // Ensure it's an array
+        listCards = {}; // Reset the `listCards` object
+        cartArray.forEach((item: Product & { quantity: number }) => {
+          listCards[item.id] = item; // Rebuild the `listCards` object
+        });
+      } else {
+        console.error('Stored cart data is not an array:', cartArray);
+        localStorage.removeItem('cart'); // Clear invalid cart data
+      }
+    } catch (error) {
+      console.error('Failed to parse stored cart data:', error);
+      localStorage.removeItem('cart'); // Clear invalid cart data
+    }
   }
-  reloadCart();
+
+  reloadCart(); // Ensure UI is updated even if cart is empty
 }
 
 // Save cart as a list, not an object
@@ -161,6 +175,7 @@ export function changeQuantity(id: string, newQuantity: number): void {
 // Clear all items from the cart
 export function clearCart(): void {
   listCards = {};
+  localStorage.removeItem('cart');
   saveCart();
   reloadCart();
   console.log('Cart has been cleared.');
