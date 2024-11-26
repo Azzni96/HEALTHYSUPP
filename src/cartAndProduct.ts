@@ -196,6 +196,25 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Clear cart button not found');
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Select all menu items with class 'Menu'
+  const menuItems = document.querySelectorAll<HTMLDivElement>('.Menu');
+
+  menuItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const category = item.getAttribute('data-category'); // Read the category attribute
+      if (category) {
+        console.log(`Navigating to category: ${category}`);
+        window.location.href = `Menu.html?category=${category}`; // Redirect to the appropriate URL
+      } else {
+        console.error('Category attribute is missing for this menu item');
+      }
+    });
+  });
+});
+
+
 // Load products and cart data on page load
 window.addEventListener('load', () => {
   loadCart();

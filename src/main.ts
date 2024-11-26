@@ -23,4 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach global functions to the window for accessibility in HTML
     (window as any).logout = logout;
     (window as any).clearCart = clearCart;
+    window.addEventListener('load', () => {
+        loadCart();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        loadProducts(category);
+      });
 });
