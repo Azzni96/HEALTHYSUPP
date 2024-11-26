@@ -186,6 +186,16 @@ export function clearCart(): void {
 (window as any).changeQuantity = changeQuantity;
 (window as any).addToCart = addToCart;
 
+
+// Add event listener for the clear cart button
+document.addEventListener('DOMContentLoaded', () => {
+  const clearCartButton = document.querySelector('#clear-cart');
+  if (clearCartButton) {
+    clearCartButton.addEventListener('click', clearCart);
+  } else {
+    console.error('Clear cart button not found');
+  }
+});
 // Load products and cart data on page load
 window.addEventListener('load', () => {
   loadCart();
