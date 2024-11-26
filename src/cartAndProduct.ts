@@ -213,6 +213,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const checkoutButton = document.getElementById('checkout');
+
+  if (checkoutButton) {
+    checkoutButton.addEventListener('click', () => {
+      console.log('Navigating to payment page...');
+      window.location.href = 'maksu.html'; // Siirrytään maksusivulle
+    });
+  } else {
+    console.error('Checkout button not found');
+  }
+});
 
 
 // Load products and cart data on page load
