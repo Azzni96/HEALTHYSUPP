@@ -3,6 +3,7 @@ import axios from 'axios';
 export function setupAuthListeners() {
   const signUpForm = document.querySelector('.sign-up-form') as HTMLFormElement | null;
   const loginForm = document.querySelector('.sign-in-form') as HTMLFormElement | null;
+  const logoutButton = document.getElementById('logoutbtn') as HTMLButtonElement | null;
 
   if (signUpForm) {
     signUpForm.addEventListener('submit', async (event) => {
@@ -68,6 +69,11 @@ if (loginForm) {
   });
 }
 
+if (logoutButton) {
+  logoutButton.addEventListener('click', () => {
+    logout();
+  });
+}
 
 window.addEventListener('load', () => {
   const username = localStorage.getItem('username');
