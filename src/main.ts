@@ -1,9 +1,8 @@
-import { processPayment } from './payment';
+import { processPayment, loadPayments } from './payment';
 import { setupAuthListeners, logout } from './auth';
 import { loadCart, reloadCart, clearCart, loadProducts } from './cartAndProduct';
 import { setupFeedbackForm } from './feedback';
 import { setupNavListeners } from './nav';
-
 document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname;
 
@@ -18,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Page-specific setup
     if (currentPage.includes('maksu.html')) {
         processPayment();
+        loadPayments();
     }
 
     // Attach global functions to the window for accessibility in HTML

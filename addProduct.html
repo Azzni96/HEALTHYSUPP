@@ -7,11 +7,49 @@
   <header>
     <h1>Customer Feedback</h1>
   </header>
+  <style>
+    table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+  </style>
   <main>
     <section id="feedback-list"></section>
     <h2>All Feedback</h2>
     <ul id="feedback-container"></ul>
   </main>
+  <section id="payment-list">
+    <h2>Payment History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cardholder Name</th>
+          <th>Email</th>
+          <th>Total</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="payment-table-body">
+        <!-- Payments will be dynamically added here -->
+      </tbody>
+    </table>
+  </section>
+
   <h1>Add a New Product, feedback List</h1>
   <form id="product-form" enctype="multipart/form-data">
     <input type="text" id="name" name="name" placeholder="Product Name" required>
@@ -49,5 +87,6 @@
     });
   </script>
   <script type="module" src="/src/feedback.ts"></script>
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

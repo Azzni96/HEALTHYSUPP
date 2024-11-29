@@ -22,4 +22,15 @@ router.post('/api/purchase', async (req, res) => {
   }
 });
 
+// GET route to fetch all purchases
+router.get('/api/purchase', async (req, res) => {
+  try {
+    const purchases = await Purchase.findAll();
+    res.json(purchases);
+  } catch (error) {
+    console.error('Error fetching purchases:', error);
+    res.status(500).json({ error: 'Failed to fetch purchases.' });
+  }
+});
+
 module.exports = router;

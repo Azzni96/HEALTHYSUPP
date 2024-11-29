@@ -160,3 +160,42 @@ function displayReceipt(details: Record<string, string>, cartData: any[], total:
 
 // Initialize the payment process
 document.addEventListener('DOMContentLoaded', () => processPayment());
+
+
+export function loadPayments(): void {
+  fetch('http://localhost:3000/api/purchase') // Make sure this matches your backend URL
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch payments');
+      }
+      return response.json();
+    })
+    .then((payments) => {
+      const tableBody = document.getElementById('payment-table-body')!;
+      tableBody.innerHTML = ''; // Clear the table first
+
+      payments.forEach((payment: any) => {
+        const row = document.createElement('tr');
+
+        // Create table cells for each payment detail
+        row.innerHTML = `
+          <td>${payment.cardName}</td>
+          <td>${payment.email}</td>
+          <td>€${payment.total.toFixed(2)}</td>
+          <td>${new Date(payment.createdAt).toLocaleString()}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    })
+    .catch((error) => {
+      console.error('Error loading payments:', error);
+    });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const currentPage = window.location.pathname;
+
+  if (currentPage.includes('addProduct.html')) {
+    loadPayments();
+  }
+});
