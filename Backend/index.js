@@ -6,6 +6,7 @@ const sequelize = require('./config/db'); // Connect to MariaDB using Sequelize
 const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const productRoutes = require('./routes/productRoutes');
+const purchaseRoutes = require('./routes/purchaseRoutes');
 
 const app = express();
 
@@ -31,6 +32,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api', productRoutes);
+app.use('/', purchaseRoutes);
+
 
 // Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {

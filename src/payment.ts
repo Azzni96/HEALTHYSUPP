@@ -41,9 +41,8 @@ export function processPayment(): void {
     // Collect payment details
     const cardNumber = (document.getElementById('card-number') as HTMLInputElement)?.value.trim();
     const cardExpiration = (document.getElementById('card-expiration') as HTMLInputElement)?.value.trim();
-    const cardCVV = (document.getElementById('card-cvv') as HTMLInputElement)?.value.trim();
 
-    if (!cardNumber || !cardExpiration || !cardCVV) {
+    if (!cardNumber || !cardExpiration) {
       alert('Please complete all payment details.');
       return;
     }
@@ -53,17 +52,24 @@ export function processPayment(): void {
     if (isPaymentSuccessful) {
       alert('Payment successful!');
 
+      // Fetch cart data
+      const cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+      const total = cartData.reduce((sum: number, item: { quantity: number; price: number }) => sum + item.quantity * item.price, 0);
+
       // Display receipt
-      displayReceipt({ ...billingDetails, cardNumber, cardExpiration });
+      displayReceipt({ ...billingDetails, cardNumber, cardExpiration }, cartData, total);
+
+      // Send purchase details to backend
+      sendPurchaseDetailsToBackend({ ...billingDetails, cardNumber, cardExpiration }, cartData, total);
 
       // Clear local storage
       localStorage.removeItem('billingDetails');
       localStorage.removeItem('cart');
 
-      // Redirect to index.html after 5 seconds
+      // Redirect to index.html
       setTimeout(() => {
         window.location.href = 'index.html';
-      }, 5000); // Delay in milliseconds
+      }, 5000);
     } else {
       alert('Payment failed. Please try again.');
     }
@@ -71,9 +77,49 @@ export function processPayment(): void {
 }
 
 /**
+ * Sends purchase details to the backend
+ */
+function sendPurchaseDetailsToBackend(details: Record<string, string>, cartData: any[], total: number): void {
+  fetch('/api/purchase', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      customerDetails: {
+        cardName: details.cardName,
+        address: details.address,
+        city: details.city,
+        state: details.state,
+        phone: details.phone,
+        email: details.email,
+      },
+      paymentDetails: {
+        cardNumber: details.cardNumber, // For simulation only
+        cardExpiration: details.cardExpiration,
+      },
+      cart: cartData,
+      total,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to send purchase details');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Purchase successfully sent to backend:', data);
+    })
+    .catch((error) => {
+      console.error('Error sending purchase details to backend:', error);
+    });
+}
+
+/**
  * Displays receipt with customer and payment details
  */
-function displayReceipt(details: Record<string, string>): void {
+function displayReceipt(details: Record<string, string>, cartData: any[], total: number): void {
   const receiptContainer = document.getElementById('receipt-container')!;
   const customerNameElement = document.getElementById('customer-name')!;
   const paymentDateElement = document.getElementById('payment-date')!;
@@ -94,39 +140,23 @@ function displayReceipt(details: Record<string, string>): void {
   const paymentDate = new Date().toLocaleString();
   paymentDateElement.textContent = `Date: ${paymentDate}`;
 
-  // Fetch cart data from local storage
-  const cartData = JSON.parse(localStorage.getItem('cart') || '[]');
 
-  if (!Array.isArray(cartData)) {
-    console.error('Cart data is invalid. Clearing cart.');
-    localStorage.removeItem('cart');
-    return;
-  }
-
-  if (cartData.length === 0) {
-    alert('Your cart is empty.');
-    return;
-  }
-
-  // Populate product list and calculate total
+  // Populate product list
   productListElement.innerHTML = '';
-  let total = 0;
   cartData.forEach((item: { name: string; quantity: number; price: number }) => {
     const listItem = document.createElement('li');
     listItem.textContent = `${item.name} - ${item.quantity} pcs - €${item.price.toFixed(2)}`;
     productListElement.appendChild(listItem);
-    total += item.quantity * item.price;
   });
 
   totalAmountElement.textContent = `Total: €${total.toFixed(2)}`;
 
-  // Show the receipt container
+  // Show receipt
   receiptContainer.style.display = 'block';
 
   // Enable print functionality
-  printButton.style.display = 'block';
   printButton.onclick = () => window.print();
 }
 
-// Initialize the two-step payment process on DOMContentLoaded
+// Initialize the payment process
 document.addEventListener('DOMContentLoaded', () => processPayment());
