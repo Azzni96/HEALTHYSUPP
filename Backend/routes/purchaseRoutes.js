@@ -33,4 +33,18 @@ router.get('/api/purchase', async (req, res) => {
   }
 });
 
+router.delete('/api/purchase/:id', async (req, res) => {
+  try {
+    const purchase = await Purchase.findByPk(req.params.id);
+    if (!purchase) {
+      return res.status(404).json({ message: 'Purchase not found' });
+    }
+    await purchase.destroy();
+    res.json({ message: 'Purchase deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting purchase:', error);
+    res.status(500).json({ message: 'Failed to delete purchase.' });
+  }
+});
+
 module.exports = router;

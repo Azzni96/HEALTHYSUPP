@@ -74,15 +74,15 @@ export function setupFeedbackForm() {
     }
 
 
-  feedbacks.forEach(feedback => {
-    const listItem = document.createElement('li');
-    listItem.innerHTML = `
-      <p><strong>${feedback.name}</strong> </p>
-      <p><strong>${feedback.email}</strong> </p>
-      <p><strong>${feedback.message}</strong> </p>
-      <hr>
-    `;
-    feedbackContainer.appendChild(listItem);
+    feedbacks.forEach(feedback => {
+      const listItem = document.createElement('div');
+      listItem.classList.add('feedback-item'); // Lisää CSS-luokka kohteeseen
+      listItem.innerHTML = `
+          <p><strong>Name:</strong> ${feedback.name}</p>
+          <p><strong>Email:</strong> ${feedback.email}</p>
+          <p><strong>Message:</strong> ${feedback.message}</p>
+      `;
+      feedbackContainer.appendChild(listItem);
   });
 
 }
