@@ -37,7 +37,7 @@ app.use('/', purchaseRoutes);
 
 // Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'addProduct.html'));
+  res.sendFile(path.join(__dirname,  'index.html'));
 });
 
 // Error handling
