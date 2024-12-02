@@ -29,3 +29,7 @@ uploads/*
 !uploads/.gitkeep
 # environment variables
 .env
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
