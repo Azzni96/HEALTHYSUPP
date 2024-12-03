@@ -37,9 +37,17 @@ app.use('/', purchaseRoutes);
 
 // Serve frontend (index.html) for the root URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'addProduct.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
+app.get('/Menu.html', (req, res) => {
+  res.sendFile(path.join(buildPath, 'Menu.html'));
+});
+app.get('/addProduct.html', (req, res) => {
+  res.sendFile(path.join(buildPath, 'addProduct.html'));
+});
+app.get('/maksu.html', (req, res) => {
+  res.sendFile(path.join(buildPath, 'maksu.html'));
+});
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);

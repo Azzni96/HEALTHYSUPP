@@ -3,6 +3,16 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: './',
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        menu: './Menu.html',
+        about: './addProduct.html',
+        contact: './maksu.html',
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': {
