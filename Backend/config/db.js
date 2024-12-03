@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 // Set up the MariaDB connection
-const sequelize = new Sequelize('HEALTHYSUPP', 'root', 'Nihad1996', {
+const sequelize = new Sequelize('HEALTHYSUPP', 'root', 'Kraskras', {
   host: 'localhost',
   dialect: 'mariadb',
   logging: false,
