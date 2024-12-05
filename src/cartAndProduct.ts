@@ -18,8 +18,8 @@ let listCards: { [key: string]: Product & { quantity: number } | null } = {};
 export async function loadProducts(category: string | null = null) {
   try {
     const url = category
-      ? `http://localhost:3000/api/products/category/${category}`
-      : `http://localhost:3000/api/products`;
+      ? `/api/products/category/${category}`
+      : `/api/products`;
 
     console.log(`Fetching products from: ${url}`); // Debugging log for URL
 
@@ -59,7 +59,7 @@ function displayProducts(products: Product[]) {
         <h2>${product.name}</h2>
         <p>${product.description}</p>
         ${priceText}
-        <img src="http://localhost:3000/uploads/${product.image}" alt="${product.name}" width="200">
+        <img src="/uploads/${product.image}" alt="${product.name}" width="200">
         <button class="btn add-to-cart">Add to Cart</button>
       `;
 
@@ -141,7 +141,7 @@ export function reloadCart(): void {
         count += value.quantity!;
         listCard.innerHTML += `
           <li>
-            <div><img src="http://localhost:3000/uploads/${value.image}" alt="${value.name}" width="50"></div>
+            <div><img src="/uploads/${value.image}" alt="${value.name}" width="50"></div>
             <div>${value.name}</div>
             <div>${value.quantity} pcs</div>
             <div>

@@ -16,7 +16,7 @@ export function setupFeedbackForm() {
           };
 
           try {
-            const response = await fetch('http://localhost:3000/api/feedback', {
+            const response = await fetch('/api/feedback', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export function setupFeedbackForm() {
 
   async function fetchFeedback(): Promise<Feedback[]> {
     try {
-      const response = await fetch('http://localhost:3000/api/feedback');
+      const response = await fetch('/api/feedback');
       if (!response.ok) {
         throw new Error('Failed to fetch feedback');
       }

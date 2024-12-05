@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => processPayment());
 
 
 export function loadPayments(): void {
-  fetch('http://localhost:3000/api/purchase') // Make sure this matches your backend URL
+  fetch('/api/purchase') // Make sure this matches your backend URL
     .then((response) => {
       if (!response.ok) {
         throw new Error('Failed to fetch payments');

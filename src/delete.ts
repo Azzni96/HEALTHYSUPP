@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = '/api';
 
 // DELETE: Yleisfunktio poistamiseen
 export async function deleteItem(endpoint: string, itemId: string): Promise<void> {

@@ -23,6 +23,7 @@ export function setupAuthListeners() {
 
         if (response.status === 201) {
           console.log('Sign-up successful!');
+          alert('Sign-up successful! Please sign in.');
         }
       } catch (error) {
         console.error('Sign-up error:', error);
@@ -38,7 +39,7 @@ if (loginForm) {
     const password = (document.querySelector('input[placeholder="Password"]') as HTMLInputElement).value;
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/signin', { email, password });
+      const response = await axios.post('/api/auth/signin', { email, password });
 
       if (response.status === 200) {
         const { userId, username } = response.data.user;
