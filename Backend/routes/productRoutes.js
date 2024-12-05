@@ -17,6 +17,31 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
+/**
+ * @api {post} /products Add a Product
+ * @apiName AddProduct
+ * @apiGroup Products
+ * @apiVersion 1.0.0
+ * @apiDescription Add a new product to the catalog.
+ *
+ * @apiBody {String} name Name of the product.
+ * @apiBody {Number} price Price of the product.
+ * @apiBody {String} [description] Product description.
+ * @apiBody {String} category Product category.
+ * @apiBody {File[]} images Array of images for the product.
+ *
+ * @apiSuccess {Object} product Created product details.
+ * @apiSuccess {Number} product.id ID of the created product.
+ * @apiSuccess {String} product.name Name of the product.
+ * @apiSuccess {Number} product.price Price of the product.
+ * @apiSuccess {String} product.category Category of the product.
+ * @apiSuccess {String} [product.description] Description of the product.
+ * @apiSuccess {String} [product.image] Comma-separated list of image filenames.
+ *
+ * @apiError {String} message Error message.
+ */
+
 // Reitti tuotteen lisäämiseen
 router.post('/products', upload.array('images', 10), async (req, res) => {
   try {
@@ -45,6 +70,24 @@ router.post('/products', upload.array('images', 10), async (req, res) => {
   }
 });
 
+/**
+ * @api {get} /products Get All Products
+ * @apiName GetAllProducts
+ * @apiGroup Products
+ * @apiVersion 1.0.0
+ * @apiDescription Retrieve all products in the catalog.
+ *
+ * @apiSuccess {Object[]} products List of products.
+ * @apiSuccess {Number} products.id ID of the product.
+ * @apiSuccess {String} products.name Name of the product.
+ * @apiSuccess {Number} products.price Price of the product.
+ * @apiSuccess {String} products.category Category of the product.
+ * @apiSuccess {String} [products.description] Description of the product.
+ * @apiSuccess {String} [products.image] Comma-separated list of image filenames.
+ *
+ * @apiError {String} message Error message.
+ */
+
 // Reitti kaikkien tuotteiden hakemiseen
 router.get('/products', async (req, res) => {
   try {
@@ -55,6 +98,26 @@ router.get('/products', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+/**
+ * @api {get} /products/category/:category Get Products by Category
+ * @apiName GetProductsByCategory
+ * @apiGroup Products
+ * @apiVersion 1.0.0
+ * @apiDescription Retrieve all products for a specific category.
+ *
+ * @apiParam {String} category The category to filter products by.
+ *
+ * @apiSuccess {Object[]} products List of products in the category.
+ * @apiSuccess {Number} products.id ID of the product.
+ * @apiSuccess {String} products.name Name of the product.
+ * @apiSuccess {Number} products.price Price of the product.
+ * @apiSuccess {String} products.category Category of the product.
+ * @apiSuccess {String} [products.description] Description of the product.
+ * @apiSuccess {String} [products.image] Comma-separated list of image filenames.
+ *
+ * @apiError {String} message Error message.
+ */
 
 // Reitti tuotteiden hakemiseen kategorian mukaan
 router.get('/products/category/:category', async (req, res) => {
@@ -68,6 +131,26 @@ router.get('/products/category/:category', async (req, res) => {
   }
 });
 
+/**
+ * @api {get} /products/:id Get Product by ID
+ * @apiName GetProductById
+ * @apiGroup Products
+ * @apiVersion 1.0.0
+ * @apiDescription Retrieve details of a specific product by its ID.
+ *
+ * @apiParam {Number} id The unique ID of the product.
+ *
+ * @apiSuccess {Object} product Product details.
+ * @apiSuccess {Number} product.id ID of the product.
+ * @apiSuccess {String} product.name Name of the product.
+ * @apiSuccess {Number} product.price Price of the product.
+ * @apiSuccess {String} product.category Category of the product.
+ * @apiSuccess {String} [product.description] Description of the product.
+ * @apiSuccess {String} [product.image] Comma-separated list of image filenames.
+ *
+ * @apiError {String} message Error message.
+ */
+
 // Reitti yksittäisen tuotteen hakemiseen ID:n perusteella
 router.get('/products/:id', async (req, res) => {
   try {
@@ -79,6 +162,20 @@ router.get('/products/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+/**
+ * @api {delete} /products/:id Delete Product by ID
+ * @apiName DeleteProductById
+ * @apiGroup Products
+ * @apiVersion 1.0.0
+ * @apiDescription Delete a specific product by its ID.
+ *
+ * @apiParam {Number} id The unique ID of the product to delete.
+ *
+ * @apiSuccess {String} message Success message confirming deletion.
+ *
+ * @apiError {String} message Error message if the product is not found or cannot be deleted.
+ */
 
 router.delete('/products/:id', async (req, res) => {
   try {

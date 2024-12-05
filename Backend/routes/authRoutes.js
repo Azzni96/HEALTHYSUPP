@@ -3,6 +3,23 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
+/**
+ * @api {post} /signup User Signup
+ * @apiName Signup
+ * @apiGroup Authentication
+ * @apiVersion 1.0.0
+ * @apiDescription Create a new user account.
+ *
+ * @apiBody {String} username Username for the user.
+ * @apiBody {String} email Email of the user.
+ * @apiBody {String} phone Phone number of the user.
+ * @apiBody {String} password Password for the user.
+ *
+ * @apiSuccess {String} message Signup success message.
+ * @apiSuccess {Object} user Created user details.
+ */
+
+
 // Signup Route
 router.post('/signup', async (req, res) => {
   try {
@@ -27,6 +44,19 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+/**
+ * @api {post} /signin User Signin
+ * @apiName Signin
+ * @apiGroup Authentication
+ * @apiVersion 1.0.0
+ * @apiDescription Authenticate a user.
+ *
+ * @apiBody {String} email Email of the user.
+ * @apiBody {String} password Password of the user.
+ *
+ * @apiSuccess {String} message Signin success message.
+ * @apiSuccess {Object} user Authenticated user details.
+ */
 // Signin Route
 router.post('/signin', async (req, res) => {
   try {

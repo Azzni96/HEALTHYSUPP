@@ -2,6 +2,19 @@ const express = require('express');
 const router = express.Router();
 const Feedback = require('../models/feedback');
 
+/**
+ * @api {post} /feedback Add Feedback
+ * @apiName SubmitFeedback
+ * @apiGroup Feedback
+ * @apiVersion 1.0.0
+ * @apiDescription Submit feedback from a user.
+ *
+ * @apiBody {String} name Name of the user.
+ * @apiBody {String} email Email of the user.
+ * @apiBody {String} message Feedback message.
+ *
+ * @apiSuccess {String} message Success message.
+ */
 router.post('/', async (req, res) => {
   console.log('Received feedback:', req.body);
   try {
@@ -17,6 +30,15 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * @api {get} /feedback Get All Feedback
+ * @apiName GetFeedback
+ * @apiGroup Feedback
+ * @apiVersion 1.0.0
+ * @apiDescription Retrieve all feedback submissions.
+ *
+ * @apiSuccess {Array} feedback List of feedback submissions.
+ */
 router.get('/', async (req, res) => {
   try {
     const feedback = await Feedback.findAll();
@@ -27,6 +49,24 @@ router.get('/', async (req, res) => {
   }
 });
 
+/**
+ * @api {delete} /feedback/:id Delete Feedback
+ * @apiName DeleteFeedback
+ * @apiGroup Feedback
+ * @apiVersion 1.0.0
+ * @apiDescription Poista palaute ID:n perusteella.
+ *
+ * @apiParam {Number} id Palautteen yksilöllinen ID.
+ *
+ * @apiSuccess {String} message Poiston onnistumisviesti.
+ *
+ * @apiError FeedbackNotFound Jos palautetta ei löydy.
+ * @apiErrorExample {json} Virhe-vastaus:
+ *    HTTP/1.1 404 Not Found
+ *    {
+ *      "message": "Feedback not found"
+ *    }
+ */
 router.delete('/:id', async (req, res) => {
   try {
     const feedback = await Feedback.findByPk(req.params.id);

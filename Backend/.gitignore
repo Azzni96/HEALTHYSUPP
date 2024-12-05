@@ -5,3 +5,6 @@ uploads/*
 !uploads/.gitkeep
 # environment variables
 .env
+
+# docs folder
+docs/
