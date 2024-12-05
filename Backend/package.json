@@ -1,11 +1,5 @@
 
 {
-  "name": "Healthysupp",
-  "version": "1.0.0",
-  "description": "API documentation for your project",
-  "title": "API Documentation",
-  "url": "http://localhost:3000",
-  "order": ["Authentication", "Products", "Feedback", "Purchases"],
   "scripts": {
     "start": "npx nodemon index.js",
     "apidoc": "apidoc -i routes/ -o docs/"
