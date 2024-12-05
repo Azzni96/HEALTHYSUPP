@@ -1,15 +1,14 @@
-
 {
   "scripts": {
     "start": "npx nodemon index.js",
     "apidoc": "apidoc -i routes/ -o docs/"
   },
-
   "dependencies": {
     "apidoc": "^1.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "mariadb": "^3.4.0",
     "mongoose": "^8.7.3",
