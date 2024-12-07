@@ -141,6 +141,7 @@ html::-webkit-scrollbar-thumb {
   border-radius: 5rem;
 }
 
+
 /* Header-tyylit */
 .header {
   background: var(--bg);
@@ -1191,6 +1192,85 @@ footer {
 
 #feedbackbtn {
   width: 100%;
+}
+/* Yleiset navbar-tyylit */
+.navbar, .cart-items-container, .logbar {
+  display: none; /* Piilotetaan oletuksena */
+}
+
+.navbar.active, .cart-items-container.active, .logbar.active {
+  display: block; /* Näytetään, kun "active"-luokka lisätään */
+}
+
+@media (max-width: 768px) {
+  #menu-btn {
+    display: block; /* Näytä valikkopainike mobiilinäkymässä */
+  }
+
+  .header .navbar {
+    position: absolute;
+    top: 100%;
+    right: -100%;
+    background: #fff;
+    width: 100%;
+    text-align: center;
+    transition: right 0.3s ease;
+  }
+
+  .header .navbar.active {
+    right: 0; /* Näytä navbar mobiilissa */
+  }
+
+  .header .navbar a {
+    display: block;
+    margin: 1rem 0;
+    font-size: 1.8rem;
+    color: #000;
+  }
+
+  .logbar {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .logbar.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cart-items-container {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    height: auto;
+  }
+
+  .cart-items-container h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .header .navbar {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .cart-items-container {
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    width: 300px;
+    height: auto;
+  }
 }
 
 /* Media Queryt suuremmasta pienempään */
