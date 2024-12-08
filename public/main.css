@@ -94,7 +94,7 @@ section {
   background-color: #fff;
 }
 .logbar h2{
-  margin-left: 15px;
+  margin-left: 80px;
 }
 .logbar.active {
   display: flex;
@@ -1248,6 +1248,16 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 285px;
+    background: none;
+  }
+  .header .icons .logbar {
+    position: absolute;
+    right: 10px;
+    top: 50px;
+  }
+  .logbar h2 {
+    margin-left: 40px;
   }
 
   .cart-items-container {
@@ -1302,6 +1312,13 @@ footer {
 }
 
 @media (max-width: 870px) {
+  .container {
+    min-height: 800px;
+    height: 75vh;
+    width: 55%;
+}
+.content{
+margin-top: 30px}
   .feedback-container form input,
   .feedback-container form textarea,
   .feedback-container form button {
@@ -1418,11 +1435,38 @@ footer {
   display: flex;
   margin-left: 80px;
 }
+.header .icons .logbar {
+  position: absolute;
+   right: 0;
+ }
+  .logbar h2 {
+    margin-left: 75px;
+  }
+  .header .icons .logbar button {
+    font-size: 2rem;
+    align-items: center;
+    background: none;
+    margin-top: 5px;
+  }
+  #product-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-left: 165px;
+  }
 
 }
+
 @media (max-width: 768px) {
   #menu-btn {
     display: inline-block;
+  }
+  .header .icons .logbar {
+    position: absolute;
+    right: 0;
+    top: 45px;
+  }
+  .logbar h2 {
+    margin-left: 35px;
   }
   .header .navbar {
     position: absolute;
@@ -1495,8 +1539,10 @@ footer {
     font-size: 2rem;
     background: none;
     position: absolute;
-    right: 10px;
-    top: 30px;
+    left: 128px;
+    top: 36px;}
+  .logbar h2 {
+    margin-left: 43px;
   }
   .header .icons .logbar button {
     font-size: 2rem;
@@ -1516,8 +1562,25 @@ footer {
     margin-left: 42px;
     margin-top: -90px;
 }
+.header .icons .logbar {
+  font-size: 2rem;
+  background: none;
+  position: absolute;
+  left: 115px;
+  top: 36px;}
+.logbar h2 {
+  margin-left: 43px;
 }
 
+}
+@media (max-width: 400px) {
+  .header .icons .logbar {
+    left: 90px;
+  }
+  .logbar h2 {
+    margin-left: 50px;
+  }
+}
 @media (max-width: 385px) {
 
   header .icons span {
@@ -1530,6 +1593,12 @@ footer {
     display: flex;
     margin-left: 35px;
     margin-top: -85px;
+  }
+  .header .icons .logbar {
+    left: 80px;
+}
+  .logbar h2 {
+    margin-left: 35px;
   }
 }
 

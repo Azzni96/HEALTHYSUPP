@@ -94,7 +94,7 @@ section {
   background-color: #fff;
 }
 .logbar h2{
-  margin-left: 15px;
+  margin-left: 80px;
 }
 .logbar.active {
   display: flex;
@@ -1248,6 +1248,7 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 285px;
   }
 
   .cart-items-container {
@@ -1302,6 +1303,13 @@ footer {
 }
 
 @media (max-width: 870px) {
+  .container {
+    min-height: 800px;
+    height: 75vh;
+    width: 55%;
+}
+.content{
+margin-top: 30px}
   .feedback-container form input,
   .feedback-container form textarea,
   .feedback-container form button {
@@ -1495,9 +1503,8 @@ footer {
     font-size: 2rem;
     background: none;
     position: absolute;
-    right: 10px;
-    top: 30px;
-  }
+    left: 65px;
+    top: 36px;}
   .header .icons .logbar button {
     font-size: 2rem;
     align-items: center;
@@ -1516,6 +1523,13 @@ footer {
     margin-left: 42px;
     margin-top: -90px;
 }
+.header .icons .logbar {
+  font-size: 2rem;
+  background: none;
+  position: absolute;
+  left: 80px;
+  top: 36px;}
+
 }
 
 @media (max-width: 385px) {
@@ -1530,6 +1544,12 @@ footer {
     display: flex;
     margin-left: 35px;
     margin-top: -85px;
+  }
+  .header .icons .logbar {
+    left: 80px;
+}
+  .logbar h2 {
+    margin-left: 35px;
   }
 }
 
