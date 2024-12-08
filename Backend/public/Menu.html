@@ -15,7 +15,7 @@
 
     <script type="module" crossorigin src="./assets/payment-e27a1750.js"></script>
     <script type="module" crossorigin src="./assets/main-1eb74a37.js"></script>
-    <link rel="stylesheet" href="./assets/main-acc5223d.css">
+    <link rel="stylesheet" href="./assets/main-c3ece8f0.css">
   <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
   <body>
     <header class="header">
@@ -77,21 +77,7 @@
                 <input type="password" placeholder="Password" />
               </div>
               <input type="submit" value="Login" class="btn-sign solid" />
-              <p class="social-text">Or Sign in with social platforms</p>
-              <div class="social-media">
-                <a href="#" class="social-icon">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-google"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-linkedin-in"></i>
-                </a>
-              </div>
+
             </form>
             <form action="#" class="sign-up-form">
               <h2 class="title">Sign up</h2>
@@ -112,28 +98,14 @@
                 <input type="number" placeholder="Phone" />
               </div>
               <input type="submit" class="btn-sign" value="Sign up" />
-              <p class="social-text">Or Sign up with social platforms</p>
-              <div class="social-media">
-                <a href="#" class="social-icon">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-google"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-linkedin-in"></i>
-                </a>
-              </div>
+
             </form>
           </div>
         </div>
 
         <div class="panels-container">
           <div class="panel left-panel">
-            <div class="content">
+            <div class="content sing-up-content">
               <h3>New here</h3>
               <p>
                 Join us and discover exclusive benefits! Sign up to get started on your journey with us.
@@ -144,7 +116,7 @@
             </div>
           </div>
           <div class="panel right-panel">
-            <div class="content">
+            <div class="content sing-in-content" >
               <h3>Welcome Back!</h3>
               <p>
                 Already have an account? Sign in to stay connected with us and access your personalized dashboard.
@@ -157,8 +129,23 @@
         </div>
       </dialog>
     </section>
-
-
+    <section class="menu" id="menu">
+      <h1 class="heading"><span>Our Menu</span></h1>
+      <div id="List">
+        <div class="Menu" data-category="creatine">
+          <p class="Menu-name">CREATINE</p>
+          <img src="./assets/creatine2-40dd710b.png" alt="Creatine" class="Menu-image">
+        </div>
+        <div class="Menu" data-category="energy">
+          <p class="Menu-name">ENERGY</p>
+          <img src="./assets/energy-2dccf621.png" alt="Energy" class="Menu-image">
+        </div>
+        <div class="Menu" data-category="muscle">
+          <p class="Menu-name">MUSCLE</p>
+          <img src="./assets/Muscle-a0f1d9c8.png" alt="Muscle" class="Menu-image">
+        </div>
+      </div>
+    </section>
     <section>
       <div id="product-list"></div> <!-- For the single selected product -->
     </section>
