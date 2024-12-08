@@ -3,6 +3,7 @@ import { setupAuthListeners, logout } from './auth';
 import { loadCart, reloadCart, clearCart, loadProducts } from './cartAndProduct';
 import { setupFeedbackForm } from './feedback';
 import { setupNavListeners } from './nav';
+import './indexProducts' // Import the indexProducts.ts file to run the code inside it
 document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname;
 
@@ -23,5 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach global functions to the window for accessibility in HTML
     (window as any).logout = logout;
     (window as any).clearCart = clearCart;
+
 
 });

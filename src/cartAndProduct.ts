@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Tuotteen määrittely
 interface Product {
   id: string;
   name: string;
@@ -11,10 +12,14 @@ interface Product {
   quantity?: number;
 }
 
+// Globaali tuotelista ja ostoskori
 let products: Product[] = [];
 let listCards: { [key: string]: Product & { quantity: number } | null } = {};
 
-// Load products from API and display on the page, optionally filtered by category
+/**
+ * Tuotteiden lataaminen API:sta
+ * @param category Valinnainen kategoriasuodatin
+ */
 export async function loadProducts(category: string | null = null) {
   try {
     const url = category
@@ -31,17 +36,22 @@ export async function loadProducts(category: string | null = null) {
         : product.price || 0,
     }));
 
-    displayProducts(products); // Display the filtered products
+    displayProducts(products); // Näytä ladatut tuotteet
   } catch (error) {
     console.error('Error fetching products:', error);
   }
 }
 
-// Display products in the product list (Menu.html or filtered category)
+/**
+ * Näytä tuotteet
+ * @param products Tuotelista
+ */
 function displayProducts(products: Product[]) {
   const productContainer = document.getElementById('product-list') as HTMLElement | null;
+
   if (productContainer) {
-    productContainer.innerHTML = ''; // Clear existing products
+    productContainer.innerHTML = ''; // Tyhjennä olemassa olevat tuotteet
+
     if (products.length === 0) {
       productContainer.innerHTML = '<p>No products found for this category.</p>';
       return;
@@ -73,40 +83,46 @@ function displayProducts(products: Product[]) {
   }
 }
 
-// Load cart from localStorage
-// Load cart from localStorage
+/**
+ * Lataa ostoskori paikallisesta tallennustilasta
+ */
 export function loadCart(): void {
   const storedCart = localStorage.getItem('cart');
 
   if (storedCart) {
     try {
-      const cartArray = JSON.parse(storedCart); // Parse JSON string into an array
+      const cartArray = JSON.parse(storedCart); // Muunna JSON-listaksi
 
-      if (Array.isArray(cartArray)) { // Ensure it's an array
-        listCards = {}; // Reset the `listCards` object
+      if (Array.isArray(cartArray)) {
+        listCards = {};
         cartArray.forEach((item: Product & { quantity: number }) => {
-          listCards[item.id] = item; // Rebuild the `listCards` object
+          listCards[item.id] = item;
         });
       } else {
         console.error('Stored cart data is not an array:', cartArray);
-        localStorage.removeItem('cart'); // Clear invalid cart data
+        localStorage.removeItem('cart'); // Poista viallinen data
       }
     } catch (error) {
       console.error('Failed to parse stored cart data:', error);
-      localStorage.removeItem('cart'); // Clear invalid cart data
+      localStorage.removeItem('cart'); // Poista viallinen data
     }
   }
 
-  reloadCart(); // Ensure UI is updated even if cart is empty
+  reloadCart(); // Päivitä UI
 }
 
-// Save cart as a list, not an object
+/**
+ * Tallenna ostoskori paikalliseen tallennustilaan
+ */
 function saveCart(): void {
-  const cartArray = Object.values(listCards).filter(Boolean); // Convert object values to an array
+  const cartArray = Object.values(listCards).filter(Boolean); // Muunna objektin arvot listaksi
   localStorage.setItem('cart', JSON.stringify(cartArray));
 }
 
-// Add product to cart
+/**
+ * Lisää tuote ostoskoriin
+ * @param id Tuotteen ID
+ */
 export function addToCart(id: string): void {
   const product = products.find((product) => product.id === id);
   if (product) {
@@ -122,7 +138,9 @@ export function addToCart(id: string): void {
   reloadCart();
 }
 
-// Reload cart items on the page
+/**
+ * Päivitä ostoskori UI:ssa
+ */
 export function reloadCart(): void {
   const listCard = document.querySelector('.listCard') as HTMLUListElement;
   const total = document.querySelector('.total') as HTMLDivElement;
@@ -159,7 +177,11 @@ export function reloadCart(): void {
   }
 }
 
-// Change quantity of a product in the cart
+/**
+ * Muuta tuotteen määrää
+ * @param id Tuotteen ID
+ * @param newQuantity Uusi määrä
+ */
 export function changeQuantity(id: string, newQuantity: number): void {
   if (listCards[id]) {
     if (newQuantity <= 0) {
@@ -172,7 +194,9 @@ export function changeQuantity(id: string, newQuantity: number): void {
   }
 }
 
-// Clear all items from the cart
+/**
+ * Tyhjennä ostoskori
+ */
 export function clearCart(): void {
   listCards = {};
   localStorage.removeItem('cart');
@@ -180,59 +204,43 @@ export function clearCart(): void {
   reloadCart();
   console.log('Cart has been cleared.');
 }
-
-// Attach functions to the window object for accessibility in HTML
-(window as any).clearCart = clearCart;
-(window as any).changeQuantity = changeQuantity;
-(window as any).addToCart = addToCart;
-
-
-// Add event listener for the clear cart button
 document.addEventListener('DOMContentLoaded', () => {
-  const clearCartButton = document.querySelector('#clear-cart');
-  if (clearCartButton) {
-    clearCartButton.addEventListener('click', clearCart);
-  } else {
-    console.error('Clear cart button not found');
-  }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Select all menu items with class 'Menu'
+  // Kuuntele kategoriavalintaa
   const menuItems = document.querySelectorAll<HTMLDivElement>('.Menu');
 
   menuItems.forEach((item) => {
     item.addEventListener('click', () => {
-      const category = item.getAttribute('data-category'); // Read the category attribute
+      const category = item.getAttribute('data-category'); // Lue kategoriatieto
       if (category) {
-        console.log(`Navigating to category: ${category}`);
-        window.location.href = `Menu.html?category=${category}`; // Redirect to the appropriate URL
+        console.log(`Loading category: ${category}`);
+        loadProducts(category); // Lataa tuotteet valitusta kategoriasta
       } else {
         console.error('Category attribute is missing for this menu item');
       }
     });
   });
-});
-document.addEventListener('DOMContentLoaded', () => {
-  const checkoutButton = document.getElementById('checkout');
 
+  // Lataa oletustuotteet
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('category'); // Hae kategoria URL-parametreista
+  loadProducts(category); // Lataa tuotteet (jos kategoriaa ei ole, lataa kaikki)
+
+  // Kuuntele ostoskorin tapahtumia
+  const clearCartButton = document.querySelector('#clear-cart');
+  if (clearCartButton) {
+    clearCartButton.addEventListener('click', clearCart);
+  }
+
+  const checkoutButton = document.getElementById('checkout');
   if (checkoutButton) {
     checkoutButton.addEventListener('click', () => {
       console.log('Navigating to payment page...');
       window.location.href = 'maksu.html'; // Siirrytään maksusivulle
     });
-  } else {
-    console.error('Checkout button not found');
   }
 });
 
-
-// Load products and cart data on page load
-window.addEventListener('load', () => {
-  loadCart();
-
-  // Retrieve the category from the URL to load specific products
-  const urlParams = new URLSearchParams(window.location.search);
-  const category = urlParams.get('category');
-  loadProducts(category);
-});
+// Globaalit funktiot HTML-käyttöön
+(window as any).clearCart = clearCart;
+(window as any).changeQuantity = changeQuantity;
+(window as any).addToCart = addToCart;
