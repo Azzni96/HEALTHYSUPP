@@ -10,6 +10,7 @@ export default defineConfig({
         menu: './Menu.html',
         about: './addProduct.html',
         contact: './maksu.html',
+        QR: './QR.html',
       },
     },
   },
