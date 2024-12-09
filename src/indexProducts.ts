@@ -15,21 +15,16 @@ interface Product {
 // Globaali ostoskori
 let cart: { [key: string]: Product & { quantity: number } } = {};
 
-// Lataa ja näytä kategoriatuotteet
+// Lataa ja näytä parhaat tuotteet
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const products = await fetchProducts();
 
-    // Ryhmittele tuotteet kategorioittain ja valitse yksi kustakin
-    const categories: { [key: string]: Product } = {};
-    products.forEach((product: Product) => {
-      if (!categories[product.category]) {
-        categories[product.category] = product; // Valitse ensimmäinen tuote kategoriasta
-      }
-    });
+    // Suodata tuotteet, joiden kategoria on "best product"
+    const bestProducts = products.filter(product => product.category.toLowerCase() === 'best product');
 
-    // Näytä kategoriatuotteet index.html-sivulla
-    displayCategoryProducts(Object.values(categories));
+    // Näytä tuotteet index.html-sivulla
+    displayBestProducts(bestProducts);
 
     // Lataa ja päivitä ostoskori
     loadCart();
@@ -53,10 +48,10 @@ async function fetchProducts(): Promise<Product[]> {
 }
 
 /**
- * Näytä jokaisen kategorian tuote ja lisää Add to Cart -toiminto
+ * Näytä tuotteet, joiden kategoria on "best product"
  */
-function displayCategoryProducts(products: Product[]): void {
-  const container = document.getElementById('category-products') as HTMLElement;
+function displayBestProducts(products: Product[]): void {
+  const container = document.getElementById('best-products') as HTMLElement;
 
   if (container) {
     container.innerHTML = ''; // Tyhjennä olemassa olevat tuotteet
@@ -65,15 +60,11 @@ function displayCategoryProducts(products: Product[]): void {
       const productDiv = document.createElement('div');
       productDiv.classList.add('product-item');
 
-      const priceText = product.discount > 0
-        ? `<p><del>$${product.price.toFixed(2)}</del> $${product.discountPrice.toFixed(2)}</p>`
-        : `<p>Price: $${product.price.toFixed(2)}</p>`;
-
       productDiv.innerHTML = `
         <h2>${product.name}</h2>
         <p>${product.description}</p>
-        ${priceText}
         <img src="/uploads/${product.image}" alt="${product.name}" width="200">
+        <p>Price: $${product.discountPrice.toFixed(2)}</p>
         <button class="btn add-to-cart" data-id="${product.id}">Add to Cart</button>
       `;
 
@@ -85,7 +76,7 @@ function displayCategoryProducts(products: Product[]): void {
       container.appendChild(productDiv);
     });
   } else {
-    console.error('Category products container not found');
+    console.error('Best products container not found');
   }
 }
 
@@ -108,45 +99,42 @@ function addToCart(product: Product): void {
 /**
  * Päivitä ostoskori käyttöliittymässä
  */
-/**
- * Päivitä ostoskori käyttöliittymässä
- */
 function reloadCart(): void {
-    const cartContainer = document.querySelector('.listCard') as HTMLElement;
-    const total = document.querySelector('.total') as HTMLElement;
-    const quantity = document.querySelector('.quantity') as HTMLElement;
+  const cartContainer = document.querySelector('.listCard') as HTMLElement;
+  const total = document.querySelector('.total') as HTMLElement;
+  const quantity = document.querySelector('.quantity') as HTMLElement;
 
-    if (!cartContainer || !total || !quantity) {
-      console.error('Cart elements not found');
-      return;
-    }
-
-    cartContainer.innerHTML = ''; // Tyhjennä vanhat tuotteet
-    let totalPrice = 0;
-    let totalQuantity = 0;
-
-    Object.values(cart).forEach((item) => {
-      totalPrice += item.discountPrice * item.quantity;
-      totalQuantity += item.quantity;
-
-      const cartItem = document.createElement('li');
-      cartItem.classList.add('cart-item');
-      cartItem.innerHTML = `
-        <div><img src="/uploads/${item.image}" alt="${item.name}" width="50"></div>
-        <div>${item.name}</div>
-        <div>${item.quantity} pcs</div>
-        <div>
-          <button onclick="changeQuantity('${item.id}', ${item.quantity - 1})">-</button>
-          <span>${item.quantity}</span>
-          <button onclick="changeQuantity('${item.id}', ${item.quantity + 1})">+</button>
-        </div>
-      `;
-      cartContainer.appendChild(cartItem);
-    });
-
-    total.textContent = `Total: $${totalPrice.toFixed(2)}`;
-    quantity.textContent = `${totalQuantity}`;
+  if (!cartContainer || !total || !quantity) {
+    console.error('Cart elements not found');
+    return;
   }
+
+  cartContainer.innerHTML = ''; // Tyhjennä vanhat tuotteet
+  let totalPrice = 0;
+  let totalQuantity = 0;
+
+  Object.values(cart).forEach((item) => {
+    totalPrice += item.discountPrice * item.quantity;
+    totalQuantity += item.quantity;
+
+    const cartItem = document.createElement('li');
+    cartItem.classList.add('cart-item');
+    cartItem.innerHTML = `
+      <div><img src="/uploads/${item.image}" alt="${item.name}" width="50"></div>
+      <div>${item.name}</div>
+      <div>${item.quantity} pcs</div>
+      <div>
+        <button onclick="changeQuantity('${item.id}', ${item.quantity - 1})">-</button>
+        <span>${item.quantity}</span>
+        <button onclick="changeQuantity('${item.id}', ${item.quantity + 1})">+</button>
+      </div>
+    `;
+    cartContainer.appendChild(cartItem);
+  });
+
+  total.textContent = `Total: $${totalPrice.toFixed(2)}`;
+  quantity.textContent = `${totalQuantity}`;
+}
 
 /**
  * Lataa ostoskori paikallisesta tallennustilasta
