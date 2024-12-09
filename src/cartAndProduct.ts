@@ -238,9 +238,29 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'maksu.html'; // Siirrytään maksusivulle
     });
   }
+  const searchInput = document.getElementById('search-bar') as HTMLInputElement;
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    filterProducts(query);
+  });
 });
 
+function filterProducts(query: string): void {
+  const productItems = document.querySelectorAll('.product-item') as NodeListOf<HTMLElement>;
+
+  productItems.forEach((item) => {
+    const name = item.querySelector('h2')?.textContent?.toLowerCase() || '';
+    const description = item.querySelector('p')?.textContent?.toLowerCase() || '';
+
+    if (name.includes(query) || description.includes(query)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
 // Globaalit funktiot HTML-käyttöön
 (window as any).clearCart = clearCart;
 (window as any).changeQuantity = changeQuantity;
 (window as any).addToCart = addToCart;
+
