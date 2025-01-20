@@ -4,6 +4,7 @@ import { test, expect } from '@playwright/test';
 test('empty cart', async ({ page }) => {
   await page.goto('http://localhost:5173/');
   await page.locator('#cart-btn').click();
+
   await page.getByRole('button', { name: 'Tyhjennä Ostoskori' }).click();
 });
 test('test', async ({ page }) => {

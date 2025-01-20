@@ -3,9 +3,9 @@
 <html lang="en">
 <head>
   <title>Add Product</title>
-  <script type="module" crossorigin src="./assets/about-34361334.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/payment-e27a1750.js">
-  <link rel="modulepreload" crossorigin href="./assets/main-2d10ea07.js">
+  <script type="module" crossorigin src="./assets/about-6d26a30c.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/axios-37fdf7d0.js">
+  <link rel="modulepreload" crossorigin href="./assets/main-b222e288.js">
 <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 <body>
   <header>
@@ -261,7 +261,14 @@ tbody tr td button:hover {
 }
 
 </style>
-
+  <header>
+    <nav>
+      <button id="logoutbtn"  class="active">
+        <div class="fas fa-right-from-bracket" id="log">Logout</div>
+        </button>
+      <a href="addProduct.html">Shopping</a>
+    </nav>
+  </header>
   <main>
     <section id="feedback-list"></section>
     <h2>All Feedback</h2>
@@ -351,6 +358,25 @@ tbody tr td button:hover {
         </tbody>
       </table>
     </section>
+    <section>
+      <h2>Users</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="user-list">
+    <!-- Users will be dynamically rendered here -->
+  </tbody>
+</table>
+</section>
+
+
+  
   
   
   

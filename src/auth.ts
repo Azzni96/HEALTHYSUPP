@@ -42,9 +42,9 @@ if (loginForm) {
       const response = await axios.post('/api/auth/signin', { email, password });
 
       if (response.status === 200) {
-        const { userId, username } = response.data.user;
+        const { userId, username, role } = response.data.user;
 
-        if (!username) {
+        if (!username || !role) {
           console.error('Username is missing in the API response', response.data);
           alert('Login failed. Please try again.');
           return;
@@ -53,6 +53,7 @@ if (loginForm) {
         // Store user data in localStorage
         localStorage.setItem('userId', userId);
         localStorage.setItem('username', username);
+        localStorage.setItem('role', role);
 
         // Display the username
         document.getElementById('username-display')!.innerText = `Welcome, ${username}`;
@@ -60,6 +61,13 @@ if (loginForm) {
 
         // Redirect to the homepage
         window.location.href = 'index.html';
+        if (role === 'admin') {
+          window.location.href = 'addproduct.html';
+        } else if (role === 'user') {
+          window.location.href = 'index.html';
+        } else {
+          alert('Invalid role detected.');
+        }
       } else {
         alert('Login failed. Please check your credentials.');
       }

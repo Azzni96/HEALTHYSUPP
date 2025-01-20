@@ -258,7 +258,14 @@ tbody tr td button:hover {
 }
 
 </style>
-
+  <header>
+    <nav>
+      <button id="logoutbtn"  class="active">
+        <div class="fas fa-right-from-bracket" id="log">Logout</div>
+        </button>
+      <a href="addProduct.html">Shopping</a>
+    </nav>
+  </header>
   <main>
     <section id="feedback-list"></section>
     <h2>All Feedback</h2>
@@ -348,8 +355,27 @@ tbody tr td button:hover {
         </tbody>
       </table>
     </section>
+    <section>
+      <h2>Users</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="user-list">
+    <!-- Users will be dynamically rendered here -->
+  </tbody>
+</table>
+</section>
+
+
   <script type="module" src="/src/feedback.ts"></script>
   <script type="module" src="/src/main.ts"></script>
   <script type="module" src="/src/delete.ts"></script>
+  <script type="module" src="/src/user.ts"></script>
 </body>
 </html>
