@@ -1,71 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const Order = require('../models/Order');
-const nodemailer = require('nodemailer');
-const PDFDocument = require('pdfkit');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Stripe-avaimen lataus
+const Order = require('../models/Order'); // Tilausmalli
+require('dotenv').config();
 
-// Nodemailer configuration
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-router.post('/payment', async (req, res) => {
-  const { name, cardNumber, email, phone, product, amount, token } = req.body;
+router.post('/create-payment-intent', async (req, res) => {
+  const { amount, cart, name, phone, email } = req.body;
 
   try {
-    // Stripe payment processing
-    const charge = await stripe.charges.create({
-      amount: Math.round(amount * 100), // Convert to cents
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount, // Summa senteissä
       currency: 'eur',
-      source: token.id,
-      description: `Payment for ${product}`
+      payment_method_types: ['card'],
+      metadata: { name, phone, email },
     });
 
-    // Save order to database
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    // Tallenna tilaus tietokantaan
     const order = await Order.create({
       name,
-      cardNumber,
-      email,
       phone,
-      product,
-      totalAmount: amount
+      email,
+      totalAmount: amount / 100, // Muutetaan euroiksi
+      product: JSON.stringify(cart),
+      items: JSON.stringify(cart),
+      total: total,
     });
 
-    // Generate PDF receipt
-    const pdfDoc = new PDFDocument();
-    let buffers = [];
-    pdfDoc.on('data', buffers.push.bind(buffers));
-    pdfDoc.on('end', async () => {
-      const pdfData = Buffer.concat(buffers);
-
-      // Send email with PDF
-      const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Payment Receipt',
-        text: 'Thank you for your payment. Attached is your receipt.',
-        attachments: [{ filename: 'receipt.pdf', content: pdfData }]
-      };
-
-      await transporter.sendMail(mailOptions);
-      res.json({ message: 'Payment successful and receipt sent!' });
+    res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+      order: { // Lähetä tilauksen tiedot frontendille
+        name: order.name,
+        phone: order.phone,
+        email: order.email,
+        total: order.total,
+        products: cart,
+      },
     });
-
-    pdfDoc.text(`Receipt for ${name}`);
-    pdfDoc.text(`Product: ${product}`);
-    pdfDoc.text(`Total Amount: €${amount}`);
-    pdfDoc.text(`Email: ${email}`);
-    pdfDoc.text(`Phone: ${phone}`);
-    pdfDoc.text('Thank you for your purchase!');
-    pdfDoc.end();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Payment failed' });
+    console.error('Error creating payment intent:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

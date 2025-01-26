@@ -3,66 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stripe Payment</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<style>
-  body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-}
-
-#payment-form {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-input, button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-</style>
-<body>
-  <div id="payment-form">
-    <h2>Checkout</h2>
-    <form id="paymentForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" required>
-
-      <label for="email">Email</label>
-      <input type="email" id="email" required>
-
-      <label for="phone">Phone</label>
-      <input type="text" id="phone" required>
-
-      <label for="product">Product</label>
-      <input type="text" id="product" required>
-
-      <label for="amount">Amount (€)</label>
-      <input type="number" id="amount" required>
-
-      <div id="card-element"><!-- Stripe Card Element --></div>
-      <div id="card-errors" role="alert"></div>
-
-      <button type="submit">Pay</button>
-    </form>
-  </div>
-  <script src="src/maksu.ts" type="module"></script>
+  <title>Maksu</title>
   <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    #card-element {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Maksa Ostoskorisi</h1>
+  <form id="payment-form">
+    <input type="text" id="customer-name" placeholder="Nimi" required>
+    <input type="tel" id="customer-phone" placeholder="Puhelinnumero" required>
+    <input type="email" id="customer-email" placeholder="Sähköposti" required>
+    <div id="card-element"></div>
+    <button type="submit">Maksa</button>
+  </form>
+  <p id="payment-message"></p>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+  const stripe = Stripe('pk_test_51QGlItRvF2XeuAxviPQAtYF18cKUpN9WCn4AhgDO9Y1zCOq4INPgiFw55WDc3xZfj19D2cNFo4mxRh2voYtBvqRz00C0yR9HS7'); // Korvaa julkisella Stripe-avaimella
+  const paymentForm = document.getElementById('payment-form');
+  const paymentMessage = document.getElementById('payment-message');
+
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  try {
+    // Luo maksuaike backendissä
+    const response = await fetch('/api/payment/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: total * 100, // Muunna eurot senteiksi
+        cart,
+        name: document.getElementById('customer-name').value,
+        phone: document.getElementById('customer-phone').value,
+        email: document.getElementById('customer-email').value,
+      }),
+    });
+
+    if (!response.ok) {
+      paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
+      return;
+    }
+
+    const { clientSecret, order } = await response.json();
+
+    // Stripe-elementit
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    // Maksutapahtuma
+    paymentForm.addEventListener('submit', async (e) => {
+e.preventDefault();
+
+const name = document.getElementById('customer-name').value;
+const email = document.getElementById('customer-email').value;
+const phone = document.getElementById('customer-phone').value;
+
+const response = await fetch('/api/payment/create-payment-intent', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({
+  amount: total * 100,
+  cart,
+  name,
+  email,
+  phone,
+}),
+});
+
+const { clientSecret, order } = await response.json();
+
+const { error } = await stripe.confirmCardPayment(clientSecret, {
+payment_method: {
+  card: cardElement,
+  billing_details: { name, email, phone },
+},
+});
+
+if (!error) {
+localStorage.setItem('order', JSON.stringify(order));
+localStorage.removeItem('cart');
+window.location.href = 'success.html';
+}
+});
+  } catch (error) {
+    paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
+  }
+});
+
+   </script>
 </body>
 </html>

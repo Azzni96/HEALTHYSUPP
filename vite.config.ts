@@ -12,6 +12,7 @@ export default defineConfig({
         contact: './maksu.html',
         QR: './QR.html',
         reset: './resetpassword.html',
+        success: './success.html',
       },
     },
   },

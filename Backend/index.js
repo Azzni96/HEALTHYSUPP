@@ -7,7 +7,7 @@ const sequelize = require('./config/db'); // MariaDB yhteys
 const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const productRoutes = require('./routes/productRoutes');
-const purchaseRoutes = require('./routes/purchaseRoutes');
+
 const paymentRoutes = require('./routes/paymentRoutes'); // Maksut
 
 const app = express();
@@ -26,7 +26,21 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://js.stripe.com", "'unsafe-inline'"],
+      frameSrc: ["'self'", "https://js.stripe.com"],
+      connectSrc: ["'self'", "https://api.stripe.com"],
+      imgSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
