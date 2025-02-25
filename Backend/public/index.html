@@ -3,226 +3,139 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="./assets/healthy-6420f970.svg" />
+  <link rel="icon" type="image/svg+xml" href="./assets/healthy-ad-nCldX.svg" />
   <link href="./main.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Example Vite PWA">
   <link rel="apple-touch-icon" href="./icons/icon-192x192.png" sizes="192x192">
   <meta name="theme-color" content="#ffffff">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
 
   <title>HEALTHYSUPP</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script type="module" crossorigin src="./assets/main-e42420f4.js"></script>
+  <script type="module" crossorigin src="./assets/main-D3CmH4up.js"></script>
 <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 
-<body>
-  <header class="header">
+<body class="bg-white text-gray-900">
+  <header class="header flex justify-between items-center p-4 bg-gray-100">
       <a href="#" class="logo">
-        <img src="./assets/healthysupp_logoff-d2a6ae41.jpg" alt="logo">
+        <img src="./assets/healthysupp_logoff-n7rpy2c_.jpg" alt="logo" class="h-10">
       </a>
-      <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="Menu.html">Shopping</a>
-        <a href="addProduct.html">Admin</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+      <nav class="navbar flex space-x-4">
+        <a href="index.html" class="text-gray-700 hover:text-gray-900">Home</a>
+        <a href="Menu.html" class="text-gray-700 hover:text-gray-900">Shopping</a>
+        <a href="#about" class="text-gray-700 hover:text-gray-900">About</a>
+        <a href="#contact" class="text-gray-700 hover:text-gray-900">Contact</a>
       </nav>
-      <div class="icons">
-        <!-- Lisää tämä HTML-elementti, johon käyttäjän nimi näytetään -->
-        <div class="fas fa-user" id="user-btn"></div>
-        <div class="fas fa-shopping-cart" id="cart-btn"></div>
-        <span class="quantity">0</span>
-        <div class="fas fa-search" id="search-btn"></div>
-        <div class="fas fa-bars" id="menu-btn"></div>
-        <div class="logbar">
-          <h2 id="username-display" style="display: none;"></h2>
-          <div class="logbar1">
-          <button><div class="fas fa-right-to-bracket" id="LoginBtn"> register</div></button>
-          <button id="logoutbtn"  class="active">
-          <div class="fas fa-right-from-bracket" id="log">Logout</div>
-          </button></div>
-        </div>
+      <div class="icons flex items-center space-x-4">
+        <div class="fas fa-user cursor-pointer" id="user-btn"></div>
+        <div class="fas fa-shopping-cart cursor-pointer" id="cart-btn"></div>
+        <span class="quantity text-sm bg-red-500 text-white rounded-full px-2">0</span>
+        <div class="fas fa-search cursor-pointer" id="search-btn"></div>
+        <div class="fas fa-bars cursor-pointer" id="menu-btn"></div>
       </div>
-      <div class="search-form">
-        <input type="search" id="search-bar" placeholder="search here...">
+      <div class="search-form hidden">
+        <input type="search" id="search-bar" placeholder="search here..." class="border p-2 rounded">
         <label for="search-box" class="fas fa-search"></label>
       </div>
-      <div class="cart-items-container">
+      <div class="cart-items-container hidden">
         <h1>Card</h1>
         <ul class="listCard"></ul>
-        <div class="cart-actions">
-          <button id="clear-cart">Tyhjennä Ostoskori</button>
-          <button id="checkout" >Maksaminen</button>
-
+        <div class="cart-actions flex space-x-2">
+          <button id="clear-cart" class="bg-gray-500 text-white px-4 py-2 rounded">Tyhjennä Ostoskori</button>
+          <button id="checkout" class="bg-green-500 text-white px-4 py-2 rounded">Maksaminen</button>
         </div>
         <div class="checkOut">
           <div class="total">0</div>
-          <div class="closeShopping">Close</div>
+          <div class="closeShopping cursor-pointer">Close</div>
         </div>
-        </div>
+      </div>
   </header>
   <section class="home" id="home">
-    <div class="content">
-      <h3>SUPPLEMENT HEALTHIER</h3>
-      <p>Our mission is to provide you with the tools, guidance, and support you need to achieve quick and effortless success. Whether you're looking to make significant strides in your personal goals or elevate your professional skills, we're here to streamline the process, ensuring you gain maximum results with minimum hassle.</p>
+    <div class="content p-4">
+      <h3 class="text-2xl font-bold">SUPPLEMENT HEALTHIER</h3>
+      <p class="mt-2">Our mission is to provide you with the tools, guidance, and support you need to achieve quick and effortless success. Whether you're looking to make significant strides in your personal goals or elevate your professional skills, we're here to streamline the process, ensuring you gain maximum results with minimum hassle.</p>
     </div>
-    <div class="image-container">
-      <img src="./assets/healthysuppHEARTANDTEARWHITE-2bc982e0.png" alt="Our Product" class="responsive-img">
+    <div class="image-container p-4">
+      <img src="./assets/healthysuppHEARTANDTEARWHITE-C7sfXF9-.png" alt="Our Product" class="responsive-img w-full h-auto">
     </div>
   </section>
-  <section id="best-products">
-    <h1>Our Categories</h1>
+  <section id="best-products" class="p-4">
+    <h1 class="text-2xl font-bold">Our Categories</h1>
     <!-- Jokaisen kategorian tuote näytetään tässä -->
   </section>
-  <section class="about" id="about">
-    <h1 class="heading"><span>about us</span></h1>
-    <div class="row">
-      <div class="image">
-        <img src="./assets/images-f4ef3820.png" alt="">
+  <section class="about p-4" id="about">
+    <h1 class="heading text-2xl font-bold"><span>about us</span></h1>
+    <div class="row flex flex-col md:flex-row">
+      <div class="image md:w-1/2">
+        <img src="./assets/images-D3782hM5.png" alt="" class="w-full h-auto">
       </div>
-      <div class="content">
-        <h3>Supporting Your Fitness Goals with Passion and Quality</h3>
-        <p>"Founded by fitness enthusiasts, HEALTHYSUPP was born out of a passion for health and wellness. We believe that having the right gear can make all the difference on your fitness journey, which is why we offer a wide range of high-quality and affordable gym products to suit every need, from home workout essentials to professional equipment, ensuring your path to fitness is both supported and satisfying."</p>
+      <div class="content md:w-1/2 p-4">
+        <h3 class="text-xl font-semibold">Supporting Your Fitness Goals with Passion and Quality</h3>
+        <p class="mt-2">"Founded by fitness enthusiasts, HEALTHYSUPP was born out of a passion for health and wellness. We believe that having the right gear can make all the difference on your fitness journey, which is why we offer a wide range of high-quality and affordable gym products to suit every need, from home workout essentials to professional equipment, ensuring your path to fitness is both supported and satisfying."</p>
       </div>
     </div>
   </section>
-  <section class="contact" id="contact">
-    <h1 class="heading"><span>contact us</span></h1>
-    <div class="row">
-      <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1981.3856342944646!2d24.758513900000015!3d60.2239959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x468df797cfe43cbb%3A0xb99a2c26d4df39ff!2sMetropolia%20University%20of%20Applied%20Sciences%20-%20Karamalmi%20Campus!5e0!3m2!1sen!2sfi!4v1729360734810!5m2!1sen!2sfi"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      <form action="">
-        <div class="inputBox">
+  <section class="contact p-4" id="contact">
+    <h1 class="heading text-2xl font-bold"><span>contact us</span></h1>
+    <div class="row flex flex-col md:flex-row">
+      <iframe class="map w-full md:w-1/2 h-64" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1981.3856342944646!2d24.758513900000015!3d60.2239959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x468df797cfe43cbb%3A0xb99a2c26d4df39ff!2sMetropolia%20University%20of%20Applied%20Sciences%20-%20Karamalmi%20Campus!5e0!3m2!1sen!2sfi!4v1729360734810!5m2!1sen!2sfi"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <form action="" class="md:w-1/2 p-4">
+        <div class="inputBox mb-4">
           <p>HEALTHYSUPP@GMAIL.COM</p>
         </div>
-        <div class="inputBox">
+        <div class="inputBox mb-4">
           <p>PHONE: +35845######</p>
         </div>
-        <div class="inputBox">
+        <div class="inputBox mb-4">
           <p>HELSINKI - FINLAND</p>
         </div>
 
-        <div class="inputBox">
-          <a href="#"><img src="./assets/facebook-4f7e3281.png" alt="Facebook"></a>
-          <a href="#"><img src="./assets/twitter-32a7e2de.png" alt="X (formerly Twitter)"></a>
-          <a href="#"><img src="./assets/instagram-0a016134.png" alt="Instagram"></a>
-          <a href="#"><img src="./assets/linkedin-66de55a9.png" alt="LinkedIn"></a>
+        <div class="inputBox flex space-x-4">
+          <a href="#"><img src="./assets/facebook-ejnf6rkB.png" alt="Facebook" class="h-8"></a>
+          <a href="#"><img src="./assets/twitter-CPWSm0NQ.png" alt="X (formerly Twitter)" class="h-8"></a>
+          <a href="#"><img src="./assets/instagram-BT1rpC5A.png" alt="Instagram" class="h-8"></a>
+          <a href="#"><img src="./assets/linkedin-DYsRWqBD.png" alt="LinkedIn" class="h-8"></a>
         </div>
       </form>
     </div>
   </section>
-  <section id="User">
-    <dialog id="user-modal" class="container">
-      <span class="close-modal" id="close-modal">&times;</span>
-      <div class="forms-container">
-        <div class="signin-signup">
-          <form action="#" class="sign-in-form">
-            <h2 class="title">Sign in</h2>
-            <div class="input-field">
-              <i class="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
-            </div>
-            <input type="submit" value="Login" class="btn-sign solid" />
-          </form>
-          <div>
-            <button id="open-forgot-dialog">Forgot Password</button>
-          </div>
-
-          <form action="#" class="sign-up-form">
-            <h2 class="title">Sign up</h2>
-            <div class="input-field">
-              <i class="fas fa-user"></i>
-              <input type="text" placeholder="Username" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-phone"></i>
-              <input type="number" placeholder="Phone" />
-            </div>
-            <input type="submit" class="btn-sign" value="Sign up" />
-
-
-          </form>
-        </div>
-      </div>
-
-      <div class="panels-container">
-        <div class="panel left-panel">
-          <div class="content sing-up-content">
-            <h3>New here</h3>
-            <p>
-              Join us and discover exclusive benefits! Sign up to get started on your journey with us.
-            </p>
-            <button class="btn-sign transparent" id="sign-up-btn">
-              Sign up
-            </button>
-          </div>
-        </div>
-        <div class="panel right-panel">
-          <div class="content sing-in-content" >
-            <h3>Welcome Back!</h3>
-            <p>
-              Already have an account? Sign in to stay connected with us and access your personalized dashboard.
-            </p>
-            <button class="btn-sign transparent" id="sign-in-btn">
-              Sign in
-            </button>
-
-          </div>
-        </div>
-      </div>
-    </dialog>
-  </section>
-  <section>
+  <section class="p-4">
     <div class="feedback-container">
-      <h2>Feedback Form</h2>
-      <form id="feedback-form">
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="email" id="email" placeholder="Your Email" required>
-        <textarea id="feedback" placeholder="Your Feedback" rows="4" required></textarea>
-        <button type="submit" id="feedbackbtn">Submit Feedback</button>
+      <h2 class="text-2xl font-bold">Feedback Form</h2>
+      <form id="feedback-form" class="mt-4">
+        <input type="text" id="name" placeholder="Your Name" required class="border p-2 rounded w-full mb-2">
+        <input type="email" id="email" placeholder="Your Email" required class="border p-2 rounded w-full mb-2">
+        <textarea id="feedback" placeholder="Your Feedback" rows="4" required class="border p-2 rounded w-full mb-2"></textarea>
+        <button type="submit" id="feedbackbtn" class="bg-blue-500 text-white px-4 py-2 rounded">Submit Feedback</button>
       </form>
-      <div class="feedback-list" id="feedback-list"></div>
+      <div class="feedback-list mt-4" id="feedback-list"></div>
     </div>
-
   </section>
   <!-- Forgot Password Dialog -->
-<dialog id="forgot-password-dialog">
-  <form id="forgot-password-form">
-    <h2>Forgot Password</h2>
-    <input type="email" id="forgot-email" placeholder="Enter your email" required>
-    <button type="submit">Send Reset Link</button>
-    <button type="button" id="close-forgot-dialog">Close</button>
-    <p id="forgot-message"></p>
-  </form>
-</dialog>
+  <dialog id="forgot-password-dialog" class="p-4">
+    <form id="forgot-password-form">
+      <h2 class="text-xl font-bold">Forgot Password</h2>
+      <input type="email" id="forgot-email" placeholder="Enter your email" required class="border p-2 rounded w-full mb-2">
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Send Reset Link</button>
+      <button type="button" id="close-forgot-dialog" class="bg-gray-500 text-white px-4 py-2 rounded mt-2">Close</button>
+      <p id="forgot-message" class="mt-2"></p>
+    </form>
+  </dialog>
 
-
-  <footer>
-    <div class="footer-container">
+  <footer class="bg-gray-100 p-4 mt-4">
+    <div class="footer-container flex justify-between items-center">
       <div class="footer-logo">
-        <img src="./assets/healthysupp_logoff-d2a6ae41.jpg" alt="logo">
+        <img src="./assets/healthysupp_logoff-n7rpy2c_.jpg" alt="logo" class="h-10">
       </div>
-      <div class="footer-social">
-        <a href="#"><img src="./assets/facebook-4f7e3281.png" alt="Facebook"></a>
-        <a href="#"><img src="./assets/twitter-32a7e2de.png" alt="X (formerly Twitter)"></a>
-        <a href="#"><img src="./assets/instagram-0a016134.png" alt="Instagram"></a>
-        <a href="#"><img src="./assets/linkedin-66de55a9.png" alt="LinkedIn"></a>
+      <div class="footer-social flex space-x-4">
+        <a href="#"><img src="./assets/facebook-ejnf6rkB.png" alt="Facebook" class="h-8"></a>
+        <a href="#"><img src="./assets/twitter-CPWSm0NQ.png" alt="X (formerly Twitter)" class="h-8"></a>
+        <a href="#"><img src="./assets/instagram-BT1rpC5A.png" alt="Instagram" class="h-8"></a>
+        <a href="#"><img src="./assets/linkedin-DYsRWqBD.png" alt="LinkedIn" class="h-8"></a>
       </div>
       <div class="footer-text">
-        <p>
+        <p class="text-gray-700">
           &copy; 2021 HEALTHYSUPP. All rights reserved.
         </p>
       </div>

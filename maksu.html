@@ -27,79 +27,72 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-  const stripe = Stripe('pk_test_51QGlItRvF2XeuAxviPQAtYF18cKUpN9WCn4AhgDO9Y1zCOq4INPgiFw55WDc3xZfj19D2cNFo4mxRh2voYtBvqRz00C0yR9HS7'); // Korvaa julkisella Stripe-avaimella
-  const paymentForm = document.getElementById('payment-form');
-  const paymentMessage = document.getElementById('payment-message');
+      const response = await fetch('/api/stripe-public-key');
+      const { publicKey } = await response.json();
+      const stripe = Stripe(publicKey); // Use the fetched public key
 
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const paymentForm = document.getElementById('payment-form');
+      const paymentMessage = document.getElementById('payment-message');
 
-  try {
-    // Luo maksuaike backendissä
-    const response = await fetch('/api/payment/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: total * 100, // Muunna eurot senteiksi
-        cart,
-        name: document.getElementById('customer-name').value,
-        phone: document.getElementById('customer-phone').value,
-        email: document.getElementById('customer-email').value,
-      }),
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      let clientSecret;
+
+      try {
+        // Luo maksuaike backendissä
+        const response = await fetch('/api/payment/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: total * 100, // Muunna eurot senteiksi
+            cart,
+            name: document.getElementById('customer-name').value,
+            phone: document.getElementById('customer-phone').value,
+            email: document.getElementById('customer-email').value,
+          }),
+        });
+
+        if (!response.ok) {
+          paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
+          return;
+        }
+
+        const data = await response.json();
+        clientSecret = data.clientSecret;
+
+        // Stripe-elementit
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        // Maksutapahtuma
+        paymentForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById('customer-name').value;
+          const email = document.getElementById('customer-email').value;
+          const phone = document.getElementById('customer-phone').value;
+
+          const { error } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: cardElement,
+              billing_details: { name, email, phone },
+            },
+          });
+
+          if (error) {
+            paymentMessage.textContent = 'Maksu epäonnistui: ' + error.message;
+          } else {
+            localStorage.setItem('order', JSON.stringify(data.order));
+            localStorage.removeItem('cart');
+            window.location.href = 'success.html';
+          }
+        });
+      } catch (error) {
+        paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
+      }
     });
-
-    if (!response.ok) {
-      paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
-      return;
-    }
-
-    const { clientSecret, order } = await response.json();
-
-    // Stripe-elementit
-    const elements = stripe.elements();
-    const cardElement = elements.create('card');
-    cardElement.mount('#card-element');
-
-    // Maksutapahtuma
-    paymentForm.addEventListener('submit', async (e) => {
-e.preventDefault();
-
-const name = document.getElementById('customer-name').value;
-const email = document.getElementById('customer-email').value;
-const phone = document.getElementById('customer-phone').value;
-
-const response = await fetch('/api/payment/create-payment-intent', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({
-  amount: total * 100,
-  cart,
-  name,
-  email,
-  phone,
-}),
-});
-
-const { clientSecret, order } = await response.json();
-
-const { error } = await stripe.confirmCardPayment(clientSecret, {
-payment_method: {
-  card: cardElement,
-  billing_details: { name, email, phone },
-},
-});
-
-if (!error) {
-localStorage.setItem('order', JSON.stringify(order));
-localStorage.removeItem('cart');
-window.location.href = 'success.html';
-}
-});
-  } catch (error) {
-    paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
-  }
-});
-
-   </script>
+  </script>
 </body>
 </html>

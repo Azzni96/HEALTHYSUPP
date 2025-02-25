@@ -12,8 +12,9 @@ export default defineConfig({
         about: './addProduct.html',
         contact: './maksu.html',
         QR: './QR.html',
-        reset: './resetpassword.html',
         success: './success.html',
+        // Remove or correct the reference to resetpassword.html
+        // reset: './resetpassword.html',
       },
     },
   },

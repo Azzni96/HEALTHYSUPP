@@ -3,12 +3,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const helmet = require('helmet'); // Lisää turvamääräykset
+const crypto = require('crypto'); // Add crypto for nonce generation
 const sequelize = require('./config/db'); // MariaDB yhteys
 const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const productRoutes = require('./routes/productRoutes');
-
 const paymentRoutes = require('./routes/paymentRoutes'); // Maksut
+require('dotenv').config();
 
 const app = express();
 
@@ -26,21 +27,22 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(
-  helmet.contentSecurityPolicy({
+app.use(helmet({
+  contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://js.stripe.com", "'unsafe-inline'"],
-      frameSrc: ["'self'", "https://js.stripe.com"],
-      connectSrc: ["'self'", "https://api.stripe.com"],
-      imgSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://js.stripe.com", (req, res) => `'nonce-${res.locals.nonce}'`],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'", "https://api.stripe.com"],
+      frameSrc: ["'self'", "https://js.stripe.com"],
     },
-  })
-);
+  },
+}));
+app.use((req, res, next) => {
+  res.locals.nonce = crypto.randomBytes(16).toString('base64');
+  next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -53,6 +55,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api', productRoutes);
 app.use('/api/payment', paymentRoutes); // Lisää maksu
+
+// Endpoint to serve the Stripe public key
+app.get('/api/stripe-public-key', (req, res) => {
+  res.send({ publicKey: process.env.STRIPE_PUBLIC_KEY });
+});
 
 // Serve frontend files
 app.get('/', (req, res) => {
