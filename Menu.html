@@ -12,158 +12,78 @@
     <title>Product Details - HEALTHYSUPP</title>
     <script type="module" src="/src/main.ts"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
   </head>
-  <body>
-    <header class="header">
+  <body class="bg-white text-gray-900">
+    <header class="header flex justify-between items-center p-4 bg-gray-100">
         <a href="index.html" class="logo">
-          <img class="healthySuppLogo" src="src/healthysupp_logoff.jpg" alt="logo">
+          <img class="healthySuppLogo h-10" src="src/healthysupp_logoff.jpg" alt="logo">
         </a>
-        <nav class="navbar">
-          <a href="index.html">Home</a>
-          <a href="Menu.html">Shopping</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#contact">Contact</a>
+        <nav class="navbar flex space-x-4">
+          <a href="index.html" class="text-gray-700 hover:text-gray-900">Home</a>
+          <a href="Menu.html" class="text-gray-700 hover:text-gray-900">Shopping</a>
+          <a href="index.html#about" class="text-gray-700 hover:text-gray-900">About</a>
+          <a href="index.html#contact" class="text-gray-700 hover:text-gray-900">Contact</a>
         </nav>
-        <div class="icons">
-          <div class="fas fa-user" id="user-btn"></div>
-          <div class="fas fa-shopping-cart" id="cart-btn"></div>
-          <span class="quantity">0</span>
-          <div class="fas fa-search" id="search-btn"></div>
-          <div class="fas fa-bars" id="menu-btn"></div>
-          <div class="logbar">
-            <div id="username-display" style="display: none;"></div>
-            <div>
-              <button><div class="fas fa-right-to-bracket" id="LoginBtn"> register</div></button>
-              <button id="logoutbtn"  class="active">
-              <div class="fas fa-right-from-bracket" id="log">Logout</div>
-              </button></div>
-          </div>
+        <div class="icons flex items-center space-x-4">
+          <div class="fas fa-user cursor-pointer" id="user-btn"></div>
+          <div class="fas fa-shopping-cart cursor-pointer" id="cart-btn"></div>
+          <span class="quantity text-sm bg-red-500 text-white rounded-full px-2">0</span>
+          <div class="fas fa-search cursor-pointer" id="search-btn"></div>
+          <div class="fas fa-bars cursor-pointer" id="menu-btn"></div>
         </div>
-        <div class="search-form">
-          <input type="search" id="search-bar" placeholder="search here...">
+        <div class="search-form hidden">
+          <input type="search" id="search-bar" placeholder="search here..." class="border p-2 rounded">
           <label for="search-box" class="fas fa-search"></label>
         </div>
-        <div class="cart-items-container">
+        <div class="cart-items-container hidden">
           <h1>Card</h1>
           <ul class="listCard"></ul>
-          <div class="cart-actions">
-            <button id="clear-cart">Tyhjennä Ostoskori</button>
-            <button id="checkout" >Maksaminen</button>
-
+          <div class="cart-actions flex space-x-2">
+            <button id="clear-cart" class="bg-gray-500 text-white px-4 py-2 rounded">Tyhjennä Ostoskori</button>
+            <button id="checkout" class="bg-green-500 text-white px-4 py-2 rounded">Maksaminen</button>
           </div>
           <div class="checkOut">
             <div class="total">0</div>
-            <div class="closeShopping">Close</div>
+            <div class="closeShopping cursor-pointer">Close</div>
           </div>
         </div>
     </header>
-    <section id="User">
-      <dialog id="user-modal" class="container">
-        <span class="close-modal" id="close-modal">&times;</span>
-        <div class="forms-container">
-          <div class="signin-signup">
-            <form action="#" class="sign-in-form">
-              <h2 class="title">Sign in</h2>
-              <div class="input-field">
-                <i class="fas fa-envelope"></i>
-                <input type="email" placeholder="Email" />
-              </div>
-              <div class="input-field">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Password" />
-              </div>
-              <input type="submit" value="Login" class="btn-sign solid" />
-
-            </form>
-            <form action="#" class="sign-up-form">
-              <h2 class="title">Sign up</h2>
-              <div class="input-field">
-                <i class="fas fa-user"></i>
-                <input type="text" placeholder="Username" />
-              </div>
-              <div class="input-field">
-                <i class="fas fa-envelope"></i>
-                <input type="email" placeholder="Email" />
-              </div>
-              <div class="input-field">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Password" />
-              </div>
-              <div class="input-field">
-                <i class="fas fa-phone"></i>
-                <input type="number" placeholder="Phone" />
-              </div>
-              <input type="submit" class="btn-sign" value="Sign up" />
-
-            </form>
-          </div>
-        </div>
-
-        <div class="panels-container">
-          <div class="panel left-panel">
-            <div class="content sing-up-content">
-              <h3>New here</h3>
-              <p>
-                Join us and discover exclusive benefits! Sign up to get started on your journey with us.
-              </p>
-              <button class="btn-sign transparent" id="sign-up-btn">
-                Sign up
-              </button>
-            </div>
-          </div>
-          <div class="panel right-panel">
-            <div class="content sing-in-content" >
-              <h3>Welcome Back!</h3>
-              <p>
-                Already have an account? Sign in to stay connected with us and access your personalized dashboard.
-              </p>
-              <button class="btn-sign transparent" id="sign-in-btn">
-                Sign in
-              </button>
-            </div>
-          </div>
-        </div>
-      </dialog>
-    </section>
-    <section class="menu" id="menu">
-      <h1 class="heading"><span>Our Menu</span></h1>
-      <div id="List">
+    <section class="menu p-4" id="menu">
+      <h1 class="heading text-2xl font-bold"><span>Our Menu</span></h1>
+      <div id="List" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         <div class="Menu" data-category="creatine">
-          <p class="Menu-name">CREATINE</p>
-          <img src="public/creatine2.png" alt="Creatine" class="Menu-image">
+          <p class="Menu-name text-lg font-semibold">CREATINE</p>
+          <img src="public/creatine2.png" alt="Creatine" class="Menu-image w-full h-auto">
         </div>
         <div class="Menu" data-category="energy">
-          <p class="Menu-name">ENERGY</p>
-          <img src="public/energy.png" alt="Energy" class="Menu-image">
+          <p class="Menu-name text-lg font-semibold">ENERGY</p>
+          <img src="public/energy.png" alt="Energy" class="Menu-image w-full h-auto">
         </div>
         <div class="Menu" data-category="muscle">
-          <p class="Menu-name">MUSCLE</p>
-          <img src="public/Muscle.png" alt="Muscle" class="Menu-image">
+          <p class="Menu-name text-lg font-semibold">MUSCLE</p>
+          <img src="public/Muscle.png" alt="Muscle" class="Menu-image w-full h-auto">
         </div>
         <div class="Menu" data-category="best product">
-          <p class="Menu-name">Best product</p>
-          </div>
+          <p class="Menu-name text-lg font-semibold">Best product</p>
+        </div>
       </div>
     </section>
-    <section>
+    <section class="p-4">
       <div id="product-list"></div> <!-- For the single selected product -->
     </section>
-
-
-    <footer>
-      <div class="footer-container">
+    <footer class="bg-gray-100 p-4 mt-4">
+      <div class="footer-container flex justify-between items-center">
         <div class="footer-logo">
-          <img src="src/healthysupp_logoff.jpg" alt="logo">
+          <img src="src/healthysupp_logoff.jpg" alt="logo" class="h-10">
         </div>
-        <div class="footer-social">
-          <a href="#"><img src="public/facebook.png" alt="Facebook"></a>
-          <a href="#"><img src="public/twitter.png" alt="X (formerly Twitter)"></a>
-          <a href="#"><img src="public/instagram.png" alt="Instagram"></a>
-          <a href="#"><img src="public/linkedin.png" alt="LinkedIn"></a>
+        <div class="footer-social flex space-x-4">
+          <a href="#"><img src="public/facebook.png" alt="Facebook" class="h-8"></a>
+          <a href="#"><img src="public/twitter.png" alt="X (formerly Twitter)" class="h-8"></a>
+          <a href="#"><img src="public/instagram.png" alt="Instagram" class="h-8"></a>
+          <a href="#"><img src="public/linkedin.png" alt="LinkedIn" class="h-8"></a>
         </div>
         <div class="footer-text">
-          <p>
+          <p class="text-gray-700">
             &copy; 2021 HEALTHYSUPP. All rights reserved.
           </p>
         </div>

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   base: './',
@@ -25,11 +26,13 @@ export default defineConfig({
     },
   },
   plugins: [
+    tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
       },
+
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}'],
         // Allow dynamic routing with specific patterns like /Menu.html?id=...
