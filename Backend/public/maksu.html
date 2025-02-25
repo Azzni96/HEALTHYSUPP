@@ -25,7 +25,7 @@
   </form>
   <p id="payment-message"></p>
 
-  <script nonce="{{nonce}}">
+  <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const response = await fetch('/api/stripe-public-key');
       const { publicKey } = await response.json();
@@ -83,12 +83,19 @@
 
           if (error) {
             paymentMessage.textContent = 'Maksu epäonnistui: ' + error.message;
-          } else {
-            localStorage.setItem('order', JSON.stringify(data.order));
-            localStorage.removeItem('cart');
-            window.location.href = 'success.html';
-          }
-        });
+          }  else {
+    // Tallenna order localStorageen
+    localStorage.setItem('order', JSON.stringify({
+      name: name,
+      phone: phone,
+      total: total,
+      products: cart
+    }));
+
+    localStorage.removeItem('cart');
+    window.location.href = 'success.html';
+  }
+});
       } catch (error) {
         paymentMessage.textContent = 'Virhe maksuaikeen luonnissa!';
       }
