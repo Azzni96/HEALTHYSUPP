@@ -26,20 +26,10 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="icons">
-      <div class="fas fa-user" id="user-btn"></div>
       <div class="fas fa-shopping-cart" id="cart-btn"></div>
       <span class="quantity">0</span>
       <div class="fas fa-search" id="search-btn"></div>
       <div class="fas fa-bars" id="menu-btn"></div>
-      <div class="logbar">
-        <h2 id="username-display" style="display: none;"></h2>
-        <!--<div>
-          <button><div class="fas fa-right-to-bracket" id="LoginBtn"> register</div></button>
-          <button id="logoutbtn" onclick="logout()" class="active">
-            <div class="fas fa-right-from-bracket" id="log">Logout</div>
-          </button>
-        </div> -->
-      </div>
     </div>
 
     <div class="search-form">
@@ -131,7 +121,7 @@
           </div>
         </div>
 
-        <form id="contact-form" class="contact-form">
+        <form id="feedback-form" class="contact-form">
           <div class="form-group">
             <input type="text" id="name" name="name" placeholder="Your name" required>
           </div>
@@ -156,128 +146,7 @@
     </div>
   </section>
 
-  <section id="User">
-    <dialog id="user-modal" class="auth-modal">
-      <div class="auth-container">
-        <button class="close-modal" id="close-modal">
-          <i class="fas fa-times"></i>
-        </button>
 
-        <div class="auth-content">
-          <!-- Sign In Form -->
-          <form action="#" class="auth-form sign-in-form">
-            <div class="auth-header">
-              <h2>Welcome back</h2>
-              <p>Please enter your details to sign in</p>
-            </div>
-
-            <div class="form-fields">
-              <div class="form-field">
-                <label for="signin-email">Email</label>
-                <div class="input-wrapper">
-                  <i class="fas fa-envelope"></i>
-                  <input type="email" id="signin-email" name="email" placeholder="Enter your email" required />
-                </div>
-              </div>
-
-              <div class="form-field">
-                <label for="signin-password">Password</label>
-                <div class="input-wrapper">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" id="signin-password" name="password" placeholder="••••••••" required />
-                </div>
-              </div>
-
-              <div class="form-options">
-                <label class="remember-me">
-                  <input type="checkbox" name="remember">
-                  <span>Remember me</span>
-                </label>
-                <a href="#" class="forgot-password">Forgot password?</a>
-              </div>
-            </div>
-
-            <div class="auth-actions">
-              <button type="submit" class="btn auth-btn">Sign in</button>
-
-              <div class="divider">
-                <span>or continue with</span>
-              </div>
-
-              <div class="social-auth">
-                <button type="button" class="social-btn">
-                  <i class="fab fa-google"></i>
-                  <span>Google</span>
-                </button>
-                <button type="button" class="social-btn">
-                  <i class="fab fa-apple"></i>
-                  <span>Apple</span>
-                </button>
-              </div>
-            </div>
-          </form>
-
-          <!-- Sign Up Form -->
-          <form action="#" class="auth-form sign-up-form">
-            <div class="auth-header">
-              <h2>Create an account</h2>
-              <p>Join us to get started with your fitness journey</p>
-            </div>
-
-            <div class="form-fields">
-              <div class="form-field">
-                <label for="signup-name">Full Name</label>
-                <div class="input-wrapper">
-                  <i class="fas fa-user"></i>
-                  <input type="text" id="signup-name" name="name" placeholder="Enter your name" required />
-                </div>
-              </div>
-
-              <div class="form-field">
-                <label for="signup-email">Email</label>
-                <div class="input-wrapper">
-                  <i class="fas fa-envelope"></i>
-                  <input type="email" id="signup-email" name="email" placeholder="Enter your email" required />
-                </div>
-              </div>
-
-              <div class="form-field">
-                <label for="signup-password">Password</label>
-                <div class="input-wrapper">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" id="signup-password" name="password" placeholder="Create a password" required />
-                </div>
-              </div>
-            </div>
-
-            <div class="auth-actions">
-              <button type="submit" class="btn auth-btn">Create account</button>
-
-              <div class="divider">
-                <span>or continue with</span>
-              </div>
-
-              <div class="social-auth">
-                <button type="button" class="social-btn">
-                  <i class="fab fa-google"></i>
-                  <span>Google</span>
-                </button>
-                <button type="button" class="social-btn">
-                  <i class="fab fa-apple"></i>
-                  <span>Apple</span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <div class="auth-switch">
-          <p class="sign-in-switch">Don't have an account? <a href="#" id="sign-up-btn">Sign up</a></p>
-          <p class="sign-up-switch">Already have an account? <a href="#" id="sign-in-btn">Sign in</a></p>
-        </div>
-      </div>
-    </dialog>
-  </section>
 
   <footer>
     <div class="footer-container">

@@ -1,0 +1,22 @@
+{
+  "name": "Healthysupp",
+  "version": "1.0.0",
+  "description": "API documentation for your project",
+  "title": "My Custom API Title",
+  "url": "http://localhost:3000",
+  "order": [
+    "Authentication",
+    "Products",
+    "Feedback",
+    "Purchases"
+  ],
+  "sampleUrl": false,
+  "defaultVersion": "0.0.0",
+  "apidoc": "0.3.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2024-12-05T14:29:55.889Z",
+    "url": "https://apidocjs.com",
+    "version": "0.29.0"
+  }
+}

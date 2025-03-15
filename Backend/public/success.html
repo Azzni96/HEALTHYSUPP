@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiitos Maksustasi</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+<body>
+  <h1>Kiitos Maksustasi!</h1>
+  <div id="order-summary">
+    <h2>Kuitti</h2>
+    <p><strong>Nimi:</strong> <span id="customer-name"></span></p>
+    <p><strong>Puhelinnumero:</strong> <span id="customer-phone"></span></p>
+    <p><strong>Kokonaishinta:</strong> €<span id="order-total"></span></p>
+    <h3>Tuotteet</h3>
+    <ul id="product-list"></ul>
+  </div>
+
+  <button id="download-pdf">Lataa PDF</button>
+  <button id="print-receipt">Tulosta</button>
+  <button id="go-to-home">Palaa Etusivulle</button>
+
+
+  <script>
+    // Kun DOM on ladattu
+    document.addEventListener('DOMContentLoaded', () => {
+      // Hae tilaustiedot localStoragesta
+      const order = JSON.parse(localStorage.getItem('order')) || {};
+
+      // Päivitä tilaustiedot näkyviin
+      document.getElementById('customer-name').textContent = order.name || 'N/A';
+      document.getElementById('customer-phone').textContent = order.phone || 'N/A';
+      document.getElementById('order-total').textContent = (order.total || 0).toFixed(2);
+
+      const productList = document.getElementById('product-list');
+      if (order.products && order.products.length) {
+        order.products.forEach(product => {
+          const li = document.createElement('li');
+          li.textContent = `${product.name} - €${product.price} x ${product.quantity}`;
+          productList.appendChild(li);
+        });
+      } else {
+        const li = document.createElement('li');
+        li.textContent = 'Ei tuotteita.';
+        productList.appendChild(li);
+      }
+
+      // Lataa PDF
+      document.getElementById('download-pdf').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        pdf.text('Kuitti', 10, 10);
+        pdf.text(`Nimi: ${order.name}`, 10, 20);
+        pdf.text(`Puhelinnumero: ${order.phone}`, 10, 30);
+        pdf.text(`Kokonaishinta: €${order.total.toFixed(2)}`, 10, 40);
+        let y = 50;
+        if (order.products && order.products.length) {
+          order.products.forEach(product => {
+            pdf.text(`${product.name} - €${product.price} x ${product.quantity}`, 10, y);
+            y += 10;
+          });
+        } else {
+          pdf.text('Ei tuotteita.', 10, y);
+        }
+        pdf.save('kuitti.pdf');
+      });
+
+      // Tulosta
+      document.getElementById('print-receipt').addEventListener('click', () => {
+        window.print();
+      });
+    });
+    // Palaa etusivulle
+    document.getElementById('go-to-home').addEventListener('click', () => {
+        window.location.href = 'index.html'; // Palauttaa index.html-sivulle
+      });
+
+  </script>
+</body>
+</html>
