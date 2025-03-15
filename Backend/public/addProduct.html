@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Product</title>
+<link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+<body>
+  <h1>Add a New Product</h1>
+  <form id="product-form" enctype="multipart/form-data">
+    <input type="text" id="name" name="name" placeholder="Product Name" required>
+    <input type="number" id="price" name="price" placeholder="Price" required min="0">
+    <input type="number" id="discount" name="discount" placeholder="Discount %" min="0" max="100">
+    <textarea id="description" name="description" placeholder="Description"></textarea>
+    <input type="file" id="images" name="images" multiple accept="image/*">
+    <input type="text" id="category" name="category" placeholder="Category" required>
+    <button type="submit">Add Product</button>
+  </form>
+
+  <script>
+    document.getElementById('product-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(document.getElementById('product-form'));
+
+      try {
+        const response = await fetch('http://localhost:3000/api/products', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          alert('Product added successfully!');
+          document.getElementById('product-form').reset();
+        } else {
+          const errorData = await response.json();
+          alert('Failed to add product: ' + (errorData.message || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

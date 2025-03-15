@@ -3,7 +3,18 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: './',
-  publicDir: 'public', // Add this line to specify the public directory
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        menu: './Menu.html',
+        about: './addProduct.html',
+        cancel: './cancel.html',
+        success: './success.html',
+        productDetails: './productDetail.html',
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': {
@@ -20,10 +31,12 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}'],
-        navigateFallback: '/index.html',
+        // Allow dynamic routing with specific patterns like /Menu.html?id=...
+        navigateFallback: '/index.html', // Fallback to index.html for SPA-like behavior
         navigateFallbackAllowlist: [
+          // Regular expression to allow /Menu.html and any query parameters
           /^\/Menu.html\?.*/,
-          /^\/index.html$/,
+          /^\/index.html$/, // Allow the base index.html route
         ],
       },
       includeAssets: ['app-icon.svg', 'main.css', 'Pacifico-Regular.ttf'],

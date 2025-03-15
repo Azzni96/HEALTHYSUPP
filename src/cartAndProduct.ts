@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 interface Product {
   id: string;
@@ -183,8 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Clear Cart button not found');
   }
 });
-
-
 
 // Attach cart functions to the window object for accessibility in HTML
 (window as any).addToCart = addToCart;
