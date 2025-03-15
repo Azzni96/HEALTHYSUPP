@@ -27,18 +27,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://js.stripe.com", (req, res) => `'nonce-${res.locals.nonce}'`],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:"],
-      connectSrc: ["'self'", "https://api.stripe.com"],
-      frameSrc: ["'self'", "https://js.stripe.com"],
-    },
-  },
-}));
+app.use(helmet());
 app.use((req, res, next) => {
   res.locals.nonce = crypto.randomBytes(16).toString('base64');
   next();
@@ -74,9 +63,7 @@ app.get('/addProduct.html', (req, res) => {
 app.get('/maksu.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'maksu.html'));
 });
-app.get('/reset-password/:token', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'resetpassword.html'));
-});
+
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -88,7 +75,7 @@ app.use((err, req, res, next) => {
 app.use('/docs', express.static('docs'));
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

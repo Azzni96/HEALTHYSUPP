@@ -42,6 +42,7 @@ export default defineConfig({
           // Regular expression to allow /Menu.html and any query parameters
           /^\/Menu.html\?.*/,
           /^\/index.html$/, // Allow the base index.html route
+          /^\/addProduct.html$/,
         ],
       },
       includeAssets: ['app-icon.svg', 'main.css', 'Pacifico-Regular.ttf'],

@@ -19,8 +19,6 @@ export async function deleteItem(endpoint: string, itemId: string): Promise<void
         await loadProducts();
       } else if (endpoint === 'feedback') {
         await fetchFeedback();
-      } else if (endpoint === 'purchase') {
-        await fetchPayments();
       }
     } else {
       const errorData = await response.json();
@@ -105,52 +103,11 @@ export async function fetchFeedback(): Promise<void> {
   }
 }
 
-// Lataa maksuhistoria ja lisää Delete-toiminto
-export async function fetchPayments(): Promise<void> {
-  try {
-    const response = await fetch(`${API}/purchase`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch payments');
-    }
 
-    const payments = await response.json();
-    const paymentTableBody = document.getElementById('payment');
-
-    if (paymentTableBody) {
-      paymentTableBody.innerHTML = '';
-      if (payments.length === 0) {
-        paymentTableBody.innerHTML = '<tr><td colspan="5">No payments found</td></tr>';
-        return;
-      }
-
-      payments.forEach((payment: any) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${payment.cardName || 'N/A'}</td>
-          <td>${payment.email || 'N/A'}</td>
-          <td>€${payment.total || '0.00'}</td>
-          <td>${payment.createdAt || 'Unknown'}</td>
-        `;
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', () => deleteItem('purchase', payment.id)); // Korjattu ID
-
-        const td = document.createElement('td');
-        td.appendChild(deleteButton);
-        tr.appendChild(td);
-        paymentTableBody.appendChild(tr);
-      });
-    }
-  } catch (error) {
-    console.error('Error fetching payments:', error);
-    alert('Failed to fetch payments');
-  }
-}
 
 // Lataa tiedot sivun latauksen yhteydessä
 document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
   fetchFeedback();
-  fetchPayments();
+
 });

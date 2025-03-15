@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <title>Add Product</title>
-  <script type="module" crossorigin src="./assets/about-Biw_lQYA.js"></script>
+  <script type="module" crossorigin src="./assets/about-BLHvqXAQ.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/main-D3CmH4up.js">
 <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 <body>
@@ -289,7 +289,7 @@ tbody tr td button:hover {
       const formData = new FormData(document.getElementById('product-form'));
 
       try {
-        const response = await fetch('/api/products', {
+        const response = await fetch('http://localhost:5317/api/products', { // Updated URL
           method: 'POST',
           body: formData
         });
