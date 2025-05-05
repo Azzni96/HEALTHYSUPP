@@ -55,6 +55,23 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
+app.post('/save-customer-info', (req, res) => {
+  const { name, email, phone, cartNumber } = req.body;
+  // Here you can save the customer info to your database
+  console.log('Customer info received:', { name, email, phone, cartNumber });
+  // For simplicity, we'll store it in a global variable (not recommended for production)
+  global.customerInfo = { name, email, phone, cartNumber };
+  res.json({ message: 'Customer info saved successfully' });
+});
+
+app.get('/get-customer-info', (req, res) => {
+  if (global.customerInfo) {
+    res.json(global.customerInfo);
+  } else {
+    res.status(404).json({ message: 'Customer info not found' });
+  }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes);

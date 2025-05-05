@@ -148,7 +148,13 @@
     </div>
   </section>
 
-
+  <form id="customer-info-form">
+    <input type="text" id="name" name="name" placeholder="Your name" required>
+    <input type="email" id="email" name="email" placeholder="Your email" required>
+    <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+    <input type="text" id="cart-number" name="cartNumber" placeholder="Cart number" required>
+    <button type="submit">Submit</button>
+  </form>
 
   <footer>
     <div class="footer-container">
@@ -196,6 +202,37 @@
         stripe.redirectToCheckout({ sessionId: session.id });
       } catch (error) {
         console.error('Error:', error);
+      }
+    });
+
+    document.getElementById('customer-info-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const customerInfo = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        cartNumber: document.getElementById('cart-number').value,
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/save-customer-info', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(customerInfo),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log('Customer info saved:', result);
+        localStorage.setItem('customerInfo', JSON.stringify(customerInfo));
+      } catch (error) {
+        console.error('Error saving customer info:', error);
       }
     });
   </script>

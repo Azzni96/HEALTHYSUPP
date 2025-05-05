@@ -8,6 +8,69 @@
 <body>
   <h1>Payment Successful!</h1>
   <p>Thank you for your purchase.</p>
+  <p id="customer-info"></p>
+  <p id="customer-phone"></p>
+  <p id="cart-number"></p>
+  <ul id="product-list"></ul>
+  <p id="total-price"></p>
   <a href="index.html">Back to Home</a>
+  <button onclick="downloadReceipt()">Download Receipt</button>
+  <script>
+    function downloadReceipt() {
+      const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
+      const cartItems = JSON.parse(localStorage.getItem('cart'));
+
+      let receiptContent = 'Thank you for your purchase. Your payment was successful.\n\n';
+      if (customerInfo) {
+        receiptContent += `Name: ${customerInfo.name}\nEmail: ${customerInfo.email}\nPhone: ${customerInfo.phone}\nCart Number: ${customerInfo.cartNumber}\n\n`;
+      }
+
+      if (cartItems) {
+        receiptContent += 'Purchased Items:\n';
+        let totalPrice = 0;
+        for (const item of cartItems) {
+          receiptContent += `${item.name} - $${item.price} x ${item.quantity}\n`;
+          totalPrice += item.price * item.quantity;
+        }
+        receiptContent += `\nTotal Price: $${totalPrice.toFixed(2)}`;
+      }
+
+      const blob = new Blob([receiptContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'receipt.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('http://localhost:3000/get-customer-info');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const customerInfo = await response.json();
+        document.getElementById('customer-info').innerText = `Name: ${customerInfo.name}, Email: ${customerInfo.email}`;
+        document.getElementById('customer-phone').innerText = `Phone: ${customerInfo.phone}`;
+        document.getElementById('cart-number').innerText = `Cart Number: ${customerInfo.cartNumber}`;
+
+        const cartItems = JSON.parse(localStorage.getItem('cart'));
+        if (cartItems) {
+          const productList = document.getElementById('product-list');
+          let totalPrice = 0;
+          for (const item of cartItems) {
+            const li = document.createElement('li');
+            li.innerText = `${item.name} - $${item.price} x ${item.quantity}`;
+            productList.appendChild(li);
+            totalPrice += item.price * item.quantity;
+          }
+          document.getElementById('total-price').innerText = `Total Price: $${totalPrice.toFixed(2)}`;
+        }
+      } catch (error) {
+        console.error('Error fetching customer info:', error);
+      }
+    });
+  </script>
 </body>
 </html>
